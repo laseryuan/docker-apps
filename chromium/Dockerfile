@@ -1,11 +1,12 @@
 ARG debian
-
 FROM $debian
+
+ARG arch
 
 ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get install -y \
-      chromium-browser \
+      `if [ "$arch" = "amd64"  ] ; then echo "chromium" ; else echo "chromium-browser" ; fi` \
       libgl1-mesa-dri \
       mesa-utils \
       && rm -rf /var/lib/apt/lists/*

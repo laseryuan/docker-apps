@@ -46,6 +46,7 @@ docker run -it --rm --name="chromium" \
 ```
 docker build \
   --build-arg debian=${DEBIAN_IMG} \
+  --build-arg arch=${ARCH} \
   -t lasery/${REPO}:${TAG} \
   .
 
