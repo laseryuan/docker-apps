@@ -20,6 +20,20 @@ cd ~/projects/docker-app/${REPO}
 
 
 ## Start the program
+amd64
+```
+docker run -it --rm --name="chromium" \
+  --net=host \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000/pulse:/run/user/1000/pulse \
+  --privileged \
+  -v /var/run/dbus/:/var/run/dbus/ \
+  -v /dev/shm:/dev/shm \
+  lasery/${REPO}:${TAG} \
+  chromium
+```
+
+arm32
 ```
 docker run -it --rm --name="chromium" \
   --net=host \
@@ -29,7 +43,7 @@ docker run -it --rm --name="chromium" \
   -v /opt/vc:/opt/vc \
   -v /dev/vchiq:/dev/vchiq \
   -v /dev/vcio:/dev/vcio \
-  -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket \
+  -v /var/run/dbus/:/var/run/dbus/ \
   -v /dev/shm:/dev/shm \
   lasery/${REPO}:${TAG} \
   chromium-browser

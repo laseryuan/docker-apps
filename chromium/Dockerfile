@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
 
 # Create chromium user
 RUN useradd -ms /bin/bash chromium
-RUN usermod -aG audio,video chromium
 
 USER chromium
 
