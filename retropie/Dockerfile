@@ -19,6 +19,10 @@ RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
 RUN cd RetroPie-Setup \
     && sudo chmod +x retropie_setup.sh \
     && ./retropie_packages.sh setup basic_install
+
+# For test joystick
+# RUN apt-get update && apt-get install -y \
+      # joystick
 RUN sudo rm -rf /var/lib/apt/lists/*
 
 # Fix permission issue

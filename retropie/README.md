@@ -5,6 +5,13 @@ docker pull lasery/retropie
 docker run --rm lasery/retropie help
 ```
 
+## Game Controller
+https://retropie.org.uk/forum/topic/8723/gamepad-not-detected
+On host machine:
+```
+sudo cp ./99-gamepad.rules /etc/udev/rules.d/99-gamepad.rules
+```
+
 # Development
 
 ## Set variables
@@ -23,16 +30,17 @@ cd ~/projects/docker-app/${REPO}
 amd64
 ```
 docker run -it --rm --name=${REPO} \
-  -v /dev/snd:/dev/snd \
+  --privileged \
   -e DISPLAY=unix:0 \
-  --privileged \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  --privileged \
   -v /var/run/dbus/:/var/run/dbus/ \
-  -v /dev/shm:/dev/shm \
   --entrypoint /bin/bash \
   lasery/${REPO}:${TAG} \
   emulationstation
+
+sudo groupadd -g 104 input
+
+jstest /dev/input/js0
 ```
 
 arm32
