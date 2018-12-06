@@ -29,11 +29,14 @@ cd ~/projects/docker-app/${REPO}
 ## Start the program
 amd64
 ```
+mkdir ~/.emulationstation
+
 docker run -it --rm --name=${REPO} \
   --privileged \
   -e DISPLAY=unix:0 \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v /var/run/dbus/:/var/run/dbus/ \
+  -v ~/.emulationstation:/home/retropie/.emulationstation \
   --entrypoint /bin/bash \
   lasery/${REPO}:${TAG} \
   emulationstation
