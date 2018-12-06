@@ -34,5 +34,3 @@ RUN usermod -aG adm,dialout,cdrom,sudo,audio,video,plugdev,games,users pi
 # RUN usermod -aG input pi
 
 USER pi
-ENTRYPOINT "/usr/bin/emulationstation"
-CMD "#auto"

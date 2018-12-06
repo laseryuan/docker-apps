@@ -37,7 +37,6 @@ docker run -it --rm --name=${REPO} \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v /var/run/dbus/:/var/run/dbus/ \
   -v ~/.emulationstation:/home/retropie/.emulationstation \
-  --entrypoint /bin/bash \
   lasery/${REPO}:${TAG} \
   emulationstation
 
