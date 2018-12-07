@@ -5,13 +5,6 @@ docker pull lasery/retropie
 docker run --rm lasery/retropie help
 ```
 
-## Game Controller
-https://retropie.org.uk/forum/topic/8723/gamepad-not-detected
-On host machine:
-```
-sudo cp ./99-gamepad.rules /etc/udev/rules.d/99-gamepad.rules
-```
-
 # Development
 
 ## Set variables
@@ -21,7 +14,8 @@ REPO=retropie
 ARCH=amd64 && DEBIAN_IMG=debian:stretch-20181112-slim
 ARCH=arm32v6 && DEBIAN_IMG=resin/raspberry-pi-debian:stretch-20181024
 
-VERSION=18.12 && TAG=${VERSION}-${ARCH} && echo $VERSION && echo $TAG && echo $DEBIAN_IMG
+VERSION=18.12 && TAG=${VERSION}-${ARCH}
+echo $VERSION && echo $TAG && echo $DEBIAN_IMG
 cd ~/projects/docker-app/${REPO}
 ```
 
@@ -30,18 +24,33 @@ cd ~/projects/docker-app/${REPO}
 amd64
 ```
 mkdir ~/.emulationstation
+mkdir -p ~/.config/retroarch/autoconfig
+mkdir -p ~/.config/retropie/configs/all
 
 docker run -it --rm --name=${REPO} \
   --privileged \
-  -e DISPLAY=unix:0 \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v /var/run/dbus/:/var/run/dbus/ \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
+  -v /dev/input:/dev/input \
   -v ~/.emulationstation:/home/retropie/.emulationstation \
+  -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
+  -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
+  -v '/mnt/raid1/Data/VirtualBox VMs/share/Backup/RetroPie_roms/RetroPie/roms':/home/retropie/RetroPie/roms \
   lasery/${REPO}:${TAG} \
   emulationstation
 
-sudo groupadd -g 104 input
+  bash
+```
 
+RetroArch
+```
+cd /opt/retropie/emulators/retroarch/bin/
+./retroarch -v
+```
+
+Test joystick
+```
+cat /dev/input/js0
 jstest /dev/input/js0
 ```
 
@@ -61,11 +70,6 @@ docker run -it --rm --name="retropie" \
   retropie-browser
 
   bash
-
-  -e DISPLAY -v /home/pi/.Xauthority:/home/chrome/.Xauthority:ro \
-
-  -v /etc/fonts/ \
-
 ```
 
 ## Build image
@@ -92,3 +96,12 @@ docker manifest push -p lasery/${REPO}
 docker manifest inspect lasery/${REPO}
 ```
 
+# Issues
+https://stackoverflow.com/questions/49687378/how-to-get-hosts-udev-events-from-a-docker-container
+udev joypad driver is not working properly. For it to work, need to use
+--net host and replug in the usb controller every time start retroarch:
+
+```
+  --net host \
+  -v /run/udev/control:/run/udev/control \
+```
