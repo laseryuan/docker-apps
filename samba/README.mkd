@@ -1,0 +1,21 @@
+https://github.com/dperson/samba
+
+# Ubuntu desktop
+docker run -it --name samba -p 139:139 -p 445:445 \
+  -v "/mnt/raid1/Data/VirtualBox VMs/share/Videos":/mount \
+  -e "USERID=1000" \
+  -e "GROUPID=1000" \
+  -d dperson/samba \
+  -s "public;/mount;yes;no" \
+  -S
+
+# Raspberry pi
+docker run -it --name samba -p 139:139 -p 445:445 \
+  -v /media/usb0:/mount \
+  -e "USERID=1000" \
+  -e "GROUPID=1000" \
+  -d dperson/samba:armhf \
+  -s "public;/mount;yes;no" \
+  -S
+
+docker rm -f samba

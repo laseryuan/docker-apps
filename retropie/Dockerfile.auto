@@ -1,0 +1,31 @@
+FROM resin/rpi-raspbian:jessie
+
+# Enable building ARM container on x86 machinery on the web (comment out next line if built on Raspberry)
+RUN [ "cross-build-start" ]
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && apt-get install -y \
+      ca-certificates git lsb-release sudo \
+      libgl1-mesa-dri \
+      udev \
+      vim \
+      mesa-utils
+
+RUN useradd -d /home/retropie -G sudo -m pi
+
+RUN echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi
+
+WORKDIR /home/retropie
+USER pi
+
+# RUN [ "/usr/bin/qemu-arm-static", "git", "clone", "--depth=1", "https://github.com/RetroPie/RetroPie-Setup.git"  ]
+
+USER root
+RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+RUN su pi && cd RetroPie-Setup \
+    && sudo chmod +x retropie_setup.sh \
+    && sudo __platform=generic-x11 ./retropie_packages.sh setup basic_install
+
+# stop processing ARM emulation (comment out next line if built on Raspberry)
+RUN [ "cross-build-end" ]
