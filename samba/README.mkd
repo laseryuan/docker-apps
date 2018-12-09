@@ -1,13 +1,26 @@
 https://github.com/dperson/samba
 
 # Ubuntu desktop
+```
 docker run -it --name samba -p 139:139 -p 445:445 \
-  -v "/mnt/raid1/Data/VirtualBox VMs/share/Videos":/mount \
+  --restart unless-stopped \
+  -v "/mnt/raid1/Data/VirtualBox VMs/share/Videos":/mount/videos \
+  -v "/media/laser/retropi/home/pi/RetroPie/roms":/mount/retropie_roms \
   -e "USERID=1000" \
   -e "GROUPID=1000" \
   -d dperson/samba \
-  -s "public;/mount;yes;no" \
+  -s "public;/mount/videos;yes;no" \
+  -s "retropie_roms;/mount/retropie_roms;yes;no" \
   -S
+
+docker rm -f samba
+```
+
+Mount retropie rom image
+```
+sudo losetup -Pf '/media/laser/Data_F/Retropie/64GB BUDZ71 ALL KILLER NO FILLER EDITION V2/64GB BUDZ71 ALL KILLER NO FILLER EDITION V2.img'
+sudo mount /dev/loop23p2 /media/laser/retropi
+```
 
 # Raspberry pi
 docker run -it --name samba -p 139:139 -p 445:445 \

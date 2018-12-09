@@ -46,14 +46,14 @@ docker run -it --rm --name=${REPO} \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
   -v /dev/input:/dev/input \
+  -v ~/retropie_roms:/home/retropie/RetroPie/roms \
   -v ~/.emulationstation:/home/retropie/.emulationstation \
   -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
   -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
-  -v '/mnt/raid1/Data/VirtualBox VMs/share/Backup/RetroPie_roms/RetroPie/roms':/home/retropie/RetroPie/roms \
   lasery/${REPO}:${TAG} \
-  emulationstation
-
   bash
+
+  emulationstation
 ```
 
 ### arm32
@@ -63,11 +63,12 @@ docker run -it --rm --name=${REPO} \
   --privileged \
   -v /opt/vc:/opt/vc \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
+  -v ~/retropie_roms:/home/retropie/RetroPie/roms \
   -v ~/.emulationstation:/home/retropie/.emulationstation \
   -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
+  -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
   --group-add video \
   -v /var/run/dbus/:/var/run/dbus/ \
-  -v ~/.Xauthority:/home/retropie/.Xauthority:ro \
   -v /dev/shm:/dev/shm \
   -v /dev/snd:/dev/snd \
   -v /dev/input:/dev/input \
@@ -77,10 +78,6 @@ docker run -it --rm --name=${REPO} \
   -v /dev/vcsm:/dev/vcsm \
   lasery/${REPO}:${TAG} \
   bash
-
-  emulationstation
-
-  -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
 ```
 
 ## Build image
