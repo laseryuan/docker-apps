@@ -1,14 +1,28 @@
 https://github.com/dperson/samba
 
-# Ubuntu desktop
+## Set variables
 ```
+REPO=samba
+
+ARCH=amd64
+ARCH=arm32v6
+
+VERSION=18.12 && TAG=${VERSION}-${ARCH}
+echo $VERSION && echo $TAG
+cd ~/projects/docker-app/${REPO}
+```
+
+### amd64
+```
+docker tag dperson/samba:latest lasery/${REPO}:${TAG}
+
 docker run -it --name samba -p 139:139 -p 445:445 \
   --restart unless-stopped \
   -v "/mnt/raid1/Data/VirtualBox VMs/share/Videos":/mount/videos \
   -v "/media/laser/retropi/home/pi/RetroPie/roms":/mount/retropie_roms \
   -e "USERID=1000" \
   -e "GROUPID=1000" \
-  -d dperson/samba \
+  -d lasery/samba \
   -s "public;/mount/videos;yes;no" \
   -s "retropie_roms;/mount/retropie_roms;yes;no" \
   -S
@@ -16,19 +30,32 @@ docker run -it --name samba -p 139:139 -p 445:445 \
 docker rm -f samba
 ```
 
-Mount retropie rom image
+### arm32v6
 ```
-sudo losetup -Pf '/media/laser/Data_F/Retropie/64GB BUDZ71 ALL KILLER NO FILLER EDITION V2/64GB BUDZ71 ALL KILLER NO FILLER EDITION V2.img'
-sudo mount /dev/loop23p2 /media/laser/retropi
-```
+docker tag dperson/samba:armhf lasery/${REPO}:${TAG}
 
-# Raspberry pi
 docker run -it --name samba -p 139:139 -p 445:445 \
   -v /media/usb0:/mount \
   -e "USERID=1000" \
   -e "GROUPID=1000" \
-  -d dperson/samba:armhf \
+  -d lasery/samba \
   -s "public;/mount;yes;no" \
   -S
+```
 
-docker rm -f samba
+## Build image
+```
+docker push lasery/${REPO}:${TAG}
+```
+
+## Multiple Archi
+```
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
+
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest push -p lasery/${REPO}
+docker manifest inspect lasery/${REPO}
+```
+
