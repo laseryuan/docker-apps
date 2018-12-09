@@ -21,12 +21,26 @@ cd ~/projects/docker-app/${REPO}
 
 
 ## Start the program
-amd64
 ```
 mkdir ~/.emulationstation
 mkdir -p ~/.config/retroarch/autoconfig
 mkdir -p ~/.config/retropie/configs/all
+```
 
+RetroArch
+```
+cd /opt/retropie/emulators/retroarch/bin/
+./retroarch -v
+```
+
+Test joystick
+```
+cat /dev/input/js0
+jstest /dev/input/js0
+```
+
+### amd64
+```
 docker run -it --rm --name=${REPO} \
   --privileged \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -42,34 +56,31 @@ docker run -it --rm --name=${REPO} \
   bash
 ```
 
-RetroArch
+### arm32
+Since retropie default built doesn't use x server, it needs to run in non-desktop environment:
 ```
-cd /opt/retropie/emulators/retroarch/bin/
-./retroarch -v
-```
-
-Test joystick
-```
-cat /dev/input/js0
-jstest /dev/input/js0
-```
-
-arm32
-```
-docker run -it --rm --name="retropie" \
-  --net=host \
-  -e DISPLAY=unix:0 \
+docker run -it --rm --name=${REPO} \
   --privileged \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v /opt/vc:/opt/vc \
+  -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
+  -v ~/.emulationstation:/home/retropie/.emulationstation \
+  -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
+  --group-add video \
+  -v /var/run/dbus/:/var/run/dbus/ \
+  -v ~/.Xauthority:/home/retropie/.Xauthority:ro \
+  -v /dev/shm:/dev/shm \
+  -v /dev/snd:/dev/snd \
+  -v /dev/input:/dev/input \
   -v /dev/vchiq:/dev/vchiq \
   -v /dev/vcio:/dev/vcio \
-  -v /var/run/dbus/:/var/run/dbus/ \
-  -v /dev/shm:/dev/shm \
+  -v /dev/fb0:/dev/fb0 \
+  -v /dev/vcsm:/dev/vcsm \
   lasery/${REPO}:${TAG} \
-  retropie-browser
-
   bash
+
+  emulationstation
+
+  -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
 ```
 
 ## Build image
