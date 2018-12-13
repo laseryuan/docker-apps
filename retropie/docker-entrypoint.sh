@@ -17,14 +17,19 @@ main() {
 
 run-help() {
   echo 'On ubuntu:'
-  echo 'docker run -it --rm --name=retropie \
-    --privileged \
-    -e DISPLAY=unix:0 \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v /var/run/dbus/:/var/run/dbus/ \
-    -v ~/.emulationstation:/home/retropie/.emulationstation \
-    lasery/retropie \
-    emulationstation'
+  echo '
+    docker run -it --rm --name=retropie \
+      --privileged \
+      -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+      -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
+      -v /dev/input:/dev/input \
+      -v retropie_roms:/home/retropie/RetroPie/roms \
+      -v ~/.emulationstation:/home/retropie/.emulationstation \
+      -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
+      -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
+      lasery/retropie \
+      emulationstation
+  '
   echo
   echo 'On raspberry pi:'
   echo '
@@ -44,7 +49,8 @@ run-help() {
       -v /dev/vcio:/dev/vcio \
       -v /dev/fb0:/dev/fb0 \
       -v /dev/vcsm:/dev/vcsm \
-      lasery/${REPO}:${TAG} \
+      lasery/retropie \
+      emulationstation
   '
 }
 
