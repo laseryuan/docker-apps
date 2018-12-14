@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 ENV DEBIAN_FRONTEND=noninteractive VERSION=8.0.4 HOME=/home/anon
 
