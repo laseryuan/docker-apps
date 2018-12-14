@@ -17,6 +17,7 @@ cd ~/projects/docker-app/${REPO}
 docker tag dperson/samba:latest lasery/${REPO}:${TAG}
 
 docker run -it --name samba -p 139:139 -p 445:445 \
+  --label keep \
   --restart unless-stopped \
   -v "/mnt/raid1/Data/VirtualBox VMs/share/Videos":/mount/videos \
   -v "/media/laser/retropi/home/pi/RetroPie/roms":/mount/retropie_roms \
