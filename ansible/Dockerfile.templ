@@ -1,0 +1,44 @@
+{{#amd64}}
+FROM debian:stretch-20181112-slim
+{{/amd64}}
+
+{{#arm32v6}}
+FROM resin/raspberry-pi-debian:stretch-20181024
+{{/arm32v6}}
+
+{{#cross}}
+RUN [ "cross-build-start" ]
+{{/cross}}
+
+ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -y \
+      curl ca-certificates \
+      openssh-server `#ssh`\
+      libffi-dev libssl-dev python-dev build-essential `#for build ansible`\
+      gnupg2 dirmngr psmisc `#for gpg`\
+      python3-dev \
+      python3-pip \
+      sudo \
+      sshpass `# for ansible use password to access ssh` \
+      && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* `# remove tmp files`
+
+RUN pip3 install --upgrade setuptools pip
+
+# Install ansible
+RUN pip install ansible
+
+RUN useradd -ms /bin/bash provision
+
+{{#cross}}
+RUN [ "cross-build-end" ]
+{{/cross}}
+
+USER provision
+WORKDIR /home/provision/app
+
+COPY --chown=provision ./docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["run"]
