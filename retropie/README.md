@@ -11,14 +11,17 @@ docker run --rm lasery/retropie help
 ```
 REPO=retropie
 
-ARCH=amd64 && DEBIAN_IMG=debian:stretch-20181112-slim
-ARCH=arm32v6 && DEBIAN_IMG=resin/raspberry-pi-debian:stretch-20181024
+ARCH=amd64
+IS_CROSS_BUILD=
 
-VERSION=18.12 && TAG=${VERSION}-${ARCH}
-echo $VERSION && echo $TAG && echo $DEBIAN_IMG
+ARCH=arm32v6
+IS_CROSS_BUILD=true
+
+VERSION=19.01 && TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+
+echo $REPO && echo $VERSION && echo $TAG && echo $IS_CROSS_BUILD
 cd ~/projects/docker-app/${REPO}
 ```
-
 
 ## Start the program
 ```
@@ -82,13 +85,16 @@ docker run -it --rm --name=${REPO} \
 
 ## Build image
 ```
+bash build.sh
+
 docker build \
-  --build-arg debian=${DEBIAN_IMG} \
-  --build-arg arch=${ARCH} \
   -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
   .
 
   --cache-from lasery/${REPO}:${TAG} \
+
+curl --request POST https://cloud.docker.com/api/build/v1/source/ea7f7b29-3a3d-4f8e-85e5-fca62d32ed48/trigger/20813066-311b-468a-8471-717033da68e9/call/
 
 docker push lasery/${REPO}:${TAG}
 ```

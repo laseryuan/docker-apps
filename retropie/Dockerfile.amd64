@@ -1,0 +1,31 @@
+FROM debian:stretch-20181112-slim
+
+
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && apt-get install -y \
+      ca-certificates git lsb-release sudo \
+      libgl1-mesa-dri \
+      udev \
+      vim \
+      mesa-utils
+
+RUN useradd -d /home/retropie -G sudo -m pi
+
+RUN echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi
+
+WORKDIR /home/retropie
+USER pi
+
+RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+RUN cd RetroPie-Setup \
+    && sudo chmod +x retropie_setup.sh \
+    && sudo ./retropie_packages.sh setup basic_install
+
+
+
+COPY --chown=pi ./docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["run"]

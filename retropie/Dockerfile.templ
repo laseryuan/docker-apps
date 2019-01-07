@@ -1,7 +1,14 @@
-FROM resin/rpi-raspbian:jessie
+{{#amd64}}
+FROM debian:stretch-20181112-slim
+{{/amd64}}
 
-# Enable building ARM container on x86 machinery on the web (comment out next line if built on Raspberry)
+{{#arm32v6}}
+FROM resin/raspberry-pi-debian:stretch-20181024
+{{/arm32v6}}
+
+{{#cross}}
 RUN [ "cross-build-start" ]
+{{/cross}}
 
 ENV LANG C.UTF-8
 
@@ -19,13 +26,26 @@ RUN echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi
 WORKDIR /home/retropie
 USER pi
 
-# RUN [ "/usr/bin/qemu-arm-static", "git", "clone", "--depth=1", "https://github.com/RetroPie/RetroPie-Setup.git"  ]
+{{#amd64}}
+RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+RUN cd RetroPie-Setup \
+    && sudo chmod +x retropie_setup.sh \
+    && sudo ./retropie_packages.sh setup basic_install
+{{/amd64}}
 
+{{#arm32v6}}
 USER root
 RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
 RUN su pi && cd RetroPie-Setup \
     && sudo chmod +x retropie_setup.sh \
     && sudo __platform=generic-x11 ./retropie_packages.sh setup basic_install
+{{/arm32v6}}
 
-# stop processing ARM emulation (comment out next line if built on Raspberry)
+{{#cross}}
 RUN [ "cross-build-end" ]
+{{/cross}}
+
+COPY --chown=pi ./docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["run"]
