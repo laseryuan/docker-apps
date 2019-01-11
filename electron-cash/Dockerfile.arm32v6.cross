@@ -1,0 +1,27 @@
+FROM resin/raspberry-pi-debian:stretch-20181024
+
+RUN [ "cross-build-start" ]
+
+RUN apt-get update && apt-get -y upgrade
+RUN apt-get install --no-install-recommends -y git build-essential
+
+RUN apt-get install -y python3-setuptools python3-pyqt5 python3-pip python3-dev libssl-dev
+
+# Add qrcode reader
+RUN apt-get install -y zbar-tools
+
+ADD ElectronCash-3.1.2.tar.gz /
+
+RUN apt-get install -y python3-pyqt5 libudev-dev libusb-1.0-0-dev
+RUN pip3 --no-cache-dir install ecdsa
+RUN pip3 --no-cache-dir install backports.shutil-which
+RUN pip3 --no-cache-dir install hidapi
+RUN pip3 --no-cache-dir install semver
+RUN pip3 --no-cache-dir install unidecode
+RUN pip3 --no-cache-dir install trezor_agent
+RUN pip3 uninstall --yes trezor
+RUN pip3 --no-cache-dir install trezor==0.7.16
+
+RUN [ "cross-build-end" ]
+
+WORKDIR "/Electron Cash-3.1.2"

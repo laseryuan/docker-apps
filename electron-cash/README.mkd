@@ -1,0 +1,35 @@
+# Usage
+```
+docker pull lasery/electron-cash
+
+docker run -it --rm --name electron-cash \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --privileged \
+  -v /dev:/dev \
+  lasery/electron-cash ./electron-cash
+```
+
+# Development
+
+## Set variables
+```
+REPO=electron-cash && VERSION=19.01
+echo $REPO && echo $VERSION
+
+cd ~/projects/docker-app/${REPO}
+```
+
+## Build image
+```
+curl --request POST https://cloud.docker.com/api/build/v1/source/e95209af-b6fb-4822-8448-bda07009927f/trigger/e679d44d-104d-4466-b8b2-a79e6d0dc0d7/call/
+```
+
+## Multiple Archi
+```
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6
+
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest push -p lasery/${REPO}
+docker manifest inspect lasery/${REPO}
+```
