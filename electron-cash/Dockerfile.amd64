@@ -1,7 +1,6 @@
+FROM debian:stretch-20181112-slim
 
-FROM resin/raspberry-pi-debian:stretch-20181024
 
-RUN [ "cross-build-start" ]
 
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get install --no-install-recommends -y git build-essential
@@ -23,6 +22,5 @@ RUN pip3 --no-cache-dir install trezor_agent
 RUN pip3 uninstall --yes trezor
 RUN pip3 --no-cache-dir install trezor==0.7.16
 
-RUN [ "cross-build-end" ]
 
 WORKDIR "/Electron Cash-3.1.2"

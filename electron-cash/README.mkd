@@ -17,6 +17,7 @@ REPO=electron-cash && VERSION=19.01
 echo $REPO && echo $VERSION
 
 cd ~/projects/docker-app/${REPO}
+bash build.sh
 ```
 
 ## Build image
