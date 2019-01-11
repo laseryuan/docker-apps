@@ -1,0 +1,58 @@
+Electrum Docker Multi-Architecture Images
+
+Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
+
+# Usage
+```
+docker pull lasery/electrum
+
+docker run -it --rm --name electrum \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --privileged \
+  -v /dev:/dev \
+  lasery/electrum electrum
+```
+
+# Development
+
+## Set variables
+```
+REPO=electrum
+
+ARCH=amd64
+
+ARCH=arm32v6
+IS_CROSS_BUILD=true
+
+VERSION=19.01
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+
+echo $REPO && echo $VERSION && echo $TAG && echo $IS_CROSS_BUILD
+cd ~/projects/crypto-box/apps/${REPO}
+```
+
+## Start the program
+```
+docker run -it --rm --name electrum \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --privileged \
+  -v /dev:/dev \
+  lasery/${REPO}:${TAG} \
+  bash
+```
+
+## Build image
+```
+curl --request POST https://cloud.docker.com/api/build/v1/source/897da4db-975d-409d-903c-73fd9d8acbf9/trigger/650e3a40-739c-4f7f-995e-8f2d730dd10a/call/
+```
+
+## Multiple Archi
+```
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
+
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest push -p lasery/${REPO}
+docker manifest inspect lasery/${REPO}
+```
