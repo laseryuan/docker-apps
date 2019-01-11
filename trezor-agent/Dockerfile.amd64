@@ -1,0 +1,41 @@
+FROM debian:stretch-20181112-slim
+
+
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && apt-get install -y \
+      build-essential \
+      ca-certificates \
+      cython3 \
+      git \
+      gpg \
+      libudev-dev \
+      libusb-1.0-0-dev \
+      python3-dev \
+      python3-pip \
+      python3-tk \
+      && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --upgrade setuptools pip
+
+RUN pip install docutils
+
+RUN useradd -ms /bin/bash trezor-agent
+RUN usermod -aG plugdev trezor-agent
+
+# Install trezor_agent
+# Patch: https://github.com/romanz/trezor-agent/pull/269
+# RUN pip install hidapi trezor_agent trezor==0.10.2
+RUN pip install trezor==0.10.2
+# RUN pip install hidapi trezor_agent
+
+# Manually Install:
+RUN git clone --depth=1 --branch=v0.11.3 https://github.com/romanz/trezor-agent /tmp/trezor-agent
+WORKDIR /tmp/
+RUN pip install -e trezor-agent/agents/trezor
+
+WORKDIR /home/trezor-agent
+
+
+USER trezor-agent

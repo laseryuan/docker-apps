@@ -1,18 +1,20 @@
 # Usage
 ```
-docker pull lasery/trezor
+docker pull lasery/trezor-agent
 
-docker run -it --rm \
+docker run -it --rm --name trezor-agent \
   --privileged \
   -v /dev:/dev \
-  lasery/trezor bash
+  lasery/trezor-agent bash
 ```
+
+[Reference](https://github.com/romanz/trezor-agent/blob/master/doc/README-GPG.md)
 
 # Development
 
 ## Set variables
 ```
-REPO=trezor && VERSION=19.01
+REPO=trezor-agent && VERSION=19.01
 echo $REPO && echo $VERSION
 
 cd ~/projects/docker-app/${REPO}
@@ -21,16 +23,7 @@ bash build.sh
 
 ## Build image
 ```
-curl --request POST https://cloud.docker.com/api/build/v1/source/79b73c49-214b-4af9-87e5-f7f8794e6d4b/trigger/07d03de2-25de-4fd9-8d67-aac20cfae4a7/call/
-```
-
-## Start the program
-```
-docker run -it --rm --name=trezor \
-  --privileged \
-  -v /dev:/dev \
-  lasery/${REPO}:${TAG} \
-  bash
+curl --request POST https://cloud.docker.com/api/build/v1/source/e33fad1d-48d7-4ec9-a06e-6c525d8ef18c/trigger/3a8028c2-cea6-4976-98ef-2194f1083ea2/call/
 ```
 
 ## Multiple Archi
@@ -43,3 +36,6 @@ docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch a
 docker manifest push -p lasery/${REPO}
 docker manifest inspect lasery/${REPO}
 ```
+
+# Issue
+"trezor-gpg init" command failed in arm32v6 version
