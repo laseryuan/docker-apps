@@ -1,36 +1,30 @@
-Electrum Docker Multi-Architecture Images
-
-Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
-
 # Usage
 ```
-docker pull lasery/electrum
+docker pull lasery/trezor
 
-docker run -it --rm --name electrum \
-  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+docker run -it --rm \
   --privileged \
   -v /dev:/dev \
-  lasery/electrum electrum
+  lasery/trezor bash
 ```
 
 # Development
 
 ## Set variables
 ```
-REPO=electrum
+REPO=trezor
 cd ~/projects/docker-app/${REPO}
 bash build.sh
 ```
 
 ## Build image
 ```
-curl --request POST https://cloud.docker.com/api/build/v1/source/897da4db-975d-409d-903c-73fd9d8acbf9/trigger/650e3a40-739c-4f7f-995e-8f2d730dd10a/call/
+curl --request POST https://cloud.docker.com/api/build/v1/source/79b73c49-214b-4af9-87e5-f7f8794e6d4b/trigger/07d03de2-25de-4fd9-8d67-aac20cfae4a7/call/
 ```
 
 ## Start the program
 ```
-docker run -it --rm --name electrum \
-  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+docker run -it --rm --name=trezor \
   --privileged \
   -v /dev:/dev \
   lasery/${REPO}:${TAG} \
