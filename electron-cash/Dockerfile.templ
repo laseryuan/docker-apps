@@ -26,12 +26,15 @@ RUN pip3 --no-cache-dir install backports.shutil-which
 RUN pip3 --no-cache-dir install hidapi
 RUN pip3 --no-cache-dir install semver
 RUN pip3 --no-cache-dir install unidecode
-RUN pip3 --no-cache-dir install trezor_agent
-RUN pip3 uninstall --yes trezor
 RUN pip3 --no-cache-dir install trezor==0.7.16
+
+# Add user
+RUN useradd -ms /bin/bash electron-cash
+RUN usermod -aG plugdev electron-cash
 
 {{#cross}}
 RUN [ "cross-build-end" ]
 {{/cross}}
 
+USER electron-cash
 WORKDIR "/Electron Cash-3.1.2"

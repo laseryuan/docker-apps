@@ -24,12 +24,31 @@ bash build.sh
 ```
 curl --request POST https://cloud.docker.com/api/build/v1/source/e95209af-b6fb-4822-8448-bda07009927f/trigger/e679d44d-104d-4466-b8b2-a79e6d0dc0d7/call/
 ```
+- Local
+```
+ARCH=amd64
+IS_CROSS_BUILD=
+
+ARCH=arm32v6
+IS_CROSS_BUILD=true
+
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+
+echo $TAG && echo $IS_CROSS_BUILD
+
+docker build \
+  -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
+  --cache-from lasery/${REPO} \
+  .
+```
 
 ## Multiple Archi
 ```
 export DOCKER_CLI_EXPERIMENTAL=enabled
-docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
 
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
 docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
 docker manifest push -p lasery/${REPO}
 docker manifest inspect lasery/${REPO}
