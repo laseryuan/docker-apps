@@ -27,21 +27,23 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip3 install --upgrade setuptools pip
 
-ADD ElectronCash-3.1.2.tar.gz /
+# Install trezor
+RUN git clone --depth=1 --branch=v0.10.2 https://github.com/trezor/python-trezor /tmp/trezor
+WORKDIR /tmp/trezor
 
-RUN apt-get install -y python3-pyqt5 libudev-dev libusb-1.0-0-dev
-RUN pip --no-cache-dir install ecdsa
-RUN pip --no-cache-dir install backports.shutil-which
-RUN pip --no-cache-dir install hidapi
-RUN pip --no-cache-dir install semver
-RUN pip --no-cache-dir install unidecode
-RUN pip --no-cache-dir install trezor==0.7.16
+RUN git submodule update --init
+RUN pip install -r requirements-dev.txt
+
+RUN python3 setup.py install
+
+# Install electron-cash
+ADD ElectronCash-3.3.1.tar.gz /
 
 # Add user
 RUN useradd -ms /bin/bash electron-cash
-RUN usermod -aG plugdev electron-cash
+RUN usermod -aG plugdev,video electron-cash
 
 RUN [ "cross-build-end" ]
 
 USER electron-cash
-WORKDIR "/Electron Cash-3.1.2"
+WORKDIR "/Electron Cash-3.3.1"

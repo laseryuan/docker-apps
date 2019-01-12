@@ -54,3 +54,9 @@ docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch a
 docker manifest push -p lasery/${REPO}
 docker manifest inspect lasery/${REPO}
 ```
+
+## Issues
+- arm32v6
+    ```
+    libEGL warning: DRI2: failed to authenticate
+    ```
