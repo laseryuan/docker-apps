@@ -21,13 +21,13 @@ RUN pip3 install --upgrade setuptools pip
 # Install ansible
 RUN pip install ansible
 
-RUN useradd -ms /bin/bash provision
+RUN useradd -ms /bin/bash ansible
 
 
-USER provision
-WORKDIR /home/provision/app
+USER ansible
+WORKDIR /home/ansible/app
 
-COPY --chown=provision ./docker-entrypoint.sh /
+COPY --chown=ansible ./docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["run"]

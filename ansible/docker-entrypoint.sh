@@ -14,10 +14,10 @@ main() {
 
 run-help() {
   echo 'docker run -it --rm \
-    -v $(pwd)/ansible:/home/provision/app \
+    -v $(pwd)/ansible:/home/ansible/app \
     -v $SSH_AUTH_SOCK:/ssh-agent \
     -e SSH_AUTH_SOCK=/ssh-agent \
-    lasery/provision \
+    lasery/ansible \
     bash'
 }
 
