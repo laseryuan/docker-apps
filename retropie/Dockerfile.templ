@@ -3,7 +3,7 @@ FROM debian:stretch-20181226-slim
 {{/amd64}}
 
 {{#arm32v6}}
-FROM resin/raspberry-pi-debian:stretch-20181024
+FROM balenalib/rpi-debian:stretch-20181207
 {{/arm32v6}}
 
 {{#cross}}
@@ -51,8 +51,8 @@ RUN bash /tmp/install.sh
 {{/amd64}}
 
 {{#arm32v6}}
-RUN su pi && \
-    bash /tmp/install.sh
+RUN chown -R pi:pi RetroPie-Setup
+RUN su -c "/tmp/install.sh" -s /bin/sh pi
 {{/arm32v6}}
 
 {{#cross}}

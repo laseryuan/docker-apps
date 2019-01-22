@@ -55,6 +55,7 @@ docker run -it --name=${REPO}-dev \
   -v ~/.config/retropie/emulationstation/:/home/retropie/.emulationstation/ \
   -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
   -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
+  -v ~/.config/retropie/joystick-selection.cfg:/opt/retropie/configs/all/joystick-selection.cfg \
   lasery/${REPO}:${TAG} \
   bash
 
@@ -118,9 +119,13 @@ Can not be run from emulationstation
 sudo ~/RetroPie-Setup/retropie_setup.sh
 -> Manage packages
 -> Manage experimental packages
--> 815 joystick-selection
+-> joystick-selection
 -> Configuration / Options
 ```
+- cross build
+Cross build not working due to not able to switch user to pi to run the script
+The local version could work
+
 - udev joypad driver
 https://stackoverflow.com/questions/49687378/how-to-get-hosts-udev-events-from-a-docker-container
 udev joypad driver is not working properly. For it to work, need to use

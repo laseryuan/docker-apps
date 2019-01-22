@@ -1,5 +1,5 @@
 
-FROM resin/raspberry-pi-debian:stretch-20181024
+FROM balenalib/rpi-debian:stretch-20181207
 
 RUN [ "cross-build-start" ]
 
@@ -31,8 +31,8 @@ RUN su pi && \
 COPY --chown=pi install.sh /tmp/install.sh
 
 
-RUN su pi && \
-    bash /tmp/install.sh
+RUN chown -R pi:pi RetroPie-Setup
+RUN su -c "/tmp/install.sh" -s /bin/sh pi
 
 RUN [ "cross-build-end" ]
 
