@@ -6,6 +6,7 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get install -y \
       ca-certificates git lsb-release sudo \
+      curl `# for install.sh` \
       libgl1-mesa-dri \
       udev \
       vim \
@@ -17,13 +18,20 @@ RUN echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi
 
 WORKDIR /home/retropie
 
-RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+
+RUN su pi && \
+      git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+RUN su pi && \
+      cd RetroPie-Setup \
+      && sudo chmod +x retropie_setup.sh \
+      && sudo __platform=rpi1 ./retropie_packages.sh setup basic_install
+
+# https://raw.githubusercontent.com/meleu/RetroPie-joystick-selection/master/install.sh
+COPY --chown=pi install.sh /tmp/install.sh
 
 
 RUN su pi && \
-    cd RetroPie-Setup \
-    && sudo chmod +x retropie_setup.sh \
-    && sudo __platform=rpi1 ./retropie_packages.sh setup basic_install
+    bash /tmp/install.sh
 
 
 USER pi

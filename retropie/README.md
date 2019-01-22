@@ -9,54 +9,58 @@ docker run --rm lasery/retropie help
 
 ## Set variables
 ```
-REPO=retropie
+REPO=retropie && VERSION=19.01
+echo $REPO && echo $VERSION
 
+cd ~/projects/docker-app/${REPO}
+bash build.sh
+```
+
+## Build image
+- Docker cloud auto-build
+```
+curl --request POST https://cloud.docker.com/api/build/v1/source/ea7f7b29-3a3d-4f8e-85e5-fca62d32ed48/trigger/20813066-311b-468a-8471-717033da68e9/call/
+```
+- Local
+```
 ARCH=amd64
 IS_CROSS_BUILD=
 
 ARCH=arm32v6
 IS_CROSS_BUILD=true
 
-VERSION=19.01 && TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
 
-echo $REPO && echo $VERSION && echo $TAG && echo $IS_CROSS_BUILD
-cd ~/projects/docker-app/${REPO}
-```
+echo $TAG && echo $IS_CROSS_BUILD
 
-## Start the program
-```
-mkdir ~/.emulationstation
-mkdir -p ~/.config/retroarch/autoconfig
-mkdir -p ~/.config/retropie/configs/all
-```
+docker build \
+  -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
+  .
 
-RetroArch
-```
-cd /opt/retropie/emulators/retroarch/bin/
-./retroarch -v
-```
+  --cache-from lasery/${REPO} \
+  --cache-from lasery/${REPO}:${TAG} \
 
-Test joystick
-```
-cat /dev/input/js0
-jstest /dev/input/js0
+docker push lasery/${REPO}:${TAG}
 ```
 
 ### amd64
 ```
-docker run -it --rm --name=${REPO} \
+docker run -it --name=${REPO}-dev \
   --privileged \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
   -v /dev/input:/dev/input \
-  -v ~/retropie_roms:/home/retropie/RetroPie/roms \
-  -v ~/.emulationstation:/home/retropie/.emulationstation \
-  -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
-  -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
+  -v retropie_roms:/home/retropie/RetroPie/roms \
+  -v ~/.config/retropie/emulationstation/:/home/retropie/.emulationstation/ \
+  -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
+  -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
   lasery/${REPO}:${TAG} \
   bash
 
   emulationstation
+
+docker rm ${REPO}-dev
 ```
 
 ### arm32
@@ -66,10 +70,10 @@ docker run -it --rm --name=${REPO} \
   --privileged \
   -v /opt/vc:/opt/vc \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
-  -v ~/retropie_roms:/home/retropie/RetroPie/roms \
-  -v ~/.emulationstation:/home/retropie/.emulationstation \
-  -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
-  -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
+  -v retropie_roms:/home/retropie/RetroPie/roms \
+  -v ~/.config/retropie/emulationstation/:/home/retropie/.emulationstation/ \
+  -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
+  -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
   --group-add video \
   -v /var/run/dbus/:/var/run/dbus/ \
   -v /dev/shm:/dev/shm \
@@ -83,22 +87,6 @@ docker run -it --rm --name=${REPO} \
   bash
 ```
 
-## Build image
-```
-bash build.sh
-
-docker build \
-  -t lasery/${REPO}:${TAG} \
-  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
-  .
-
-  --cache-from lasery/${REPO}:${TAG} \
-
-curl --request POST https://cloud.docker.com/api/build/v1/source/ea7f7b29-3a3d-4f8e-85e5-fca62d32ed48/trigger/20813066-311b-468a-8471-717033da68e9/call/
-
-docker push lasery/${REPO}:${TAG}
-```
-
 ## Multiple Archi
 ```
 export DOCKER_CLI_EXPERIMENTAL=enabled
@@ -110,7 +98,30 @@ docker manifest push -p lasery/${REPO}
 docker manifest inspect lasery/${REPO}
 ```
 
+## Start the program
+RetroArch
+```
+cd /opt/retropie/emulators/retroarch/bin/
+./retroarch -v
+```
+
+Test joystick
+```
+cat /dev/input/js0
+jstest /dev/input/js0
+```
+
 # Issues
+- joystick-selection
+Can not be run from emulationstation
+```
+sudo ~/RetroPie-Setup/retropie_setup.sh
+-> Manage packages
+-> Manage experimental packages
+-> 815 joystick-selection
+-> Configuration / Options
+```
+- udev joypad driver
 https://stackoverflow.com/questions/49687378/how-to-get-hosts-udev-events-from-a-docker-container
 udev joypad driver is not working properly. For it to work, need to use
 --net host and replug in the usb controller every time start retroarch:
