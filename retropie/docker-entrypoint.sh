@@ -23,8 +23,8 @@ run-help() {
       -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
       -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
       -v /dev/input:/dev/input \
-      -v retropie_roms:/home/retropie/RetroPie/roms \
-      -v ~/.emulationstation:/home/retropie/.emulationstation \
+      -v retropie_roms:/home/pi/RetroPie/roms \
+      -v ~/.emulationstation:/home/pi/.emulationstation \
       -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
       -v ~/.config/retropie/configs/all/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
       lasery/retropie \
@@ -37,11 +37,11 @@ run-help() {
       --privileged \
       -v /opt/vc:/opt/vc \
       -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
-      -v ~/.emulationstation:/home/retropie/.emulationstation \
+      -v ~/.emulationstation:/home/pi/.emulationstation \
       -v ~/.config/retroarch/autoconfig:/opt/retropie/configs/all/retroarch/autoconfig/ \
       --group-add video \
       -v /var/run/dbus/:/var/run/dbus/ \
-      -v ~/.Xauthority:/home/retropie/.Xauthority:ro \
+      -v ~/.Xauthority:/home/pi/.Xauthority:ro \
       -v /dev/shm:/dev/shm \
       -v /dev/snd:/dev/snd \
       -v /dev/input:/dev/input \

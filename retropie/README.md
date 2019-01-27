@@ -51,8 +51,8 @@ docker run -it --name=${REPO}-dev \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
   -v /dev/input:/dev/input \
-  -v retropie_roms:/home/retropie/RetroPie/roms \
-  -v ~/.config/retropie/emulationstation/:/home/retropie/.emulationstation/ \
+  -v retropie_roms:/home/pi/RetroPie/roms \
+  -v ~/.config/retropie/emulationstation/:/home/pi/.emulationstation/ \
   -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
   -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
   -v ~/.config/retropie/joystick-selection.cfg:/opt/retropie/configs/all/joystick-selection.cfg \
@@ -71,8 +71,8 @@ docker run -it --rm --name=${REPO} \
   --privileged \
   -v /opt/vc:/opt/vc \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
-  -v retropie_roms:/home/retropie/RetroPie/roms \
-  -v ~/.config/retropie/emulationstation/:/home/retropie/.emulationstation/ \
+  -v retropie_roms:/home/pi/RetroPie/roms \
+  -v ~/.config/retropie/emulationstation/:/home/pi/.emulationstation/ \
   -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
   -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
   --group-add video \
@@ -115,6 +115,8 @@ jstest /dev/input/js0
 # Issues
 - joystick-selection
 Can not be run from emulationstation
+Work around:
+Remove all containt in /opt/retropie/configs/all/joystick-selection.cfg
 ```
 sudo ~/RetroPie-Setup/retropie_setup.sh
 -> Manage packages
@@ -122,6 +124,7 @@ sudo ~/RetroPie-Setup/retropie_setup.sh
 -> joystick-selection
 -> Configuration / Options
 ```
+
 - cross build
 Cross build not working due to not able to switch user to pi to run the script
 The local version could work

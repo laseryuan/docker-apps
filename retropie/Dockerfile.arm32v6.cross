@@ -13,11 +13,11 @@ RUN apt-get update && apt-get install -y \
       vim \
       mesa-utils
 
-RUN useradd -d /home/retropie -G sudo -m pi
+RUN useradd -d /home/pi -G sudo -m pi
 
 RUN echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi
 
-WORKDIR /home/retropie
+WORKDIR /home/pi
 
 
 RUN su pi && \
