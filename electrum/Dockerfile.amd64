@@ -1,4 +1,4 @@
-FROM debian:stretch-20181112-slim
+FROM debian:buster-20190326-slim
 
 
 
@@ -32,7 +32,8 @@ WORKDIR /tmp/trezor
 RUN git submodule update --init
 RUN pip install -r requirements-dev.txt
 
-RUN python3 setup.py install
+RUN python3 setup.py prebuild
+RUN python3 setup.py develop
 
 # Install ledger
 RUN pip3 --no-cache-dir install btchip-python
@@ -41,7 +42,6 @@ RUN pip3 --no-cache-dir install btchip-python
 RUN git clone --depth=1 --branch 3.3.4 https://github.com/spesmilo/electrum.git /tmp/electrum
 WORKDIR /tmp/electrum
 RUN python3 -m pip install .[fast]
-RUN pyrcc5 icons.qrc -o electrum/gui/qt/icons_rc.py
 RUN protoc --proto_path=electrum --python_out=electrum electrum/paymentrequest.proto
 
 ## Not work for raspberry due to pyaes==1.6.1 sha256 mismatch

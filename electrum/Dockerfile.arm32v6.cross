@@ -1,5 +1,5 @@
 
-FROM resin/raspberry-pi-debian:stretch-20181024
+FROM balenalib/raspberry-pi-debian:buster-20190325
 
 RUN [ "cross-build-start" ]
 
@@ -33,7 +33,8 @@ WORKDIR /tmp/trezor
 RUN git submodule update --init
 RUN pip install -r requirements-dev.txt
 
-RUN python3 setup.py install
+RUN python3 setup.py prebuild
+RUN python3 setup.py develop
 
 # Install ledger
 RUN pip3 --no-cache-dir install btchip-python
@@ -42,7 +43,6 @@ RUN pip3 --no-cache-dir install btchip-python
 RUN git clone --depth=1 --branch 3.3.4 https://github.com/spesmilo/electrum.git /tmp/electrum
 WORKDIR /tmp/electrum
 RUN python3 -m pip install .[fast]
-RUN pyrcc5 icons.qrc -o electrum/gui/qt/icons_rc.py
 RUN protoc --proto_path=electrum --python_out=electrum electrum/paymentrequest.proto
 
 

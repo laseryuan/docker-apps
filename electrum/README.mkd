@@ -15,16 +15,39 @@ docker run -it --rm --name electrum \
 
 # Development
 
-## Set variables
+## Set enviornment
 ```
-REPO=electrum
+REPO=electrum && VERSION=19.04
+echo $REPO && echo $VERSION
+
+ARCH=amd64 && IS_CROSS_BUILD=
+
+ARCH=arm32v6 && IS_CROSS_BUILD=true
+IS_CROSS_BUILD=
+
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+echo $REPO:$TAG && echo $IS_CROSS_BUILD && echo $VERSION
+
 cd ~/projects/docker-app/${REPO}
 bash build.sh
 ```
 
 ## Build image
+- Docker cloud auto-build
 ```
 curl --request POST https://cloud.docker.com/api/build/v1/source/897da4db-975d-409d-903c-73fd9d8acbf9/trigger/650e3a40-739c-4f7f-995e-8f2d730dd10a/call/
+```
+
+- Local
+```
+docker build \
+  -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
+  .
+
+  --cache-from lasery/${REPO} \
+
+docker push lasery/${REPO}:${TAG}
 ```
 
 ## Start the program
