@@ -27,7 +27,7 @@ RUN pip3 install --upgrade setuptools pip
 
 # Install trezor
 
-RUN git clone --depth=1 --branch=v0.10.2 https://github.com/trezor/python-trezor /tmp/trezor
+RUN git clone --depth=1 --branch=v0.11.2 https://github.com/trezor/python-trezor /tmp/trezor
 WORKDIR /tmp/trezor
 
 RUN git submodule update --init
@@ -39,7 +39,7 @@ RUN python3 setup.py install
 RUN pip3 --no-cache-dir install btchip-python
 
 # Install electrum
-RUN git clone --depth=1 --branch 3.2.3 https://github.com/spesmilo/electrum.git /tmp/electrum
+RUN git clone --depth=1 --branch 3.3.4 https://github.com/spesmilo/electrum.git /tmp/electrum
 WORKDIR /tmp/electrum
 RUN python3 -m pip install .[fast]
 RUN pyrcc5 icons.qrc -o electrum/gui/qt/icons_rc.py
