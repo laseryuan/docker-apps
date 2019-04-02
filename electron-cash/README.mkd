@@ -13,7 +13,7 @@ docker run -it --rm --name electron-cash \
 
 ## Set variables
 ```
-REPO=electron-cash && VERSION=19.01
+REPO=electron-cash && VERSION=19.04
 echo $REPO && echo $VERSION
 
 cd ~/projects/docker-app/${REPO}

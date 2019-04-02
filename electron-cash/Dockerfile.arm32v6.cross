@@ -1,5 +1,5 @@
 
-FROM resin/raspberry-pi-debian:stretch-20181024
+FROM balenalib/raspberry-pi-debian:buster-20190325
 
 RUN [ "cross-build-start" ]
 
@@ -28,22 +28,23 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install --upgrade setuptools pip
 
 # Install trezor
-RUN git clone --depth=1 --branch=v0.10.2 https://github.com/trezor/python-trezor /tmp/trezor
+RUN git clone --depth=1 --branch=v0.11.2 https://github.com/trezor/python-trezor /tmp/trezor
 WORKDIR /tmp/trezor
 
 RUN git submodule update --init
 RUN pip install -r requirements-dev.txt
 
-RUN python3 setup.py install
+RUN python3 setup.py prebuild
+RUN python3 setup.py develop
 
 # Install electron-cash
-ADD ElectronCash-3.3.1.tar.gz /
+ADD Electron-Cash-4.0.0.tar.gz /
 
 # Add user
 RUN useradd -ms /bin/bash electron-cash
-RUN usermod -aG plugdev,video electron-cash
+RUN usermod -aG plugdev electron-cash
 
 RUN [ "cross-build-end" ]
 
 USER electron-cash
-WORKDIR "/Electron Cash-3.3.1"
+WORKDIR "/Electron Cash-4.0.0"
