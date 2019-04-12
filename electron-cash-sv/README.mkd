@@ -1,0 +1,73 @@
+# Usage
+```
+docker pull lasery/electron-cash-sv
+
+docker run -it --rm --name electron-cash-sv \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --privileged \
+  -v /dev:/dev \
+  lasery/electron-cash-sv ./electron-cash
+```
+
+# Development
+
+## Set variables
+```
+REPO=electron-cash-sv && VERSION=19.04
+echo $REPO && echo $VERSION
+
+cd ~/projects/docker-app/${REPO}
+bash build.sh
+```
+
+## Build image
+```
+curl --request POST https://cloud.docker.com/api/build/v1/source/8d1a76e4-a359-4444-970a-d3c3495a8b90/trigger/d376b474-5304-480a-b489-249ed18261dc/call/
+```
+
+- Local
+```
+ARCH=amd64 IS_CROSS_BUILD=
+
+ARCH=arm32v6
+IS_CROSS_BUILD=true
+
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+
+echo $TAG && echo $IS_CROSS_BUILD
+
+docker build \
+  -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
+  --cache-from lasery/${REPO} \
+  .
+```
+
+## Start the program
+```
+docker run -it --rm --name electron-cash-sv \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --privileged \
+  -v /dev:/dev \
+  lasery/${REPO}:${TAG} \
+  bash
+
+  ./electron-cash
+```
+
+## Multiple Archi
+```
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
+
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest push -p lasery/${REPO}
+docker manifest inspect lasery/${REPO}
+```
+
+## Issues
+- arm32v6
+    ```
+    libEGL warning: DRI2: failed to authenticate
+    ```
