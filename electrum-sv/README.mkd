@@ -6,7 +6,7 @@ docker run -it --rm --name electrum-sv \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   --privileged \
   -v /dev:/dev \
-  lasery/electrum-sv ./electron-cash
+  lasery/electrum-sv ./electrum-sv
 ```
 
 # Development
@@ -59,10 +59,11 @@ docker run -it --rm --name electrum-sv \
 ## Multiple Archi
 ```
 export DOCKER_CLI_EXPERIMENTAL=enabled
-docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64
+# docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
 
 docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
-docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+# docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
 docker manifest push -p lasery/${REPO}
 docker manifest inspect lasery/${REPO}
 ```
@@ -70,5 +71,5 @@ docker manifest inspect lasery/${REPO}
 ## Issues
 - arm32v6
     ```
-    libEGL warning: DRI2: failed to authenticate
+    https://github.com/Marxlp/pyFlightAnalysis/issues/8
     ```
