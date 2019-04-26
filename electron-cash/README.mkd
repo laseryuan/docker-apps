@@ -7,6 +7,8 @@ docker run -it --rm --name electron-cash \
   --privileged \
   -v /dev:/dev \
   lasery/electron-cash ./electron-cash
+
+  -v /home/electron-cash/.electron-cash/wallets/
 ```
 
 # Development
@@ -42,6 +44,18 @@ docker build \
   -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
   --cache-from lasery/${REPO} \
   .
+```
+
+## Start the program
+```
+docker run -it --rm --name electron-cash \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --privileged \
+  -v /dev:/dev \
+  lasery/${REPO}:${TAG} \
+  bash
+
+  ./electron-cash
 ```
 
 ## Multiple Archi

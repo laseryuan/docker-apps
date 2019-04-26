@@ -47,16 +47,20 @@ RUN pip install -r requirements-dev.txt
 RUN python3 setup.py prebuild
 RUN python3 setup.py develop
 
-# Install electron-cash-sv
-ADD ElectronCash-3.1.6.tar.gz /
+# Install electrum-sv
+ADD electrumsv-sv-1.2.0.tar.gz /
+
+WORKDIR "/electrumsv-sv-1.2.0"
+
+RUN pip install .
+RUN pip install electrumsv-secp256k1
 
 # Add user
-RUN useradd -ms /bin/bash electron-cash-sv
-RUN usermod -aG plugdev electron-cash-sv
+RUN useradd -ms /bin/bash electrum-sv
+RUN usermod -aG plugdev electrum-sv
 
 {{#cross}}
 RUN [ "cross-build-end" ]
 {{/cross}}
 
-USER electron-cash-sv
-WORKDIR "/Electron Cash-3.1.6"
+USER electrum-sv

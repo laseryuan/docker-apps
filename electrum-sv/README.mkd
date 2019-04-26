@@ -1,19 +1,19 @@
 # Usage
 ```
-docker pull lasery/electron-cash-sv
+docker pull lasery/electrum-sv
 
-docker run -it --rm --name electron-cash-sv \
+docker run -it --rm --name electrum-sv \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   --privileged \
   -v /dev:/dev \
-  lasery/electron-cash-sv ./electron-cash
+  lasery/electrum-sv ./electron-cash
 ```
 
 # Development
 
 ## Set variables
 ```
-REPO=electron-cash-sv && VERSION=19.04
+REPO=electrum-sv && VERSION=19.04
 echo $REPO && echo $VERSION
 
 cd ~/projects/docker-app/${REPO}
@@ -22,7 +22,7 @@ bash build.sh
 
 ## Build image
 ```
-curl --request POST https://cloud.docker.com/api/build/v1/source/8d1a76e4-a359-4444-970a-d3c3495a8b90/trigger/d376b474-5304-480a-b489-249ed18261dc/call/
+curl --request POST https://cloud.docker.com/api/build/v1/source/758ddc55-c5b9-47d1-afb6-ce82892b8518/trigger/801e1f1b-c096-4e1c-9119-a295965c98df/call/
 ```
 
 - Local
@@ -39,20 +39,21 @@ echo $TAG && echo $IS_CROSS_BUILD
 docker build \
   -t lasery/${REPO}:${TAG} \
   -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
-  --cache-from lasery/${REPO} \
   .
+
+  --cache-from lasery/${REPO} \
 ```
 
 ## Start the program
 ```
-docker run -it --rm --name electron-cash-sv \
+docker run -it --rm --name electrum-sv \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   --privileged \
   -v /dev:/dev \
   lasery/${REPO}:${TAG} \
   bash
 
-  ./electron-cash
+  ./electrum-sv
 ```
 
 ## Multiple Archi
