@@ -51,5 +51,8 @@ RUN pip install electrumsv-secp256k1
 RUN useradd -ms /bin/bash electrum-sv
 RUN usermod -aG plugdev electrum-sv
 
+RUN mkdir /tmp/wallet
+RUN chown electrum-sv:electrum-sv /tmp/wallet
+
 
 USER electrum-sv

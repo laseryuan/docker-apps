@@ -54,6 +54,8 @@ docker run -it --rm --name electrum-sv \
   bash
 
   ./electrum-sv
+
+  -v /media/wllet:/tmp/wallet \
 ```
 
 ## Multiple Archi
