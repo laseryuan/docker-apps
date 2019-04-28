@@ -51,6 +51,10 @@ RUN ./contrib/make_packages
 RUN useradd -ms /bin/bash electrum
 RUN usermod -aG plugdev electrum
 
+# wallet mount point
+RUN mkdir /tmp/wallet
+RUN chown electrum:electrum /tmp/wallet
+
 
 USER electrum
 WORKDIR /home/electrum

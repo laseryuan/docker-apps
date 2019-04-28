@@ -11,6 +11,8 @@ docker run -it --rm --name electrum \
   --privileged \
   -v /dev:/dev \
   lasery/electrum electrum
+
+  -v /media/wllet:/tmp/wallet \
 ```
 
 # Development

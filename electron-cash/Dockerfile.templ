@@ -54,6 +54,10 @@ ADD Electron-Cash-4.0.0.tar.gz /
 RUN useradd -ms /bin/bash electron-cash
 RUN usermod -aG plugdev electron-cash
 
+# wallet mount point
+RUN mkdir /tmp/wallet
+RUN chown electron-cash:electron-cash /tmp/wallet
+
 {{#cross}}
 RUN [ "cross-build-end" ]
 {{/cross}}

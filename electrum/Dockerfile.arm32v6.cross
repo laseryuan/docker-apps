@@ -50,6 +50,10 @@ RUN protoc --proto_path=electrum --python_out=electrum electrum/paymentrequest.p
 RUN useradd -ms /bin/bash electrum
 RUN usermod -aG plugdev electrum
 
+# wallet mount point
+RUN mkdir /tmp/wallet
+RUN chown electrum:electrum /tmp/wallet
+
 RUN [ "cross-build-end" ]
 
 USER electrum

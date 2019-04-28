@@ -8,7 +8,7 @@ docker run -it --rm --name electron-cash \
   -v /dev:/dev \
   lasery/electron-cash ./electron-cash
 
-  -v /home/electron-cash/.electron-cash/wallets/
+  -v /media/wllet:/tmp/wallet \
 ```
 
 # Development
