@@ -1,5 +1,5 @@
 
-FROM resin/raspberry-pi-debian:stretch-20181024
+FROM balenalib/raspberry-pi-debian:buster-20190325
 
 
 ENV LANG C.UTF-8
@@ -25,13 +25,12 @@ RUN useradd -ms /bin/bash trezor-agent
 RUN usermod -aG plugdev trezor-agent
 
 # Install trezor_agent
+# RUN pip install hidapi trezor== trezor_agent==
 # Patch: https://github.com/romanz/trezor-agent/pull/269
-# RUN pip install hidapi trezor_agent trezor==0.10.2
-RUN pip install trezor==0.10.2
-# RUN pip install hidapi trezor_agent
+RUN pip install trezor==0.11.2
 
 # Manually Install:
-RUN git clone --depth=1 --branch=v0.11.3 https://github.com/romanz/trezor-agent /tmp/trezor-agent
+RUN git clone --depth=1 --branch=v0.13.1 https://github.com/romanz/trezor-agent /tmp/trezor-agent
 WORKDIR /tmp/
 RUN pip install -e trezor-agent/agents/trezor
 
