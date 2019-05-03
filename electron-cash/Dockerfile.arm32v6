@@ -40,7 +40,7 @@ RUN python3 setup.py prebuild
 RUN python3 setup.py develop
 
 # Install electron-cash
-ADD Electron-Cash-4.0.0.tar.gz /
+ADD Electron-Cash-4.0.2.tar.gz /
 
 # Add user
 RUN useradd -ms /bin/bash electron-cash
@@ -52,4 +52,4 @@ RUN chown electron-cash:electron-cash /tmp/wallet
 
 
 USER electron-cash
-WORKDIR "/Electron Cash-4.0.0"
+WORKDIR "/Electron Cash-4.0.2"

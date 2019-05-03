@@ -15,7 +15,7 @@ docker run -it --rm --name electron-cash \
 
 ## Set variables
 ```
-REPO=electron-cash && VERSION=19.04
+REPO=electron-cash && VERSION=19.05
 echo $REPO && echo $VERSION
 
 cd ~/projects/docker-app/${REPO}
@@ -42,8 +42,9 @@ echo $TAG && echo $IS_CROSS_BUILD
 docker build \
   -t lasery/${REPO}:${TAG} \
   -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
-  --cache-from lasery/${REPO} \
   .
+
+  --cache-from lasery/${REPO} \
 ```
 
 ## Start the program
