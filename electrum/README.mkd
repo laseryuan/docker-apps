@@ -19,7 +19,7 @@ docker run -it --rm --name electrum \
 
 ## Set enviornment
 ```
-REPO=electrum && VERSION=19.04
+REPO=electrum && VERSION=19.05
 echo $REPO && echo $VERSION
 
 ARCH=amd64 && IS_CROSS_BUILD=

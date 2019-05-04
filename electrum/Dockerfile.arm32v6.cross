@@ -26,15 +26,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install --upgrade setuptools pip
 
 # Install trezor
-
-RUN git clone --depth=1 --branch=v0.11.2 https://github.com/trezor/python-trezor /tmp/trezor
-WORKDIR /tmp/trezor
-
-RUN git submodule update --init
-RUN pip install -r requirements-dev.txt
-
-RUN python3 setup.py prebuild
-RUN python3 setup.py develop
+RUN pip install trezor==0.11.2
 
 # Install ledger
 RUN pip3 --no-cache-dir install btchip-python
