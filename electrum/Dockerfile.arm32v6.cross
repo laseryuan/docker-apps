@@ -32,7 +32,7 @@ RUN pip install trezor==0.11.2
 RUN pip3 --no-cache-dir install btchip-python
 
 # Install electrum
-RUN git clone --depth=1 --branch 3.3.4 https://github.com/spesmilo/electrum.git /tmp/electrum
+RUN git clone --depth=1 --branch 3.3.5 https://github.com/spesmilo/electrum.git /tmp/electrum
 WORKDIR /tmp/electrum
 RUN python3 -m pip install .[fast]
 RUN protoc --proto_path=electrum --python_out=electrum electrum/paymentrequest.proto
