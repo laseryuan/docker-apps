@@ -1,16 +1,16 @@
-Electrum Docker Multi-Architecture Images
+electrum-dash Docker Multi-Architecture Images
 
 Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
 
 # Usage
 ```
-docker pull lasery/electrum
+docker pull lasery/electrum-dash
 
-docker run -it --rm --name electrum \
+docker run -it --rm --name electrum-dash \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   --privileged \
   -v /dev:/dev \
-  lasery/electrum electrum
+  lasery/electrum-dash electrum-dash
 
   -v /media/wllet:/tmp/wallet \
 ```
@@ -19,7 +19,7 @@ docker run -it --rm --name electrum \
 
 ## Set enviornment
 ```
-REPO=electrum && VERSION=19.05
+REPO=electrum-dash && VERSION=19.05
 echo $REPO && echo $VERSION
 
 ARCH=amd64 && IS_CROSS_BUILD=
@@ -37,7 +37,7 @@ bash build.sh
 ## Build image
 - Docker cloud auto-build
 ```
-curl --request POST https://cloud.docker.com/api/build/v1/source/ece3fed8-eaa5-4c3f-801b-7eb4f39ee810/trigger/b4734646-8b61-4d4f-b621-0763d0e8ff7c/call/
+curl --request POST https://cloud.docker.com/api/build/v1/source/9810c1bb-3a20-4746-9b70-1cb9e584f891/trigger/495f17b3-9f37-442d-a647-c135d2c08cc8/call/
 ```
 
 - Local
@@ -54,7 +54,7 @@ docker push lasery/${REPO}:${TAG}
 
 ## Start the program
 ```
-docker run -it --rm --name electrum \
+docker run -it --rm --name electrum-dash \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   --privileged \
   -v /dev:/dev \

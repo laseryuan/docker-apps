@@ -1,0 +1,52 @@
+FROM debian:buster-20190326-slim
+
+
+
+ENV LANG C.UTF-8
+
+# RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cython3 \
+    git \
+    libprotoc-dev \
+    libssl-dev \
+    libudev-dev \
+    libusb-1.0-0-dev \
+    protobuf-compiler \
+    pyqt5-dev-tools \
+    python3-dev \
+    python3-pip \
+    python3-pyqt5 \
+    zbar-tools `# qrcode reader` \
+    && rm -rf /var/lib/apt/lists/*
+
+
+RUN pip3 install --upgrade setuptools pip
+
+# Install trezor
+RUN pip install trezor==0.11.2
+
+# Install ledger
+RUN pip3 --no-cache-dir install btchip-python
+
+# Install electrum-dash
+RUN git clone --depth=1 --branch 3.3.4 https://github.com/akhavr/electrum-dash.git /tmp/electrum-dash
+WORKDIR /tmp/electrum-dash
+RUN python3 -m pip install .[fast]
+RUN protoc --proto_path=electrum_dash --python_out=electrum_dash electrum_dash/paymentrequest.proto
+
+## Not work for raspberry due to pyaes==1.6.1 sha256 mismatch
+RUN ./contrib/make_packages
+
+# Add user
+RUN useradd -ms /bin/bash electrum-dash
+RUN usermod -aG plugdev electrum-dash
+
+# wallet mount point
+RUN mkdir /tmp/wallet
+RUN chown electrum-dash:electrum-dash /tmp/wallet
+
+
+USER electrum-dash
+WORKDIR /home/electrum-dash
