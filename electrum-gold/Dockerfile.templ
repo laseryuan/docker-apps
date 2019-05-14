@@ -1,0 +1,69 @@
+{{#amd64}}
+FROM debian:stretch-20190506-slim
+{{/amd64}}
+
+{{#arm32v6}}
+FROM balenalib/raspberry-pi-debian:stretch-20190507
+{{/arm32v6}}
+
+{{#cross}}
+RUN [ "cross-build-start" ]
+{{/cross}}
+
+ENV LANG C.UTF-8
+
+# RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cython3 \
+    git \
+    libprotoc-dev \
+    libssl-dev \
+    libudev-dev \
+    libusb-1.0-0-dev \
+    protobuf-compiler \
+    pyqt5-dev-tools \
+    python3-dev \
+    python3-pip \
+    python3-pyqt5 \
+    zbar-tools `# qrcode reader` \
+    && rm -rf /var/lib/apt/lists/*
+
+
+RUN pip3 install --upgrade setuptools pip
+
+# Install trezor
+# RUN pip install trezor==0.9.1
+
+# Install ledger
+RUN pip3 --no-cache-dir install btchip-python
+
+# Install electrum-gold
+RUN git clone --depth=1 --branch 3.2.1 https://github.com/BTCGPU/electrum.git /electrum-gold
+WORKDIR /electrum-gold
+RUN pip install .[full] --ignore-installed Cython
+
+# Build icons
+RUN pyrcc5 icons.qrc -o gui/qt/icons_rc.py
+
+RUN pip install -U protobuf
+RUN protoc --proto_path=lib/ --python_out=lib/ lib/paymentrequest.proto
+
+{{#amd64}}
+## Not work for raspberry due to pyaes==1.6.1 sha256 mismatch
+RUN ./contrib/make_packages
+{{/amd64}}
+
+# Add user
+RUN useradd -ms /bin/bash electrum-gold
+RUN usermod -aG plugdev electrum-gold
+
+# wallet mount point
+RUN mkdir /tmp/wallet
+RUN chown electrum-gold:electrum-gold /tmp/wallet
+
+{{#cross}}
+RUN [ "cross-build-end" ]
+{{/cross}}
+
+USER electrum-gold
