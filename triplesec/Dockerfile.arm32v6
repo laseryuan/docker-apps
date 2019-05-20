@@ -1,0 +1,14 @@
+
+FROM balenalib/raspberry-pi-node:11.15.0-20190507
+
+
+ENV LANG C.UTF-8
+
+RUN npm install triplesec
+RUN npm install readline-sync
+
+RUN useradd -ms /bin/bash node
+
+
+USER node
+WORKDIR /home/node

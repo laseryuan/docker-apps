@@ -1,0 +1,67 @@
+triplesec Docker Multi-Architecture Images
+
+Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
+
+# Usage
+```
+docker pull lasery/triplesec
+
+docker run -it --rm --name triplesec \
+  lasery/triplesec \
+  bash
+```
+
+# Development
+
+## Set enviornment
+```
+REPO=triplesec && VERSION=19.05
+echo $REPO && echo $VERSION
+
+ARCH=amd64 && IS_CROSS_BUILD=
+
+ARCH=arm32v6 && IS_CROSS_BUILD=true
+IS_CROSS_BUILD=
+
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+echo $REPO:$TAG && echo $IS_CROSS_BUILD && echo $VERSION
+
+cd ~/projects/docker-app/${REPO}
+bash build.sh
+```
+
+## Build image
+- Docker cloud auto-build
+```
+curl --request POST https://cloud.docker.com/api/build/v1/source/6dd3db06-9064-4bc2-ba47-c88037262b7a/trigger/2065f385-2ee8-4a6d-b997-60b7bbb7eede/call/
+```
+
+- Local
+```
+docker build \
+  -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
+  .
+
+  --cache-from lasery/${REPO} \
+
+docker push lasery/${REPO}:${TAG}
+```
+
+## Start the program
+```
+docker run -it --rm --name triplesec \
+  lasery/${REPO}:${TAG} \
+  bash
+```
+
+## Multiple Archi
+```
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
+
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest push -p lasery/${REPO}
+docker manifest inspect lasery/${REPO}
+```
