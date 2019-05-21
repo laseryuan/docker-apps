@@ -1,0 +1,67 @@
+openstego Docker Multi-Architecture Images
+
+Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
+
+# Usage
+```
+docker pull lasery/openstego
+
+docker run -it --rm --name openstego \
+  lasery/openstego \
+  bash
+```
+
+# Development
+
+## Set enviornment
+```
+REPO=openstego && VERSION=19.05
+echo $REPO && echo $VERSION
+
+ARCH=amd64 && IS_CROSS_BUILD=
+
+ARCH=arm32v6 && IS_CROSS_BUILD=true
+IS_CROSS_BUILD=
+
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+echo $REPO:$TAG && echo $IS_CROSS_BUILD && echo $VERSION
+
+cd ~/projects/docker-app/${REPO}
+bash build.sh
+```
+
+## Build image
+- Docker cloud auto-build
+```
+curl --request POST https://cloud.docker.com/api/build/v1/source/ed3920ff-2e12-4964-a205-77639b972aa0/trigger/09590d58-2ed5-4234-bc4d-74e7e8c65bed/call/
+```
+
+- Local
+```
+docker build \
+  -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
+  .
+
+  --cache-from lasery/${REPO} \
+
+docker push lasery/${REPO}:${TAG}
+```
+
+## Start the program
+```
+docker run -it --rm --name openstego \
+  lasery/${REPO}:${TAG} \
+  bash
+```
+
+## Multiple Archi
+```
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
+
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest push -p lasery/${REPO}
+docker manifest inspect lasery/${REPO}
+```
