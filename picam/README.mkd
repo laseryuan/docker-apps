@@ -1,0 +1,68 @@
+picam Docker Multi-Architecture Images
+
+Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
+
+# Usage
+```
+docker pull lasery/picam
+
+docker run -it --rm --name picam \
+  lasery/picam \
+  bash
+```
+
+# Development
+
+## Set enviornment
+```
+REPO=picam && VERSION=19.05
+echo $REPO && echo $VERSION
+
+ARCH=amd64 && IS_CROSS_BUILD=
+
+ARCH=arm32v6 && IS_CROSS_BUILD=true
+IS_CROSS_BUILD=
+
+TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
+echo $REPO:$TAG && echo $IS_CROSS_BUILD && echo $VERSION
+
+cd ~/projects/docker-app/${REPO}
+bash build.sh
+```
+
+## Build image
+- Docker cloud auto-build
+```
+curl --request POST https://cloud.docker.com/api/build/v1/source/1df087ec-3579-4caa-a4ae-f4b47ad9162f/trigger/730c4b95-96e2-45d7-bf2e-60f885cc0adf/call/
+```
+
+- Local
+```
+docker build \
+  -t lasery/${REPO}:${TAG} \
+  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
+  .
+
+  --cache-from lasery/${REPO} \
+
+docker push lasery/${REPO}:${TAG}
+```
+
+## Start the program
+```
+docker run -it --rm --name picam \
+  lasery/${REPO}:${TAG} \
+  bash
+
+  -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
+```
+
+## Multiple Archi
+```
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6
+
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest push -p lasery/${REPO}
+docker manifest inspect lasery/${REPO}
+```
