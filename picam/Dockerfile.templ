@@ -2,7 +2,7 @@
 FROM balenalib/rpi-debian:stretch-20190511
 {{/arm32v6}}
 
-ARG VERSION=1.4.6
+ARG VERSION=1.4.7
 
 {{#cross}}
 RUN [ "cross-build-start" ]
@@ -18,8 +18,8 @@ RUN apt-get update && apt-get install -y \
 
 # Install picam binary
 RUN mkdir ~/picam
-ADD picam-${VERSION}-binary-stretch.tar.xz /tmp/
-RUN mv /tmp/picam-${VERSION}-binary-stretch/picam ~/picam/
+ADD picam-${VERSION}-binary.tar.xz /tmp/
+RUN mv /tmp/picam-${VERSION}-binary/picam ~/picam/
 
 WORKDIR /root/picam
 
