@@ -51,6 +51,9 @@ docker push lasery/${REPO}:${TAG}
 ## Start the program
 ```
 docker run -it --rm --name picam \
+  --privileged \
+  -v /opt/vc:/opt/vc \
+  -v /dev:/dev \
   lasery/${REPO}:${TAG} \
   bash
 
