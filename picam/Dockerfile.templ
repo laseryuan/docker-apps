@@ -21,7 +21,9 @@ RUN mkdir ~/picam
 ADD picam-${VERSION}-binary.tar.xz /tmp/
 RUN mv /tmp/picam-${VERSION}-binary/picam ~/picam/
 
+ADD make_dirs.sh /root/picam/
 WORKDIR /root/picam
+RUN ./make_dirs.sh
 
 {{#cross}}
 RUN [ "cross-build-end" ]

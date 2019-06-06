@@ -7,6 +7,7 @@ Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
 docker pull lasery/picam
 
 docker run -it --rm --name picam \
+  --privileged \
   lasery/picam \
   bash
 ```
@@ -15,8 +16,7 @@ docker run -it --rm --name picam \
 
 ## Set enviornment
 ```
-REPO=picam && VERSION=19.05
-echo $REPO && echo $VERSION
+REPO=picam && VERSION=19.06
 
 ARCH=amd64 && IS_CROSS_BUILD=
 
@@ -52,8 +52,6 @@ docker push lasery/${REPO}:${TAG}
 ```
 docker run -it --rm --name picam \
   --privileged \
-  -v /opt/vc:/opt/vc \
-  -v /dev:/dev \
   lasery/${REPO}:${TAG} \
   bash
 
