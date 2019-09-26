@@ -9,56 +9,29 @@ docker run --rm lasery/retropie help
 
 ## Set variables
 ```
-REPO=retropie && VERSION=19.09
-echo $REPO && echo $VERSION
-
-cd ~/projects/docker-apps/${REPO}
+REPO=retropie && VERSION=19.09 cd ~/projects/docker-apps/${REPO}
 bash build.sh
 ```
 
 ## Build image
-- Docker cloud auto-build
 ```
-curl --request POST https://cloud.docker.com/api/build/v1/source/ea7f7b29-3a3d-4f8e-85e5-fca62d32ed48/trigger/20813066-311b-468a-8471-717033da68e9/call/
+docker buildx bake
 ```
-- Local
+
+## Development
 ```
-ARCH=amd64
-IS_CROSS_BUILD=
-
-ARCH=arm32v6
-IS_CROSS_BUILD=true
-
-TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; fi`
-
-echo $TAG && echo $IS_CROSS_BUILD
-
-docker buildx build --platform=linux/arm/v6 -o type=docker \
-
-docker build \
-  -t lasery/${REPO}:${TAG} \
-  -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
-  .
-
-  --cache-from lasery/${REPO} \
-  --cache-from lasery/${REPO}:${TAG} \
-
-docker push lasery/${REPO}:${TAG}
+  emulationstation
 ```
 
 ### amd64
 ```
-docker run -it --name=${REPO}-dev \
+docker run -it --rm --name=${REPO} \
   --privileged \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
   -v /dev/input:/dev/input \
-  lasery/${REPO}:${TAG} \
+  lasery/${REPO}:${VERSION}-amd64 \
   bash
-
-  emulationstation
-
-docker rm ${REPO}-dev
 ```
 
 ### arm32
@@ -77,7 +50,7 @@ docker run -it --rm --name=${REPO} \
   -v /dev/vcio:/dev/vcio \
   -v /dev/fb0:/dev/fb0 \
   -v /dev/vcsm:/dev/vcsm \
-  lasery/${REPO}:${TAG} \
+  lasery/${REPO}:${VERSION}-arm32 \
   bash
 ```
 
@@ -91,11 +64,13 @@ docker run -it --rm --name=${REPO} \
 
 ## Multiple Archi
 ```
+docker push lasery/${REPO}:${VERSION}-amd64 lasery/${REPO}:${VERSION}-arm32
+
 export DOCKER_CLI_EXPERIMENTAL=enabled
-docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32v6
+docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32
 
 docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
-docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32v6 --arch arm
+docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32 --arch arm
 docker manifest push -p lasery/${REPO}
 docker manifest inspect lasery/${REPO}
 ```
