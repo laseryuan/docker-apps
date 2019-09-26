@@ -1,9 +1,9 @@
 {{#amd64}}
-FROM debian:stretch-20181226-slim
+FROM debian:stretch-20190910-slim
 {{/amd64}}
 
 {{#arm32v6}}
-FROM balenalib/rpi-debian:stretch-20181207
+FROM balenalib/rpi-debian:stretch-20190511
 {{/arm32v6}}
 
 {{#cross}}
@@ -24,23 +24,17 @@ RUN useradd -d /home/pi -G sudo -m pi
 
 RUN echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi
 
-WORKDIR /home/pi
+
+USER pi
+RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git /home/pi/RetroPie-Setup
+WORKDIR /home/pi/RetroPie-Setup
+RUN sudo chmod +x retropie_setup.sh
 
 {{#amd64}}
-USER pi
-RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
-RUN cd RetroPie-Setup \
-    && sudo chmod +x retropie_setup.sh \
-    && sudo ./retropie_packages.sh setup basic_install
+RUN sudo ./retropie_packages.sh setup basic_install
 {{/amd64}}
-
 {{#arm32v6}}
-RUN su pi && \
-      git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
-RUN su pi && \
-      cd RetroPie-Setup \
-      && sudo chmod +x retropie_setup.sh \
-      && sudo __platform=rpi1 ./retropie_packages.sh setup basic_install
+RUN sudo __platform=rpi1 ./retropie_packages.sh setup basic_install
 {{/arm32v6}}
 
 # https://raw.githubusercontent.com/meleu/RetroPie-joystick-selection/master/install.sh
@@ -49,18 +43,8 @@ COPY --chown=pi install.sh /tmp/install.sh
 {{#amd64}}
 RUN bash /tmp/install.sh
 {{/amd64}}
-
 {{#arm32v6}}
-RUN chown -R pi:pi RetroPie-Setup
-RUN su -c "/tmp/install.sh" -s /bin/sh pi
-{{/arm32v6}}
-
-{{#cross}}
-RUN [ "cross-build-end" ]
-{{/cross}}
-
-{{#arm32v6}}
-USER pi
+RUN __platform=rpi1 bash /tmp/install.sh
 {{/arm32v6}}
 
 COPY --chown=pi ./docker-entrypoint.sh /
