@@ -9,10 +9,10 @@ docker run --rm lasery/retropie help
 
 ## Set variables
 ```
-REPO=retropie && VERSION=19.01
+REPO=retropie && VERSION=19.09
 echo $REPO && echo $VERSION
 
-cd ~/projects/docker-app/${REPO}
+cd ~/projects/docker-apps/${REPO}
 bash build.sh
 ```
 
@@ -33,6 +33,8 @@ TAG=${VERSION}-${ARCH}`if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo -cross; 
 
 echo $TAG && echo $IS_CROSS_BUILD
 
+docker buildx build --platform=linux/arm/v6 -o type=docker \
+
 docker build \
   -t lasery/${REPO}:${TAG} \
   -f Dockerfile.${ARCH}$(if [ \"$IS_CROSS_BUILD\" = \"true\" ]; then echo .cross; fi) \
@@ -51,11 +53,6 @@ docker run -it --name=${REPO}-dev \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
   -v /dev/input:/dev/input \
-  -v retropie_roms:/home/pi/RetroPie/roms \
-  -v ~/.config/retropie/emulationstation/:/home/pi/.emulationstation/ \
-  -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
-  -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
-  -v ~/.config/retropie/joystick-selection.cfg:/opt/retropie/configs/all/joystick-selection.cfg \
   lasery/${REPO}:${TAG} \
   bash
 
@@ -69,13 +66,9 @@ Since retropie default built doesn't use x server, it needs to run in non-deskto
 ```
 docker run -it --rm --name=${REPO} \
   --privileged \
-  -v /opt/vc:/opt/vc \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
-  -v retropie_roms:/home/pi/RetroPie/roms \
-  -v ~/.config/retropie/emulationstation/:/home/pi/.emulationstation/ \
-  -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
-  -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
   --group-add video \
+  -v /opt/vc:/opt/vc \
   -v /var/run/dbus/:/var/run/dbus/ \
   -v /dev/shm:/dev/shm \
   -v /dev/snd:/dev/snd \
@@ -86,6 +79,14 @@ docker run -it --rm --name=${REPO} \
   -v /dev/vcsm:/dev/vcsm \
   lasery/${REPO}:${TAG} \
   bash
+```
+
+## Run
+```
+  -v retropie_roms:/home/pi/RetroPie/roms \
+  -v ~/.config/retropie/emulationstation/:/home/pi/.emulationstation/ \
+  -v ~/.config/retropie/autoconfig/:/opt/retropie/configs/all/retroarch/autoconfig/ \
+  -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
 ```
 
 ## Multiple Archi
