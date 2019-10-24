@@ -9,7 +9,12 @@ shift
 /opt/TurboVNC/bin/vncserver :1 -securitytypes None -viewonly
 barrierc -d INFO --no-daemon -n mc-vnc "$@"
       ;;
-    novnc)
+    game)
+/opt/TurboVNC/bin/vncserver :1 -securitytypes None
+tail -f /dev/null
+      ;;
+# NoVNC proxy
+    web)
 /opt/websockify/run 5901 --cert=/self.pem --ssl-only --web=/opt/noVNC --wrap-mode=ignore -- vncserver :1 -securitytypes otp -otp
       ;;
     help)

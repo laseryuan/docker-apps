@@ -31,7 +31,8 @@ docker run --gpus all  --name=vnc-gpu --rm -it -v /tmp/.X11-unix/X0:/tmp/.X11-un
   fps \
   ${Barrier_server_address}
 
-  novnc
+  game \
+  web \
 ```
 
 ## Development
@@ -39,8 +40,8 @@ docker run --gpus all  --name=vnc-gpu --rm -it -v /tmp/.X11-unix/X0:/tmp/.X11-un
   -v $(pwd)/turbovncserver-security.conf:/etc/turbovncserver-security.conf \
 
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
+  -v $(pwd)/home:/root \
 
-  vnc-gpu \
   bash
 ```
 
