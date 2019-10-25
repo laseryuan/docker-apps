@@ -22,17 +22,15 @@ docker tag vnc-gpu lasery/vnc-gpu:ubuntu-18.04-19.10 && docker push lasery/vnc-g
 
 ## Usage
 ```
-xhost +si:localuser:root
-
 docker run --rm vnc-gpu
 
 docker run --gpus all  --name=vnc-gpu --rm -it -v /tmp/.X11-unix/X0:/tmp/.X11-unix/X0 -p 5901:5901 \
-  vnc-gpu \
+  lasery/vnc-gpu:ubuntu-18.04-19.10 \
   fps \
   ${Barrier_server_address}
 
-  game \
-  web \
+  game
+  web
 ```
 
 ## Development
@@ -40,8 +38,9 @@ docker run --gpus all  --name=vnc-gpu --rm -it -v /tmp/.X11-unix/X0:/tmp/.X11-un
   -v $(pwd)/turbovncserver-security.conf:/etc/turbovncserver-security.conf \
 
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
-  -v $(pwd)/home:/root \
+  -v $(pwd)/home:/home/app \
 
+  vnc-gpu \
   bash
 ```
 

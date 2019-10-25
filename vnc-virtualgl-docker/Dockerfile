@@ -3,12 +3,6 @@
 # https://turbovnc.org
 # https://virtualgl.org
 
-# xhost +si:localuser:root
-# openssl req -new -x509 -days 365 -nodes -out self.pem -keyout self.pem
-# docker build -t vnc-gpu .
-# docker run --init --runtime=nvidia --name=vnc-gpu --rm -i -v /tmp/.X11-unix/X0:/tmp/.X11-unix/X0 -p 5901:5901 vnc-gpu
-# docker exec -ti vnc-gpu vglrun glxspheres64
-
 FROM nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -81,6 +75,11 @@ RUN cd /tmp && \
     cd build && \
     make install
 # Finish install Barrier
+
+RUN mkdir -m 777 /tmp/.X11-unix
+
+RUN useradd -ms /bin/bash app
+USER app
 
 COPY ./turbovncserver-security.conf /etc/
 COPY ./docker-entrypoint.sh /
