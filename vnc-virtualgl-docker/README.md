@@ -25,6 +25,7 @@ docker tag vnc-gpu lasery/vnc-gpu:ubuntu-18.04-19.10 && docker push lasery/vnc-g
 docker run --rm vnc-gpu
 
 docker run --gpus all  --name=vnc-gpu --rm -it -v /tmp/.X11-unix/X0:/tmp/.X11-unix/X0 -p 5901:5901 \
+  -v /dev/shm:/dev/shm \
   lasery/vnc-gpu:ubuntu-18.04-19.10 \
   fps \
   ${Barrier_server_address}

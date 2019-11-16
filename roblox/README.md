@@ -4,15 +4,15 @@ Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
 
 # Usage
 ```
-docker pull lasery/minecraft
-docker run --rm lasery/minecraft
+docker pull lasery/roblox
+docker run --rm lasery/roblox
 ```
 
 # Development
 
 ## Set enviornment
 ```
-export REPO=minecraft && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-apps/minecraft
+export REPO=roblox && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-apps/roblox
 ./build.sh docker
 ```
 
@@ -20,28 +20,31 @@ export REPO=minecraft && export VERSION=$(date "+%y.%m") && cd ~/projects/docker
 ```
 docker volume create \
   --label keep \
-  minecraft-config
+  roblox-config
 
 export PULSE_SERVER=/var/run/pulse/native
+```
 
-docker run -it --rm --name=minecraft-dev \
-  -v minecraft-config:/home/mc/.minecraft \
+```
+docker run -it --rm --name=roblox-dev \
+  -v roblox-config:/home/mc/.roblox \
   -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
   --device=/dev/dri:/dev/dri \
   -e PULSE_SERVER=unix:${PULSE_SERVER} -v ${PULSE_SERVER}:${PULSE_SERVER} \
-  minecraft:amd64 \
+  roblox:amd64 \
   bash
 ```
 
 Nvidia
 ```
-docker run -it --rm --name=minecraft-dev \
+docker run -it --rm --name=roblox-dev \
   --gpus all \
-  -v minecraft-config:/home/mc/.minecraft \
   -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
-  minecraft:nvidia \
+  -e PULSE_SERVER=unix:${PULSE_SERVER} -v ${PULSE_SERVER}:${PULSE_SERVER} \
+  roblox:nvidia \
   bash
+
+  -v roblox-config:/home/mc/.roblox \
 ```
 
 ## Build image

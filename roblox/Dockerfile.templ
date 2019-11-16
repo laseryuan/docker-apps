@@ -1,0 +1,67 @@
+{{#amd64}}
+FROM nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04
+{{/amd64}}
+
+{{#arm32}}
+FROM balenalib/raspberry-pi-debian:stretch-20191011
+{{/arm32}}
+
+ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
+
+# Install graphic driver
+# RUN apt-get update -qy && apt-get install -qy \
+RUN apt-get update -qy && apt-get install -qy --no-install-recommends \
+      `# libEGL support` \
+      libgl1-mesa-dri \
+      mesa-utils \
+
+# Install Roblox
+# https://gitlab.com/brinkervii/grapejuice/wikis/Installation/Ubuntu
+# Install Wine
+RUN dpkg --add-architecture i386 && \
+    apt-get install -y software-properties-common && \
+    wget -nc https://dl.winehq.org/wine-builds/winehq.key -O /tmp/winehq.key && \
+    apt-key add /tmp/winehq.key && \
+    apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main' && \
+    apt update && \
+    apt install --install-recommends -y wine-stable
+# Finish install Wine
+
+# Install Python 3.7
+RUN add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt install -y python3.7 python3.7-dev python3.7-venv
+# Finish install Python 3.7
+
+# Dependencies
+RUN apt install -y python3-pip virtualenv libcairo2-dev libgirepository1.0-dev libgtk-3-0 libgtk-3-bin libdbus-1-dev python3-gi gobject-introspection gir1.2-gtk-3.0
+
+RUN apt install -y unzip
+
+# Install windows manager
+RUN apt-get install -y \
+        xfce4
+
+# Install
+# wget https://gitlab.com/brinkervii/grapejuice/-/archive/master/grapejuice-master.zip
+COPY ./grapejuice-master.zip /tmp/grapejuice-master.zip
+RUN cd /tmp && \
+    unzip grapejuice-master.zip && \
+    cd grapejuice-master && \
+    python3.7 ./install.py
+
+# Finish install Roblox
+
+RUN useradd -ms /bin/bash roblox
+
+WORKDIR /home/roblox
+
+USER roblox
+
+# RUN mkdir /home/mc/.minecraft
+
+COPY --chown=mc ./docker-entrypoint.sh /
+COPY --chown=mc ./README.md /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["help"]

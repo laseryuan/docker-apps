@@ -9,7 +9,7 @@ docker run --rm lasery/retropie help
 
 ## Set variables
 ```
-REPO=retropie && VERSION=19.09 cd ~/projects/docker-apps/${REPO}
+REPO=retropie && VERSION=19.09 && cd ~/projects/docker-apps/${REPO}
 bash build.sh
 ```
 
