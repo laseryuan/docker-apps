@@ -47,8 +47,12 @@ Install grapejuice
 ```
 export USER=$(whoami)
 
+mkdir ~/.config
 cd /tmp/grapejuice-master && python3.7 ./install.py
-/etc/init.d/dbus start
+/etc/init.d/dbus start # docker exec -it -u root roblox-dev
+```
+
+```
 cd ~/.local/share/grapejuice/bin
 ./grapejuice gui
 ```
@@ -64,6 +68,12 @@ Start Roblox player
 ```
 chromium-browser
 ./grapejuice player roblox-player:
+```
+
+Fix mime error
+```
+cd ~/.local/share/applications/
+vim roblox-player.desktop
 ```
 
 Nvidia
