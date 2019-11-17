@@ -23,28 +23,40 @@ docker volume create \
   roblox-config
 
 export PULSE_SERVER=/var/run/pulse/native
+export PULSE_SERVER=/run/user/1000/pulse/native
 ```
 
 ```
 docker run -it --rm --name=roblox-dev \
-  -v roblox-config:/home/mc/.roblox \
+  --privileged \
+  -v roblox-config:/home/roblox/ \
   -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
   --device=/dev/dri:/dev/dri \
   -e PULSE_SERVER=unix:${PULSE_SERVER} -v ${PULSE_SERVER}:${PULSE_SERVER} \
+  -v /etc/localtime:/etc/localtime:ro \
+  --security-opt seccomp=$(pwd)/chrome.json \
+  -e USER=$(whoami) \
   roblox:amd64 \
   bash
 ```
 
+Install grapejuice
+```
+cd /tmp/grapejuice-master && python3.7 ./install.py
+/etc/init.d/dbus start
+cd ~
+.local/share/grapejuice/bin/grapejuice gui
+```
+
+Start Roblox
+```
+chromium-browser
+.local/share/grapejuice/bin/grapejuice player roblox-player:
+```
+
 Nvidia
 ```
-docker run -it --rm --name=roblox-dev \
   --gpus all \
-  -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e PULSE_SERVER=unix:${PULSE_SERVER} -v ${PULSE_SERVER}:${PULSE_SERVER} \
-  roblox:nvidia \
-  bash
-
-  -v roblox-config:/home/mc/.roblox \
 ```
 
 ## Build image

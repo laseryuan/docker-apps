@@ -9,18 +9,22 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -qy && apt-get install -qy --no-install-recommends \
       `# libEGL support` \
       libgl1-mesa-dri \
-      mesa-utils \
+      mesa-utils
+
+# Install Chromium
+RUN apt install -y chromium-browser libcanberra-gtk-module libcanberra-gtk3-module
+# Finish install Chromium
 
 # Install Roblox
 # https://gitlab.com/brinkervii/grapejuice/wikis/Installation/Ubuntu
 # Install Wine
 RUN dpkg --add-architecture i386 && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y software-properties-common wget && \
     wget -nc https://dl.winehq.org/wine-builds/winehq.key -O /tmp/winehq.key && \
-    apt-key add /tmp/winehq.key && \
-    apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main' && \
+    apt-key add /tmp/winehq.key
+RUN apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main' && \
     apt update && \
-    apt install --install-recommends -y wine-stable
+    apt install --install-recommends -y wine-stable winbind
 # Finish install Wine
 
 # Install Python 3.7
@@ -33,10 +37,6 @@ RUN apt install -y python3-pip virtualenv libcairo2-dev libgirepository1.0-dev l
 
 RUN apt install -y unzip
 
-# Install windows manager
-RUN apt-get install -y \
-        xfce4
-
 # Install
 # wget https://gitlab.com/brinkervii/grapejuice/-/archive/master/grapejuice-master.zip
 COPY ./grapejuice-master.zip /tmp/grapejuice-master.zip
@@ -45,6 +45,7 @@ RUN cd /tmp && \
     cd grapejuice-master && \
     python3.7 ./install.py
 
+RUN apt install -y dbus-x11
 # Finish install Roblox
 
 RUN useradd -ms /bin/bash roblox
@@ -53,10 +54,10 @@ WORKDIR /home/roblox
 
 USER roblox
 
-# RUN mkdir /home/mc/.minecraft
+# RUN mkdir /home/roblox/.minecraft
 
-COPY --chown=mc ./docker-entrypoint.sh /
-COPY --chown=mc ./README.md /
+COPY --chown=roblox ./docker-entrypoint.sh /
+COPY --chown=roblox ./README.md /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["help"]

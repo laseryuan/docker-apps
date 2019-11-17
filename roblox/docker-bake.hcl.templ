@@ -10,12 +10,3 @@ target "amd64" {
     tags = ["{{REPO}}:amd64"]
     output = ["type=docker"]
 }
-
-target "arm32" {
-    dockerfile = "./arm32/Dockerfile"
-    platforms = [
-        "linux/arm/v6",
-    ]
-    tags = ["{{REPO}}:arm32"]
-    output = ["type=docker"]
-}
