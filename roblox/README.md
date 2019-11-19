@@ -23,9 +23,10 @@ docker volume create \
   --label keep \
   roblox-config
 
-export PULSE_SERVER=/var/run/pulse/native
 export PULSE_SERVER=/run/user/1000/pulse/native
 
+# if using system-wise pulseaudio
+export PULSE_SERVER=/run/pulse/native
 xhost +SI:localuser:$(id -nu 1000) # if current user id is not 1000
 ```
 

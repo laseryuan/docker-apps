@@ -1,3 +1,5 @@
+# https://gitlab.com/brinkervii/grapejuice/wikis/Installation/Ubuntu
+# https://appdb.winehq.org/objectManager.php?sClass=application&iId=9392
 FROM nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04
 
 

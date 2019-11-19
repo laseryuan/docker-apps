@@ -2,10 +2,9 @@
 # vim: set noswapfile :
 
 main() {
-  /etc/init.d/dbus start
   case "$1" in
     run)
-      minecraft-launcher
+/etc/init.d/dbus start # docker exec -it -u root roblox-dev
       ;;
     help)
       run-help
