@@ -22,19 +22,11 @@ docker rm -f tor-browser
 
 Build
 ```
-REPO=tor-browser && ARCH=amd64
-cd ~/projects/docker-apps/${REPO}
-
-VERSION=19.10 && TAG=${VERSION}-${ARCH}
-echo $REPO && echo $VERSION && echo $TAG
+export REPO=tor-browser && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-apps/tor-browser
+docker build -t tor-browser:amd64 .
 ```
 
 ## Deploy
 ```
-export DOCKER_CLI_EXPERIMENTAL=enabled
-docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64
-
-docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
-docker manifest push -p lasery/${REPO}
-docker manifest inspect lasery/${REPO}
+./build.sh push
 ```
