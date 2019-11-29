@@ -2,12 +2,9 @@
 FROM jess/chrome
 {{/amd64}}
 
-{{#arm32}}
-FROM balenalib/raspberry-pi-debian:stretch-20191011
-{{/arm32}}
-
 USER root
 
 RUN usermod -u 1000 chrome && groupmod -g 1000 chrome
+RUN chown chrome:chrome /home/chrome
 
 USER chrome
