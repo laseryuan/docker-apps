@@ -1,14 +1,4 @@
-{{#amd64}}
-FROM debian:stretch-20181112-slim
-{{/amd64}}
-
-{{#arm32v6}}
-FROM resin/raspberry-pi-debian:stretch-20181024
-{{/arm32v6}}
-
-{{#cross}}
-RUN [ "cross-build-start" ]
-{{/cross}}
+FROM debian:stretch-slim
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
@@ -30,10 +20,6 @@ RUN pip3 install --upgrade setuptools pip
 RUN pip install ansible
 
 RUN useradd -ms /bin/bash ansible
-
-{{#cross}}
-RUN [ "cross-build-end" ]
-{{/cross}}
 
 USER ansible
 WORKDIR /home/ansible/app

@@ -1,6 +1,4 @@
-FROM debian:stretch-20181112-slim
-
-
+FROM debian:stretch-slim
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
@@ -22,7 +20,6 @@ RUN pip3 install --upgrade setuptools pip
 RUN pip install ansible
 
 RUN useradd -ms /bin/bash ansible
-
 
 USER ansible
 WORKDIR /home/ansible/app
