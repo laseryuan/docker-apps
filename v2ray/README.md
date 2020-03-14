@@ -24,6 +24,11 @@ docker buildx bake
   --cache-from lasery/app \
 ```
 
+### Cross run
+```
+docker run --rm -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -it v2ray:arm32 sh
+```
+
 ## Start the program
 Prepare environment
 ```
