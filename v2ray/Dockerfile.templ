@@ -37,7 +37,7 @@ ENV TZ ${TZ}
 ENV V2RAY_VERSION v4.19.1 
 ENV V2RAY_LOG_DIR /var/log/v2ray
 ENV V2RAY_CONFIG_DIR /etc/v2ray/
-ENV V2RAY_DOWNLOAD_URL https://github.com/v2ray/v2ray-core/releases/download/${V2RAY_VERSION}/v2ray-linux-64.zip
+ENV V2RAY_DOWNLOAD_URL https://github.com/v2ray/v2ray-core/releases/download/${V2RAY_VERSION}/v2ray-linux-arm.zip
 
 RUN apk upgrade --update \
     && apk add \
@@ -50,12 +50,10 @@ RUN apk upgrade --update \
         /tmp/v2ray \
     && curl -L -H "Cache-Control: no-cache" -o /tmp/v2ray/v2ray.zip ${V2RAY_DOWNLOAD_URL} \
     && pwd \
-    && unzip /tmp/v2ray/v2ray.zip -d /tmp/v2ray/ \
-    && mv /tmp/v2ray/v2ray /usr/bin \
-    && mv /tmp/v2ray/v2ctl /usr/bin \
-    && mv /tmp/v2ray/vpoint_vmess_freedom.json /etc/v2ray/config.json \
-    && chmod +x /usr/bin/v2ray \
-    && chmod +x /usr/bin/v2ctl \
+    && unzip /tmp/v2ray/v2ray.zip -d /etc/v2ray/ \
+    && ln -s /etc/v2ray/v2ray /usr/bin/v2ray \
+    && ln -s /etc/v2ray/v2ctl /usr/bin/v2ctl \
+    && mv /etc/v2ray/vpoint_vmess_freedom.json /etc/v2ray/config.json \
     && apk del curl \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
@@ -98,7 +96,8 @@ COPY index.html /srv/index.html
 # COPY package.json /etc/package.json
 # install process wrapper
 COPY --from=builder /install/parent /bin/parent
-ADD caddy.sh /caddy.sh
+ADD docker-entrypoint.sh /
+ADD caddy.sh /
+ADD client.sh /
 EXPOSE 443 80
-ENTRYPOINT ["/caddy.sh"]
-# CMD ["--conf", "/etc/Caddyfile", "--log", "stdout", "--agree=$ACME_AGREE"]
+ENTRYPOINT ["/docker-entrypoint.sh"]

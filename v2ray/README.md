@@ -24,37 +24,17 @@ docker buildx bake
   --cache-from lasery/app \
 ```
 
-### Cross run
-```
-docker run --rm -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static -it v2ray:arm32 sh
-```
-
 ## Start the program
 Prepare environment
 ```
-docker volume create \
-  --label keep \
-  v2ray-config
-
-docker run --rm -v v2ray-config:/home/v2ray/ v2ray:amd64 init
-
-export PULSE_SERVER=/run/user/1000/pulse/native
-
-# if using system-wise pulseaudio
-export PULSE_SERVER=/run/pulse/native
-xhost +SI:localuser:$(id -nu 1000) # if current user id is not 1000
-```
-
-```
 docker run -it --rm --name=v2ray-dev \
-  -v v2ray-config:/home/v2ray/ \
-  -p 6567:6567 \
-  -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
-  --device=/dev/dri:/dev/dri \
-  -e PULSE_SERVER=unix:${PULSE_SERVER} -v ${PULSE_SERVER}:${PULSE_SERVER} \
-  -v /etc/localtime:/etc/localtime:ro \
+  -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
   v2ray:amd64 \
-  bash
+  sh
+
+  /docker-entrypoint.sh server {domain.com} V2RAY_WS {v2ray_id}
+  /docker-entrypoint.sh client {domain.com} V2RAY_WS {v2ray_id}
+
 ```
 
 ## Build image

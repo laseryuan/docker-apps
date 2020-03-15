@@ -3,23 +3,21 @@
 
 main() {
   case "$1" in
-    init)
-mkdir /home/mindustry/.config
+    server)
+shift
+/caddy.sh "$@"
       ;;
-    run)
-/tmp/Mindustry
+    client)
+shift
+/client.sh "$@"
       ;;
     help)
-      run-help
+cat /README.md
       ;;
     *)
       exec "$@"
       ;;
   esac
-}
-
-run-help() {
-cat /README.md
 }
 
 main "$@"
