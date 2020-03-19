@@ -27,21 +27,18 @@ SERVER_IP=\
 
 SERVER_PORT=\
 
-TPROXY_PORT=\
-
-cd ~/projects/pi-router/shadowsocksr/
+PROXY_PORT=\
 
   -v $PWD/app/:/root/app/ \
   -v $PWD/docker-entrypoint.sh:/docker-entrypoint.sh \
 
 docker run --rm \
   --name shadowsocksr-cli \
-  -p ${TPROXY_PORT}:${TPROXY_PORT} \
-  -p ${TPROXY_PORT}:${TPROXY_PORT}/udp \
-  -e TPROXY_PORT=${TPROXY_PORT} \
+  -p ${PROXY_PORT}:${PROXY_PORT} -p ${PROXY_PORT}:${PROXY_PORT}/udp \
+  -e PROXY_PORT=${PROXY_PORT} \
   -e VERBOSE=TRUE \
   -e SERVER_IP=${SERVER_IP} -e SERVER_PORT=${SERVER_PORT} -e SERVER_PASSWORD=MY_SSPASSWORD \
-  lasery/shadowsocksr:arm32-${VERSION} \
+  shadowsocksr \
   client
 ```
 
@@ -49,7 +46,6 @@ docker run --rm \
 ```
 ./build.sh docker
 
-export DOCKER_CLI_EXPERIMENTAL=enabled
 docker buildx bake
 ```
 

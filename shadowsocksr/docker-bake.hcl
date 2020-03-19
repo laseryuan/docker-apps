@@ -1,5 +1,14 @@
 group "default" {
-    targets = ["arm32"]
+    targets = ["amd64", "arm32"]
+}
+
+target "amd64" {
+    dockerfile = "./amd64/Dockerfile"
+    platforms = [
+        "linux/amd64",
+    ]
+    tags = ["shadowsocksr", "shadowsocksr:amd64"]
+    output = ["type=docker"]
 }
 
 target "arm32" {
