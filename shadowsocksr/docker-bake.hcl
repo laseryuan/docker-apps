@@ -7,6 +7,6 @@ target "arm32" {
     platforms = [
         "linux/arm/v6",
     ]
-    tags = ["ssr-libev:arm32"]
+    tags = ["shadowsocksr:arm32"]
     output = ["type=docker"]
 }

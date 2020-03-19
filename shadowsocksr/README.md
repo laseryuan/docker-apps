@@ -1,14 +1,14 @@
 # Usage
 ```
-docker run --rm lasery/shadowsocksr-libev help
+docker run --rm lasery/shadowsocksr help
 ```
 
 # Development
 
 ## Set enviornment
 ```
-export REPO=shadowsocksr-libev && export VERSION=$(date "+%y.%m")
-cd ~/projects/docker-apps/shadowsocksr-libev
+export REPO=shadowsocksr && export VERSION=$(date "+%y.%m")
+cd ~/projects/docker-apps/shadowsocksr
 ```
 
 ```
@@ -29,7 +29,7 @@ SERVER_PORT=\
 
 TPROXY_PORT=\
 
-cd ~/projects/pi-router/shadowsocksr-libev/
+cd ~/projects/pi-router/shadowsocksr/
 
   -v $PWD/app/:/root/app/ \
   -v $PWD/docker-entrypoint.sh:/docker-entrypoint.sh \
@@ -41,8 +41,8 @@ docker run --rm \
   -e TPROXY_PORT=${TPROXY_PORT} \
   -e VERBOSE=TRUE \
   -e SERVER_IP=${SERVER_IP} -e SERVER_PORT=${SERVER_PORT} -e SERVER_PASSWORD=MY_SSPASSWORD \
-  lasery/shadowsocksr-libev:arm32-${VERSION} \
-  start
+  lasery/shadowsocksr:arm32-${VERSION} \
+  client
 ```
 
 ## Build image
