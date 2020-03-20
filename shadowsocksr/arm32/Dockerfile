@@ -6,22 +6,19 @@ RUN apt-get update -qy && apt-get install -qy \
       --no-install-recommends \
       && rm -rf /var/lib/apt/lists/*
 
+# Install shadowsocksr-libev
 ADD ./ssr-libev-2.5.3.tar.gz /tmp/
 RUN mv /tmp/shadowsocksr-libev-2.5.3 /root/shadowsocksr-libev
 
-WORKDIR /root/shadowsocksr-libev
+RUN cd /root/shadowsocksr-libev && ./configure && make && make install
 
-RUN ./configure && make
-RUN make install
+# Install shadowsocksr-libev
+ADD ./ssrr-3.2.2.tar.gz /tmp/
+RUN mv /tmp/shadowsocksr-3.2.2 /root/shadowsocksr
 
-# Development
-# RUN apt-get install -y \
-  # curl \
-  # dnsutils \
-  # netcat \
-  # --no-install-recommends
+RUN cd /root/shadowsocksr && bash setup_cymysql.sh && bash initcfg.sh
 
-WORKDIR /root/app/
+COPY config.json /root/shadowsocksr/user-config.json
 
 STOPSIGNAL SIGTERM
 COPY docker-entrypoint.sh /

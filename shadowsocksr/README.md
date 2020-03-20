@@ -31,15 +31,17 @@ PROXY_PORT=\
 
   -v $PWD/app/:/root/app/ \
   -v $PWD/docker-entrypoint.sh:/docker-entrypoint.sh \
-
 docker run --rm \
   --name shadowsocksr-cli \
   -p ${PROXY_PORT}:${PROXY_PORT} -p ${PROXY_PORT}:${PROXY_PORT}/udp \
   -e PROXY_PORT=${PROXY_PORT} \
   -e VERBOSE=TRUE \
   -e SERVER_IP=${SERVER_IP} -e SERVER_PORT=${SERVER_PORT} -e SERVER_PASSWORD=MY_SSPASSWORD \
+  -e METHOD=aes-256-cfb -e PROTOCOL=origin \
   shadowsocksr \
   client
+
+  server
 ```
 
 ## Build image

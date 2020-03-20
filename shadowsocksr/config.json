@@ -1,0 +1,6 @@
+// vim: set noswapfile :
+{
+    "password": "<password>",
+    "protocol": "<protocol>",
+    "method": "<method>"
+}
