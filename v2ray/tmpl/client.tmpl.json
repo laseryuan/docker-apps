@@ -1,22 +1,15 @@
-#!/bin/bash
-# FILE="/etc/Caddy"
-domain="$1"
-psname="$2"
-uuid="$3"
-
-# v2ray
-cat > /etc/v2ray/config.json <<'EOF'
 {
   "log": {
-    "loglevel": "warning"
+    "loglevel": "${loglevel}"
   },
   "inbound": {
-    "port": 1080,
+    "port": "${socks_port}",
     "listen": "0.0.0.0",
     "protocol": "socks",
     "settings": {
       "auth": "noauth",
-      "udp": false
+      "ip": "0.0.0.0",
+      "udp": true
     }
   },
   "inboundDetour": [
@@ -31,10 +24,10 @@ cat > /etc/v2ray/config.json <<'EOF'
     "protocol": "vmess",
     "settings": {
       "vnext": [{
-        "address": "domain", // 服务器地址，请修改为你自己的服务器 ip 或域名
+        "address": "${domain}", // 服务器地址，请修改为你自己的服务器 ip 或域名
         "port": 443,  // 服务器端口
         "users": [{
-            "id": "uuid", //你的UUID， 此ID需与服务端保持一致
+            "id": "${v2ray_id}", //你的UUID， 此ID需与服务端保持一致
             "level": 1,
             "alterId": 4,  //此ID也需与客户端保持一致
             "security": "aes-128-gcm"
@@ -45,10 +38,10 @@ cat > /etc/v2ray/config.json <<'EOF'
         "network": "ws",
         "security": "tls",
         "tlsSettings": {
-            "serverName": "domain" //此域名是你服务器的域名
+            "serverName": "${domain}" //此域名是你服务器的域名
         },
         "wsSettings": {
-            "path": "/one" //与服务器配置及nginx配置相关
+            "path": "${ws_path}" //与服务器配置及nginx配置相关
         }
     },
     "tag": "forgin"
@@ -104,9 +97,3 @@ cat > /etc/v2ray/config.json <<'EOF'
   }
 }
 
-EOF
-
-sed -i "s/uuid/${uuid}/" /etc/v2ray/config.json
-sed -i "s/\bdomain\b/${domain}/" /etc/v2ray/config.json
-
-/usr/bin/v2ray -config /etc/v2ray/config.json

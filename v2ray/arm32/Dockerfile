@@ -96,8 +96,9 @@ COPY index.html /srv/index.html
 # COPY package.json /etc/package.json
 # install process wrapper
 COPY --from=builder /install/parent /bin/parent
-ADD docker-entrypoint.sh /
-ADD caddy.sh /
-ADD client.sh /
+COPY tmpl/ /etc/v2ray/tmpl/
+COPY docker-entrypoint.sh /
+COPY caddy.sh /
+
 EXPOSE 443 80
 ENTRYPOINT ["/docker-entrypoint.sh"]

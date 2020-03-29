@@ -27,14 +27,24 @@ docker buildx bake
 ## Start the program
 Prepare environment
 ```
+  -e DEBUG=true
+  -e WS_PATH="/two"
+
+  -e DOMAIN=
+  -e V2RAY_ID=
+
+  -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
+  -v $(pwd)/tmpl/:/etc/v2ray/tmpl/ \
+
 docker run -it --rm --name=v2ray-dev \
-  -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
-  v2ray:amd64 \
-  sh
+  v2ray \
+  bash
+
+  client
 
   /docker-entrypoint.sh server {domain.com} V2RAY_WS {v2ray_id}
-  /docker-entrypoint.sh client {domain.com} V2RAY_WS {v2ray_id}
 
+  -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
 ```
 
 ## Build image
