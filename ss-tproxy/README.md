@@ -18,18 +18,19 @@ docker buildx bake
 ```
 
 ```
-  -e DOCKER_NET \
-  -e HOST_ADDRESS=\
   -e DEBUG=true \
+  -e USE_REDSOCKS=false \
   -e SSTP_CONFIG="mode=gfwlist" \
+  -e DOCKER_NET \
 
+  -e HOST_ADDRESS=\
   -e SOCKS_IP=\
   -e SOCKS_PORT=\
 
   -v $(pwd)/redsocks/redsocks-fw.sh:/usr/local/bin/redsocks-fw.sh
   -v $(pwd)/redsocks/redsocks.tmpl:/etc/redsocks.tmpl
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
-  -v $(pwd)/ss-tproxy:/etc/ss-tproxy/tmpl/ \
+  -v $(pwd)/tmpl/:/etc/ss-tproxy/tmpl/ \
 
 docker run --privileged=true --net=host --sysctl net.ipv4.conf.all.route_localnet=1 --name ss-tproxy \
   -it --rm \

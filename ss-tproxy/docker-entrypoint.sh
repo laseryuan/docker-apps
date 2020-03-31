@@ -50,25 +50,52 @@ ss-tproxy-config-valid() {
 ss-tproxy-config() {
   # ss-tproxy-config-valid
 
+  [ -z "${HOST_ADDRESS}" ] && { echo "Need to defaine HOST_ADDRESS !"; return 1; } || host_address="${HOST_ADDRESS}"
+
   [[ "${DEBUG}" == "true" ]] && ipt2socks_verbose='-v' || ipt2socks_verbose=""
+  [[ "${DEBUG}" == "true" ]] && log_debug='on' || log_debug="off"
+
+  [ -z "${USE_REDSOCKS}" ] && use_redsocks='true' || use_redsocks="false"
   [ -z "${SOCKS_IP}" ] && socks_ip='127.0.0.1' || socks_ip="${SOCKS_IP}"
   [ -z "${SOCKS_PORT}" ] && socks_port='1080' || socks_port="${SOCKS_PORT}"
-  [ -z "${HOST_ADDRESS}" ] && { echo "Need to defaine HOST_ADDRESS !"; return 1; } || host_address="${HOST_ADDRESS}"
+
 
   echo "Creating ss-tproxy configuration file ..."
   sed \
     -e "s|\${host_address}|${host_address}|" \
     -e "s|\${DEBUG}|${if_debug}|" \
-    -e "s|\${proxy_startcmd}|start_ipt2socks|" \
-    -e "s|\${proxy_stopcmd}|kill -9 \$(pidof ipt2socks)|" \
-      /etc/ss-tproxy/tmpl/ss-tproxy.conf.tmpl > /etc/ss-tproxy/ss-tproxy.conf
+      /etc/ss-tproxy/tmpl/ss-tproxy.conf.tmpl > /etc/ss-tproxy/ss-tproxy.conf.tmp
 
-  echo "Creating ipt2socks configuration file using ${socks_ip}:${socks_port}..."
-  sed \
-    -e "s|\${socks_ip}|${socks_ip}|" \
-    -e "s|\${socks_port}|${socks_port}|" \
-    -e "s|\${verbose}|${ipt2socks_verbose}|" \
-      /etc/ss-tproxy/tmpl/start_ipt2socks.tmpl >> /etc/ss-tproxy/ss-tproxy.conf
+  if [[ "${use_redsocks}" == "true" ]]; then
+    echo "Creating redsocks.conf file using: ${socks_ip}:${socks_port}..."
+    sed \
+      -e "s|\${ip}|${socks_ip}|" \
+      -e "s|\${port}|${socks_port}|" \
+      -e "s|\${log_debug}|${log_debug}|" \
+        /etc/ss-tproxy/tmpl/redsocks.conf.tmpl > /etc/ss-tproxy/redsocks.conf
+
+    cat /etc/ss-tproxy/redsocks.conf
+
+    echo "Use redsocks startup script ..."
+    sed \
+      -e "s|\${proxy_startcmd}|start_redsocks2|" \
+      -e "s|\${proxy_stopcmd}|kill -9 \$(pidof redsocks2)|" \
+        /etc/ss-tproxy/ss-tproxy.conf.tmp > /etc/ss-tproxy/ss-tproxy.conf
+
+    cat /etc/ss-tproxy/tmpl/start_redsocks2.tmpl >> /etc/ss-tproxy/ss-tproxy.conf
+  else
+    sed \
+      -e "s|\${proxy_startcmd}|start_ipt2socks|" \
+      -e "s|\${proxy_stopcmd}|kill -9 \$(pidof ipt2socks)|" \
+        /etc/ss-tproxy/ss-tproxy.conf.tmp > /etc/ss-tproxy/ss-tproxy.conf
+
+    echo "Use ipt2socks startup script using ${socks_ip}:${socks_port}..."
+    sed \
+      -e "s|\${socks_ip}|${socks_ip}|" \
+      -e "s|\${socks_port}|${socks_port}|" \
+      -e "s|\${verbose}|${ipt2socks_verbose}|" \
+        /etc/ss-tproxy/tmpl/start_ipt2socks.tmpl >> /etc/ss-tproxy/ss-tproxy.conf
+  fi
 
   cat /etc/ss-tproxy/ss-tproxy.conf
 }
