@@ -1,0 +1,4 @@
+# https://github.com/zfl9/ipt2socks/issues/15
+start_ipt2socks() {
+    (ipt2socks ${verbose} -R -s ${socks_ip} -p ${socks_port} </dev/null &>>/var/log/ipt2socks.log &)
+}

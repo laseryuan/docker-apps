@@ -1,0 +1,81 @@
+# Redsocks docker image.
+FROM debian:stretch-20200224
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# Install packages
+RUN apt-get update && apt-get install -y \
+      iptables curl perl ipset iproute2 dnsmasq make gcc libuv1-dev automake libtool unzip
+
+# Installation of chinadns-ng
+RUN curl -L https://github.com/zfl9/chinadns-ng/archive/master.zip -o /tmp/chinadns-ng.zip
+RUN unzip /tmp/chinadns-ng.zip -d /tmp/
+RUN mv /tmp/chinadns-ng-master /tmp/chinadns-ng
+
+WORKDIR /tmp/chinadns-ng
+RUN make && make install
+
+# Install libuv
+ENV libuv_version="1.32.0"
+RUN curl -L https://github.com/libuv/libuv/archive/v$libuv_version.tar.gz -o /tmp/libuv-$libuv_version.tar.gz && \
+  tar xvf /tmp/libuv-$libuv_version.tar.gz -C /tmp/ && \
+  mv /tmp/libuv-$libuv_version /tmp/libuv
+
+WORKDIR /tmp/libuv
+RUN ./autogen.sh && \
+  ./configure --prefix=/opt/libuv --enable-shared=no --enable-static=yes CC="gcc -O3" && \
+  make && make install
+
+# Installation of ipt2socks
+ENV ipt2socks_version="1.0.2"
+RUN curl -L https://github.com/zfl9/ipt2socks/archive/v$ipt2socks_version.tar.gz -o /tmp/ipt2socks.tar.gz && \
+  tar xvf /tmp/ipt2socks.tar.gz -C /tmp/ && \
+  mv /tmp/ipt2socks-$ipt2socks_version /opt/ipt2socks
+
+WORKDIR /opt/ipt2socks
+RUN make INCLUDES="-I/opt/libuv/include" LDFLAGS="-L/opt/libuv/lib" && make install
+
+# Installation of dns2tcp
+ENV dns2tcp_version="master"
+RUN curl -L https://github.com/zfl9/dns2tcp/archive/${dns2tcp_version}.zip -o /tmp/dns2tcp.zip && \
+  unzip /tmp/dns2tcp.zip -d /tmp/ && \
+  mv /tmp/dns2tcp-${dns2tcp_version} /tmp/dns2tcp
+
+WORKDIR /tmp/dns2tcp
+RUN make && make install
+
+# Build ss-tproxy
+ENV sstproxy_version="4.6"
+RUN curl -L https://github.com/zfl9/ss-tproxy/archive/v${sstproxy_version}.tar.gz -o /tmp/sstproxy.tar.gz && \
+  tar xvf /tmp/sstproxy.tar.gz -C /tmp/ && \
+  mv /tmp/ss-tproxy-${sstproxy_version} /tmp/ss-tproxy
+
+WORKDIR /tmp/ss-tproxy
+RUN chmod +x ss-tproxy && \
+  cp -af ss-tproxy /usr/local/bin && \
+  mkdir -p /etc/ss-tproxy && \
+  cp -af ss-tproxy.conf gfwlist* chnroute* ignlist* /etc/ss-tproxy && \
+  cp -af ss-tproxy.service /etc/systemd/system
+
+# Installation of redsocks2
+ENV redsocks2_version="0.67"
+RUN apt-get install -y \
+      git libevent-dev openssl
+RUN curl -L https://github.com/semigodking/redsocks/archive/release-${redsocks2_version}.tar.gz -o /tmp/redsocks2.tar.gz && \
+  tar xvf /tmp/redsocks2.tar.gz -C /tmp/ && \
+  mv /tmp/redsocks-release-${redsocks2_version} /tmp/redsocks2
+
+WORKDIR /tmp/redsocks2
+RUN git apply patches/disable-ss.patch && \
+  make && \
+  mv redsocks2 /usr/local/bin
+
+# Development
+# RUN apt-get install -y \
+      # python netcat dnsutils procps
+
+COPY tmpl/ /etc/ss-tproxy/tmpl/
+COPY docker-entrypoint.sh /
+COPY README.md /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
