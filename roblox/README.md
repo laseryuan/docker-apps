@@ -31,12 +31,13 @@ xhost +SI:localuser:$(id -nu 1000) # if current user id is not 1000
 ```
 
 ```
+  --device=/dev/snd:/dev/snd \
+
 docker run -it --rm --name=roblox-dev \
   --privileged \
   -v roblox-config:/home/roblox/ \
   -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
   --device=/dev/dri:/dev/dri \
-  --device=/dev/snd:/dev/snd \
   -e PULSE_SERVER=unix:${PULSE_SERVER} -v ${PULSE_SERVER}:${PULSE_SERVER} \
   -v /etc/localtime:/etc/localtime:ro \
   --security-opt seccomp=$(pwd)/chrome.json \

@@ -59,8 +59,10 @@ RUN chmod +x ss-tproxy && \
 
 # Installation of redsocks2
 ENV redsocks2_version="0.67"
+
 RUN apt-get install -y \
       git libevent-dev openssl
+
 RUN curl -L https://github.com/semigodking/redsocks/archive/release-${redsocks2_version}.tar.gz -o /tmp/redsocks2.tar.gz && \
   tar xvf /tmp/redsocks2.tar.gz -C /tmp/ && \
   mv /tmp/redsocks-release-${redsocks2_version} /tmp/redsocks2

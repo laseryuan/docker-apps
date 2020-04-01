@@ -13,6 +13,7 @@ RUN mv /tmp/shadowsocksr-libev-2.5.3 /root/shadowsocksr-libev
 RUN cd /root/shadowsocksr-libev && ./configure && make && make install
 
 # Install shadowsocksr-libev
+# https://github.com/shadowsocksrr/shadowsocksr
 ADD ./ssrr-3.2.2.tar.gz /tmp/
 RUN mv /tmp/shadowsocksr-3.2.2 /root/shadowsocksr
 
