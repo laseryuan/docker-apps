@@ -1,11 +1,13 @@
 # Redsocks docker image.
-FROM debian:stretch-20200224
+FROM debian:buster-20200327
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get update && apt-get install -y \
       iptables curl perl ipset iproute2 dnsmasq make gcc libuv1-dev automake libtool unzip
+
+RUN c_rehash
 
 # Installation of chinadns-ng
 RUN curl -L https://github.com/zfl9/chinadns-ng/archive/master.zip -o /tmp/chinadns-ng.zip
@@ -58,18 +60,15 @@ RUN chmod +x ss-tproxy && \
   cp -af ss-tproxy.service /etc/systemd/system
 
 # Installation of redsocks2
-ENV redsocks2_version="0.67"
-
 RUN apt-get install -y \
-      git libevent-dev openssl
+      git libevent-dev openssl libssl-dev
 
-RUN curl -L https://github.com/semigodking/redsocks/archive/release-${redsocks2_version}.tar.gz -o /tmp/redsocks2.tar.gz && \
-  tar xvf /tmp/redsocks2.tar.gz -C /tmp/ && \
-  mv /tmp/redsocks-release-${redsocks2_version} /tmp/redsocks2
+RUN curl -L https://github.com/semigodking/redsocks/archive/master.zip -o /tmp/redsocks2.zip
+RUN unzip /tmp/redsocks2.zip -d /tmp/
+RUN mv /tmp/redsocks-master /tmp/redsocks2
 
 WORKDIR /tmp/redsocks2
-RUN git apply patches/disable-ss.patch && \
-  make && \
+RUN make DISABLE_SHADOWSOCKS=true && \
   mv redsocks2 /usr/local/bin
 
 # Development

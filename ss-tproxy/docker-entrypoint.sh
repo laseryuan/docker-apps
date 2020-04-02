@@ -4,15 +4,20 @@
 main() {
   case "$1" in
     ipt2socks)
-shift
-run-ipt2socks "$@"
+      shift
+      run-ipt2socks "$@"
       ;;
     sstproxy)
-shift
-run-sstproxy
+      shift
+      run-sstproxy
       ;;
     help)
-cat /README.md
+      cat /README.md
+      ;;
+    test)
+      redsocks2 -h
+      ipt2socks -h
+      ss-tproxy help
       ;;
     *)
       exec "$@"

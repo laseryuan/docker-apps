@@ -9,6 +9,8 @@ amd64=true mo ./Dockerfile.templ > ./amd64/Dockerfile
 arm32=true mo ./Dockerfile.templ > ./arm32/Dockerfile
 
 mo ./docker-bake.hcl.templ > ./docker-bake.hcl
+
+docker buildx bake
       ;;
     push)
 export DOCKER_CLI_EXPERIMENTAL=enabled
