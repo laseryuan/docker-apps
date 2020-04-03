@@ -8,17 +8,15 @@ base {
 }
 
 redsocks {
-  local_ip = 0.0.0.0;
-  local_port = 60080;
-  ip = ${ip};
-  port = ${port};
+  bind = "0.0.0.0:60080";
+  relay = "${ip}:${port}";
   type = socks5;
+  timeout = 10;
 }
 
 redudp {
-  local_ip = 0.0.0.0;
-  local_port = 60080;
-  ip = ${ip};
-  port = ${port};
+  bind = "127.0.0.1:60080";
+  relay = "${ip}:${port}";
   type = socks5;
+  udp_timeout = 30;
 }

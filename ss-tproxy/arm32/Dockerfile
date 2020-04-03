@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y \
       iptables curl perl ipset iproute2 dnsmasq make gcc libuv1-dev automake libtool unzip
 
+# https://forums.balena.io/t/unable-to-complete-the-sense-application-help-please/19698/6
 RUN c_rehash
 
 # Installation of chinadns-ng
@@ -63,9 +64,10 @@ RUN chmod +x ss-tproxy && \
 RUN apt-get install -y \
       git libevent-dev openssl libssl-dev
 
-RUN curl -L https://github.com/semigodking/redsocks/archive/master.zip -o /tmp/redsocks2.zip
-RUN unzip /tmp/redsocks2.zip -d /tmp/
-RUN mv /tmp/redsocks-master /tmp/redsocks2
+ENV redsocks2_version="master"
+RUN curl -L https://github.com/semigodking/redsocks/archive/${redsocks2_version}.zip -o /tmp/redsocks2.zip && \
+  unzip /tmp/redsocks2.zip -d /tmp/ && \
+  mv /tmp/redsocks-${redsocks2_version} /tmp/redsocks2
 
 WORKDIR /tmp/redsocks2
 RUN make DISABLE_SHADOWSOCKS=true && \
