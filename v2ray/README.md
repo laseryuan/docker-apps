@@ -13,15 +13,11 @@ docker run --rm lasery/v2ray
 ## Set enviornment
 ```
 export REPO=v2ray && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-apps/v2ray
-./build.sh docker
 ```
 
 ## Build image
 ```
-export DOCKER_CLI_EXPERIMENTAL=enabled
-docker buildx bake
-
-  --cache-from lasery/app \
+./build.sh docker
 ```
 
 ## Start the program
@@ -43,14 +39,6 @@ docker run -it --rm --name=v2ray-dev \
   client
 
   /docker-entrypoint.sh server {domain.com} V2RAY_WS {v2ray_id}
-
-  -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
-```
-
-## Build image
-- Local
-```
-docker buildx bake
 ```
 
 ## Deploy image
