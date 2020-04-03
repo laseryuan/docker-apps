@@ -31,6 +31,7 @@ Prepare environment
 
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
   -v $(pwd)/tmpl/:/etc/v2ray/tmpl/ \
+  -v $(pwd)/web/:/tmp/web/ \
 
 docker run -it --rm --name=v2ray-dev \
   v2ray \

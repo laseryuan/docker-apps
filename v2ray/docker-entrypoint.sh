@@ -5,6 +5,7 @@ main() {
   case "$1" in
     server)
 shift
+copy_web_pages
 /caddy.sh "$@"
       ;;
     client)
@@ -36,6 +37,13 @@ client-config() {
       /etc/v2ray/tmpl/client.tmpl.json > /etc/v2ray/config.json
 
   cat /etc/v2ray/config.json
+}
+
+copy_web_pages() {
+  if [ "$(ls -A /tmp/web)" ]; then
+     echo "Copying web contents ..."
+     cp -a /tmp/web/* /srv/
+  fi
 }
 
 main "$@"
