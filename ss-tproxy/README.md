@@ -14,7 +14,6 @@ cd ~/projects/docker-apps/ss-tproxy
 ## Build image
 ```
 ./build.sh docker
-docker buildx bake
 ```
 
 ```

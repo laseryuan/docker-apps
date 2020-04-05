@@ -57,6 +57,7 @@ ss-tproxy-config() {
 
   [ -z "${HOST_ADDRESS}" ] && { echo "Need to defaine HOST_ADDRESS !"; return 1; } || host_address="${HOST_ADDRESS}"
 
+  [[ "${DEBUG}" == "true" ]] && if_debug='true' || if_debug="false"
   [[ "${DEBUG}" == "true" ]] && ipt2socks_verbose='-v' || ipt2socks_verbose=""
   [[ "${DEBUG}" == "true" ]] && log_debug='on' || log_debug="off"
 
@@ -68,7 +69,7 @@ ss-tproxy-config() {
   echo "Creating ss-tproxy configuration file ..."
   sed \
     -e "s|\${host_address}|${host_address}|" \
-    -e "s|\${DEBUG}|${if_debug}|" \
+    -e "s|\${if_debug}|${if_debug}|" \
       /etc/ss-tproxy/tmpl/ss-tproxy.conf.tmpl > /etc/ss-tproxy/ss-tproxy.conf.tmp
 
   if [[ "${use_redsocks}" == "true" ]]; then
