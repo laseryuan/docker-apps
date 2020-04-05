@@ -77,6 +77,9 @@ RUN make DISABLE_SHADOWSOCKS=true && \
 # RUN apt-get install -y \
       # python netcat dnsutils procps
 
+# https://github.com/moby/moby/issues/38099
+RUN update-alternatives --set iptables /usr/sbin/iptables-legacy
+
 COPY tmpl/ /etc/ss-tproxy/tmpl/
 COPY docker-entrypoint.sh /
 COPY README.md /

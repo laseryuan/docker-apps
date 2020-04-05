@@ -18,7 +18,8 @@ cd ~/projects/docker-apps/ss-tproxy
 
 ```
   -e DEBUG=true \
-  -e USE_REDSOCKS=false \
+  -e REDSOCKS=false \
+  -e UDP=true \
   -e SSTP_CONFIG="mode=gfwlist" \
   -e DOCKER_NET \
 

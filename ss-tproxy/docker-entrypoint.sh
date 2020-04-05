@@ -61,7 +61,10 @@ ss-tproxy-config() {
   [[ "${DEBUG}" == "true" ]] && ipt2socks_verbose='-v' || ipt2socks_verbose=""
   [[ "${DEBUG}" == "true" ]] && log_debug='on' || log_debug="off"
 
-  [ -z "${USE_REDSOCKS}" ] && use_redsocks='true' || use_redsocks="false"
+  [ -z "${REDSOCKS}" ] && use_redsocks='true' || use_redsocks="${REDSOCKS}"
+  [ -z "${UDP}" ] && tcponly='true' || {
+    [[ "${UDP}" == "true" ]] && tcponly='false' || tcponly="true"
+  }
   [ -z "${SOCKS_IP}" ] && socks_ip='127.0.0.1' || socks_ip="${SOCKS_IP}"
   [ -z "${SOCKS_PORT}" ] && socks_port='1080' || socks_port="${SOCKS_PORT}"
 
@@ -70,6 +73,7 @@ ss-tproxy-config() {
   sed \
     -e "s|\${host_address}|${host_address}|" \
     -e "s|\${if_debug}|${if_debug}|" \
+    -e "s|\${tcponly}|${tcponly}|" \
       /etc/ss-tproxy/tmpl/ss-tproxy.conf.tmpl > /etc/ss-tproxy/ss-tproxy.conf.tmp
 
   if [[ "${use_redsocks}" == "true" ]]; then
