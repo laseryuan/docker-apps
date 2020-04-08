@@ -1,8 +1,9 @@
 # https://github.com/Yun-Mao/caddy_docker
-FROM golang:1.13-alpine as builder
+# Build Caddy
+FROM golang:1.13-alpine as caddy_builder
 RUN apk add --no-cache git gcc musl-dev
 RUN mkdir /www /caddy
-COPY builder.sh /usr/bin/builder.sh
+COPY caddy_builder.sh /usr/bin/caddy_builder.sh
 ARG version="1.0.5"
 ARG enable_telemetry="true"
 {{#arm32}}
@@ -11,7 +12,7 @@ ENV GOARCH=arm
 ENV GOARM=6
 {{/arm32}}
 
-RUN VERSION=${version} /bin/sh /usr/bin/builder.sh
+RUN VERSION=${version} /bin/sh /usr/bin/caddy_builder.sh
 
 FROM alpine:latest
 
@@ -20,14 +21,29 @@ ENV CADDY_VERSION=1.0.5
 ENV CADDYPATH=/caddy/certs
 
 RUN apk add --no-cache \
-    ca-certificates \
-    git \
-    mailcap \
-    openssh-client \
-    tzdata
+      ca-certificates \
+      git \
+      mailcap \
+      openssh-client \
+      tzdata
 
+# Build Trojan
+FROM alpine:latest AS trojan_builder
+WORKDIR /root
+RUN set -ex \
+      && VERSION="v1.15.1" \
+      && apk add --no-cache git build-base make cmake boost-dev openssl-dev mariadb-connector-c-dev \
+      && git clone --branch ${VERSION} --single-branch https://github.com/trojan-gfw/trojan.git \
+      && cd trojan \
+      && cmake . \
+      && make \
+      && strip -s trojan
 
-COPY --from=builder /install/caddy /usr/bin/caddy
+FROM alpine:latest
+
+# Final stage
+# Install caddy
+COPY --from=caddy_builder /install/caddy /usr/bin/caddy
 
 RUN /usr/bin/caddy -version
 RUN /usr/bin/caddy -plugins
@@ -38,4 +54,13 @@ WORKDIR /www
 
 COPY Caddyfile /caddy/Caddyfile
 
-CMD ["caddy","--conf", "/caddy/Caddyfile", "--log", "stdout", "--agree"]
+# Install trojan
+ENV TZ=Asia/Shanghai
+
+RUN set -ex \
+	&& apk add --no-cache tzdata ca-certificates libstdc++ boost-system boost-program_options mariadb-connector-c
+
+COPY --from=trojan_builder /root/trojan/trojan /usr/bin
+
+COPY tmpl/ /etc/v2ray/tmpl/
+COPY docker-entrypoint.sh /

@@ -8,6 +8,14 @@ docker pull lasery/v2ray
 docker run --rm lasery/v2ray
 ```
 
+caddy
+```
+docker run -it --rm --name=caddy \
+  webhippie/caddy:latest \
+  bash
+```
+
+
 # Development
 
 ## Set enviornment

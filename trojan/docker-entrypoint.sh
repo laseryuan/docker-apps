@@ -3,9 +3,11 @@
 
 main() {
   case "$1" in
+    caddy)
+      caddy --conf /caddy/Caddyfile --log stdout --agree
+      ;;
     server)
       server_config
-      /usr/bin/trojan -config /etc/trojan/config.json
       trojan -c /etc/trojan/config.json
       ;;
     client)

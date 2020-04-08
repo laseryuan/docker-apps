@@ -39,15 +39,14 @@ module() {
         "github.com/caddyserver/caddy/caddy/caddymain"
         "github.com/caddyserver/caddy/caddyhttp/httpserver"
         "github.com/captncraig/cors"
-        // plug in plugins here, for example:
-        // _ "import/path/here"
         "errors"
 
+        // plug in plugins here, for example:
         "github.com/caddyserver/caddy/caddytls"
         "github.com/go-acme/lego/v3/providers/dns/dnspod"
-        _ "github.com/echocat/caddy-filter"
+        // _ "import/path/here"
+        _ "github.com/abiosoft/caddy-git"
         _ "github.com/nicolasazrak/caddy-cache"
-        _ "github.com/hacdias/caddy-minify"
         _ "github.com/epicagency/caddy-expires"
         _ "github.com/captncraig/caddy-realip"
     )
