@@ -1,7 +1,7 @@
 group "default" {
-    targets = ["amd64"]
+    // targets = ["amd64"]
     // targets = ["arm32v7"]
-    // targets = ["amd64", "arm32v7"]
+    targets = ["amd64", "arm32v7"]
 }
 
 target "amd64" {

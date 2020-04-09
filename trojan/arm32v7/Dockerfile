@@ -1,29 +1,6 @@
 # https://github.com/Yun-Mao/caddy_docker
 # Build Caddy
-FROM golang:1.13-alpine as caddy_builder
-RUN apk add --no-cache git gcc musl-dev
-RUN mkdir /www /caddy
-COPY caddy_builder.sh /usr/bin/caddy_builder.sh
-ARG version="1.0.5"
-ARG enable_telemetry="true"
-# Explicitly configure go builds for ARM32v6
-ENV GOARCH=arm
-ENV GOARM=6
-
-RUN VERSION=${version} /bin/sh /usr/bin/caddy_builder.sh
-
-FROM alpine:latest
-
-ENV CADDY_VERSION=1.0.5
-
-ENV CADDYPATH=/caddy/certs
-
-RUN apk add --no-cache \
-      ca-certificates \
-      git \
-      mailcap \
-      openssh-client \
-      tzdata
+FROM lasery/caddy as caddy_builder
 
 # Build Trojan
 FROM alpine:latest AS trojan_builder
@@ -37,28 +14,25 @@ RUN set -ex \
       && make \
       && strip -s trojan
 
-FROM alpine:latest
-
 # Final stage
 # Install caddy
+FROM alpine:latest
+
 COPY --from=caddy_builder /install/caddy /usr/bin/caddy
 
 RUN /usr/bin/caddy -version
 RUN /usr/bin/caddy -plugins
 
-EXPOSE 80 443 2015
-VOLUME /root/.caddy /www
-WORKDIR /www
-
-COPY Caddyfile /caddy/Caddyfile
-
 # Install trojan
 ENV TZ=Asia/Shanghai
 
 RUN set -ex \
-	&& apk add --no-cache tzdata ca-certificates libstdc++ boost-system boost-program_options mariadb-connector-c
+  && apk add --no-cache tzdata ca-certificates libstdc++ boost-system boost-program_options mariadb-connector-c
 
 COPY --from=trojan_builder /root/trojan/trojan /usr/bin
 
-COPY tmpl/ /etc/v2ray/tmpl/
+COPY tmpl/ /etc/trojan/tmpl/
 COPY docker-entrypoint.sh /
+
+EXPOSE 443 80
+ENTRYPOINT ["/docker-entrypoint.sh"]

@@ -3,16 +3,15 @@
 
 main() {
   case "$1" in
-    caddy)
-      caddy --conf /caddy/Caddyfile --log stdout --agree
-      ;;
     server)
+      caddy_config
       server_config
+      caddy --conf /etc/Caddyfile --log stdout --agree &
+      sleep 5
       trojan -c /etc/trojan/config.json
       ;;
     client)
 shift
-copy_web_pages
       ;;
     help)
       cat /README.md
@@ -23,23 +22,34 @@ copy_web_pages
   esac
 }
 
+caddy_config() {
+  [ -z "${DOMAIN}" ] && { echo "Need to defaine DOMAIN !"; return 1; } || domain="${DOMAIN}"
+  [ -z "${WS_PATH}" ] && ws_path='/one' || ws_path="${WS_PATH}"
+
+  # [[ "${DEBUG}" == "true" ]] && log_level='0' || log_level="1"
+  # [ -z "${PASSWORDS}" ] && password='["my_trojan_pass"]' || password="${PASSWORDS}"
+
+  sed \
+    -e "s|\${domain}|${domain}|" \
+    -e "s|\${ws_path}|${ws_path}|" \
+      /etc/trojan/tmpl/Caddyfile.tmpl > /etc/Caddyfile
+
+  cat /etc/Caddyfile
+}
+
 server_config() {
+  [ -z "${DOMAIN}" ] && { echo "Need to defaine DOMAIN !"; return 1; } || domain="${DOMAIN}"
+
   [[ "${DEBUG}" == "true" ]] && log_level='0' || log_level="1"
   [ -z "${PASSWORDS}" ] && password='["my_trojan_pass"]' || password="${PASSWORDS}"
 
   sed \
+    -e "s/\${domain}/${domain}/g" \
     -e "s|\${log_level}|${log_level}|" \
     -e "s|\${password}|${password}|" \
       /etc/trojan/tmpl/server.tmpl.json > /etc/trojan/config.json
 
   cat /etc/trojan/config.json
-}
-
-copy_web_pages() {
-  if [ "$(ls -A /tmp/web)" ]; then
-     echo "Copying web contents ..."
-     cp -a /tmp/web/* /srv/
-  fi
 }
 
 main "$@"
