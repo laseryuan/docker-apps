@@ -37,13 +37,15 @@ Demand
 
 on server:
   -p 80:80 -p 443:443 -p 80:80/udp -p 443:443/udp \
+
+on client:
+  -p 1080:1080 -p 1080:1080/udp \
 ```
 
 Optional
 ```
   -e DEBUG=true
   -e WS_PATH="/two"
-  - WS_PATH="/two"
 ```
 
 
@@ -51,6 +53,8 @@ Development
 ```
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
   -v $(pwd)/tmpl/:/etc/v2ray/tmpl/ \
+
+on server:
   -v $(pwd)/web/:/tmp/web/ \
   -v $(pwd)/web/ssl/:/root/.caddy/ \
 ```
