@@ -1,6 +1,7 @@
 group "default" {
     // targets = ["amd64"]
-    targets = ["amd64", "arm32"]
+    // targets = ["arm32v7"]
+    targets = ["amd64", "arm32v7"]
 }
 
 target "amd64" {
@@ -18,5 +19,14 @@ target "arm32" {
         "linux/arm/v6",
     ]
     tags = ["v2ray:arm32"]
+    output = ["type=docker"]
+}
+
+target "arm32v7" {
+    dockerfile = "./arm32v7/Dockerfile"
+    platforms = [
+        "linux/arm/v7",
+    ]
+    tags = ["v2ray:arm32v7"]
     output = ["type=docker"]
 }

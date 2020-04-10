@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 # vim: set noswapfile :
 
 main() {
   case "$1" in
     server)
-shift
-copy_web_pages
-/caddy.sh "$@"
+      caddy_config
+      server_config
+      copy_web_pages
+      server_run
       ;;
     client)
-      client-config
+      client_config
       /usr/bin/v2ray -config /etc/v2ray/config.json
       ;;
     help)
@@ -21,7 +22,58 @@ copy_web_pages
   esac
 }
 
-client-config() {
+server_run() {
+  caddy --conf /etc/Caddyfile --log stdout --agree &
+  echo "配置 JSON 详情"
+  echo " "
+  cat /etc/v2ray/config.json
+  echo " "
+  node v2ray.js
+  /usr/bin/v2ray -config /etc/v2ray/config.json
+}
+
+caddy_config() {
+  [ -z "${DOMAIN}" ] && { echo "Need to defaine DOMAIN !"; return 1; } || domain="${DOMAIN}"
+  [ -z "${WS_PATH}" ] && ws_path='/one' || ws_path="${WS_PATH}"
+
+  # [[ "${DEBUG}" == "true" ]] && log_level='0' || log_level="1"
+  # [ -z "${PASSWORDS}" ] && password='["my_trojan_pass"]' || password="${PASSWORDS}"
+
+  sed \
+    -e "s|\${domain}|${domain}|" \
+    -e "s|\${ws_path}|${ws_path}|" \
+      /etc/v2ray/tmpl/Caddyfile.tmpl > /etc/Caddyfile
+
+  cat /etc/Caddyfile
+}
+
+server_config() {
+  [ -z "${V2RAY_ID}" ] && ( echo "Need to defaine V2RAY_ID !"; return 1; ) || v2ray_id="${V2RAY_ID}"
+  [ -z "${DOMAIN}" ] && { echo "Need to defaine DOMAIN !"; return 1; } || domain="${DOMAIN}"
+
+  [[ "${DEBUG}" == "true" ]] && loglevel='debug' || loglevel="warning"
+  [ -z "${WS_PATH}" ] && ws_path='/one' || ws_path="${WS_PATH}"
+  [ -z "${PS_NAME}" ] && psname='V2RAY_WS' || psname="${PS_NAME}"
+
+  sed \
+    -e "s|\${v2ray_id}|${v2ray_id}|" \
+    -e "s|\${loglevel}|${loglevel}|" \
+    -e "s|\${ws_path}|${ws_path}|" \
+      /etc/v2ray/tmpl/server.tmpl.json > /etc/v2ray/config.json
+
+  cat /etc/v2ray/config.json
+
+  sed \
+    -e "s|\${domain}|${domain}|" \
+    -e "s|\${ws_path}|${ws_path}|" \
+    -e "s|\${v2ray_id}|${v2ray_id}|" \
+    -e "s|\${psname}|${psname}|" \
+      /etc/v2ray/tmpl/sebs.tmpl.js > /srv/sebs.js
+
+  cat /srv/sebs.js
+}
+
+client_config() {
   [[ "${DEBUG}" == "true" ]] && loglevel='debug' || loglevel="warning"
   [ -z "${SOCKS_PORT}" ] && socks_port='1080' || socks_port="${SOCKS_PORT}"
   [ -z "${WS_PATH}" ] && ws_path='/one' || ws_path="${WS_PATH}"

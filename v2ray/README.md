@@ -30,24 +30,38 @@ export REPO=v2ray && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-app
 
 ## Start the program
 Prepare environment
+Demand
+```
+  -e DOMAIN=\
+  -e V2RAY_ID=\
+
+on server:
+  -p 80:80 -p 443:443 -p 80:80/udp -p 443:443/udp \
+```
+
+Optional
 ```
   -e DEBUG=true
   -e WS_PATH="/two"
+  - WS_PATH="/two"
+```
 
-  -e DOMAIN=
-  -e V2RAY_ID=
 
+Development
+```
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
   -v $(pwd)/tmpl/:/etc/v2ray/tmpl/ \
   -v $(pwd)/web/:/tmp/web/ \
+  -v $(pwd)/web/ssl/:/root/.caddy/ \
+```
 
+```
 docker run -it --rm --name=v2ray-dev \
   v2ray \
-  bash
+  sh
 
-  client
-
-  /docker-entrypoint.sh server {domain.com} V2RAY_WS {v2ray_id}
+  /docker-entrypoint.sh server
+  /docker-entrypoint.sh client
 ```
 
 ## Deploy image

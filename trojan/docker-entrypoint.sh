@@ -24,14 +24,12 @@ shift
 
 caddy_config() {
   [ -z "${DOMAIN}" ] && { echo "Need to defaine DOMAIN !"; return 1; } || domain="${DOMAIN}"
-  [ -z "${WS_PATH}" ] && ws_path='/one' || ws_path="${WS_PATH}"
 
   # [[ "${DEBUG}" == "true" ]] && log_level='0' || log_level="1"
   # [ -z "${PASSWORDS}" ] && password='["my_trojan_pass"]' || password="${PASSWORDS}"
 
   sed \
     -e "s|\${domain}|${domain}|" \
-    -e "s|\${ws_path}|${ws_path}|" \
       /etc/trojan/tmpl/Caddyfile.tmpl > /etc/Caddyfile
 
   cat /etc/Caddyfile

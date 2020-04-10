@@ -20,6 +20,7 @@ FROM alpine:latest
 
 COPY --from=caddy_builder /install/caddy /usr/bin/caddy
 
+# validate install
 RUN /usr/bin/caddy -version
 RUN /usr/bin/caddy -plugins
 

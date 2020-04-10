@@ -1,0 +1,8 @@
+${domain}
+{
+  log ./caddy.log
+  proxy ${ws_path} :2333 {
+    websocket
+    header_upstream -Origin
+  }
+}
