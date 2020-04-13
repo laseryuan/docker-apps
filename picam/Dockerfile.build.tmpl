@@ -1,0 +1,46 @@
+FROM balenalib/raspberry-pi-debian:stretch-20200221
+
+ARG VERSION=1.4.8
+
+ENV LANG C.UTF-8
+
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    libharfbuzz-dev libharfbuzz0b libfontconfig1 \
+    libraspberrypi0 `# Solve libbrcmGLESv2.so dependency issue` \
+    libasound2-dev libssl-dev `# Solve libasound dependency issue`
+
+# Install builder dependency
+RUN apt-get update -qy && apt-get install -qy \
+      build-essential
+
+# Build and install fdk-aac
+ENV FDK_AAC_PACKAGE="http://downloads.sourceforge.net/project/opencore-amr/fdk-aac/fdk-aac-0.1.6.tar.gz"
+RUN curl -L ${FDK_AAC_PACKAGE} -o /tmp/fdk-aac.tar.gz
+RUN tar xvf /tmp/fdk-aac.tar.gz -C /tmp/
+RUN mv /tmp/fdk-aac-0.1.6 /tmp/fdk-aac
+
+WORKDIR /tmp/fdk-aac
+
+RUN ./configure
+RUN make -j4
+RUN make install
+
+# Build and install ffmpeg
+ENV ffmpeg_version="4.2.2"
+RUN curl -L http://ffmpeg.org/releases/ffmpeg-${ffmpeg_version}.tar.gz -o /tmp/ffmpeg.tar.gz
+RUN tar xvf /tmp/ffmpeg.tar.gz -C /tmp/
+RUN mv /tmp/ffmpeg-${ffmpeg_version} /tmp/ffmpeg
+
+WORKDIR /tmp/ffmpeg
+
+RUN ./configure --enable-libfdk-aac
+RUN make -j4
+RUN make install
+
+# Build libilclient
+# https://github.com/raspberrypi/firmware/tree/master/opt/vc/src/
+ADD src.tar.gz /opt/vc/
+ADD include.tar.gz /opt/vc/
+WORKDIR /opt/vc/src/hello_pi/libs/ilclient
+RUN make

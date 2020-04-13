@@ -1,0 +1,16 @@
+FROM lasery/picam:build AS build
+
+FROM balenalib/raspberry-pi-debian:stretch-20200221
+
+COPY --from=build /opt/ffmpeg
+COPY --from=build /usr/local/lib/libfdk-aac.*
+COPY --from=build /opt/vc/src/hello_pi/libs/ilclient/libilclient.a
+
+# Install eicam binary
+RUN mkdir ~/picam
+ADD picam-${VERSION}-binary.tar.xz /tmp/
+RUN mv /tmp/picam-${VERSION}-binary/picam ~/picam/
+
+ADD make_dirs.sh /root/picam/
+WORKDIR /root/picam
+RUN ./make_dirs.sh

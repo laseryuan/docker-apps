@@ -1,0 +1,25 @@
+---
+REPO: picam
+VERSION: 20.04
+STAGE: true
+
+ARCH:
+- name: armv6
+  tag: armv6
+  arch: arm
+  variant: v6
+  platform: linux/arm/v6
+  enable: true
+
+- name: armv7
+  tag: armv7
+  arch: arm
+  variant: v7
+  platform: linux/arm/v7
+  enable: true
+
+- name: amd64
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  enable: false
