@@ -1,16 +1,59 @@
+ARG BASE_IMAGE=balenalib/raspberry-pi-debian:stretch-20200405
+
 FROM lasery/picam:build AS build
 
-FROM balenalib/raspberry-pi-debian:stretch-20200221
+FROM $BASE_IMAGE AS picam_build
 
-COPY --from=build /opt/ffmpeg
-COPY --from=build /usr/local/lib/libfdk-aac.*
-COPY --from=build /opt/vc/src/hello_pi/libs/ilclient/libilclient.a
+ENV LD_LIBRARY_PATH=/usr/local/lib
 
-# Install eicam binary
-RUN mkdir ~/picam
-ADD picam-${VERSION}-binary.tar.xz /tmp/
-RUN mv /tmp/picam-${VERSION}-binary/picam ~/picam/
+# Install dependencies
+COPY --from=build /usr/local /usr/local/
+COPY --from=build /opt/vc/src/hello_pi/libs/ilclient /opt/vc/src/hello_pi/libs/ilclient/
 
-ADD make_dirs.sh /root/picam/
-WORKDIR /root/picam
-RUN ./make_dirs.sh
+# Download source
+ENV picam_version="1.4.8"
+RUN curl -L https://github.com/iizukanao/picam/archive/v${picam_version}.tar.gz -o /tmp/picam.tar.gz && \
+    tar xvf /tmp/picam.tar.gz -C /tmp/ && \
+    mv /tmp/picam-${picam_version} /tmp/picam
+
+# Build picam
+# Install build dependency
+RUN apt-get update -qy && apt-get install -qy \
+      build-essential pkg-config fontconfig \
+      libfreetype6-dev libfontconfig1-dev \
+      libraspberrypi-dev raspberrypi-kernel-headers \
+      libharfbuzz-dev libharfbuzz0b libfontconfig1 \
+      libraspberrypi0 `# Solve libbrcmGLESv2.so dependency issue` \
+      libasound2-dev libssl-dev `# Solve libasound dependency issue`
+
+WORKDIR /tmp/picam
+COPY patch/whichpi /tmp/picam/whichpi
+RUN make -j4
+
+# Test
+RUN ./picam --help
+
+FROM $BASE_IMAGE
+
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
+# Install dependencies
+COPY --from=build /usr/local /usr/local/
+COPY --from=build /opt/vc/src/hello_pi/libs/ilclient /opt/vc/src/hello_pi/libs/ilclient/
+COPY --from=picam_build /tmp/picam /usr/local/bin/
+
+      # build-essential pkg-config fontconfig \
+      # libfreetype6-dev libfontconfig1-dev \
+RUN apt-get update -qy && apt-get install -qy \
+      --no-install-recommends \
+      libharfbuzz0b libfontconfig1 \
+      libraspberrypi0 `# Solve libbrcmGLESv2.so dependency issue` \
+      libasound2-dev libssl-dev `# Solve libasound dependency issue`
+# Test
+RUN ffmpeg -version && picam --help
+
+# # Install eicam binary
+# RUN mkdir ~/picam
+# ADD make_dirs.sh /root/picam/
+# WORKDIR /root/picam
+# RUN ./make_dirs.sh

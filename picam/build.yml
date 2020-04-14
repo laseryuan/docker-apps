@@ -1,7 +1,7 @@
 ---
 REPO: picam
 VERSION: 20.04
-STAGE: true
+STAGE: false
 
 ARCH:
 - name: armv6
@@ -16,7 +16,7 @@ ARCH:
   arch: arm
   variant: v7
   platform: linux/arm/v7
-  enable: true
+  enable: false
 
 - name: amd64
   tag: amd64
