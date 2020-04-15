@@ -11,14 +11,12 @@ docker run --rm lasery/picam help
 Fist time setup
 ```
 gem install mustache
-chmod +x build/build.sh
+utils/build.tmpl.sh config && chmod +x build/build.sh
 ```
 
 ## Set enviornment
 ```
 cd ~/projects/docker-apps/picam
-
-mustache build.yml utils/build.tmpl.sh > build/build.sh
 ```
 
 ## Build image

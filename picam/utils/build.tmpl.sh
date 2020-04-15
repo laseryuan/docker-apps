@@ -3,6 +3,9 @@ main() {
   local repo={{REPO}}
 
   case "$1" in
+    config)
+      docker-config
+      ;;
     docker)
       docker-build
       docker buildx bake -f build/docker-bake.hcl
@@ -20,9 +23,12 @@ main() {
   esac
 }
 
-docker-build() {
+docker-config() {
+  mustache build.yml utils/build.tmpl.sh > build/build.sh
   mustache build.yml utils/docker-bake.hcl.tmpl > build/docker-bake.hcl
+}
 
+docker-build() {
 {{#ARCH}}
 {{#enable}}
   mkdir -p build/{{name}}
