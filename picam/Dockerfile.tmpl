@@ -46,8 +46,8 @@ COPY --from=picam_build /tmp/picam /usr/local/bin/
 # Sanity Test
 RUN ffmpeg -version && picam --help
 
-# # Install eicam binary
-# RUN mkdir ~/picam
-# ADD make_dirs.sh /root/picam/
-# WORKDIR /root/picam
-# RUN ./make_dirs.sh
+COPY docker-entrypoint.sh /
+COPY README.md /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["help"]
