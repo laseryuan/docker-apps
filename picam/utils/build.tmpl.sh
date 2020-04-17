@@ -11,6 +11,8 @@ main() {
       docker buildx bake -f build/docker-bake.hcl
       ;;
     push)
+      docker-build
+      docker buildx bake -f build/docker-bake.hcl
       docker-push
       ;;
     deploy)

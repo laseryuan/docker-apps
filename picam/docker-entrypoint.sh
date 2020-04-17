@@ -7,6 +7,7 @@ main() {
       shift
       trap 'term_handler' SIGTERM SIGINT
       start_picam "$@"
+      run_custum_script
       tail -f /dev/null & wait
       ;;
     record)
@@ -28,11 +29,19 @@ main() {
   esac
 }
 
+run_custum_script() {
+  sleep 10 # wait for picam
+  if [ -f ~/picam/run_me.sh ]; then
+    echo "Run custom script."
+    bash ~/picam/run_me.sh
+  fi
+}
+
 start_picam() {
   make_dirs
   cd ~/picam
   [ -z "$@" ] && param='--noaudio' || param="$@"
-  echo picam $param
+  echo "Execute: \"picam $param\""
   picam $param &
 }
 

@@ -4,7 +4,9 @@ Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
 
 # Usage
 ```
-docker run --rm lasery/picam help
+docker run --rm lasery/picam
+
+docker run --privileged -d --name picam lasery/picam record
 ```
 
 # Development
@@ -29,12 +31,9 @@ build/build.sh deploy
 
 ## Start the program
 ```
-docker run --privileged -d --name picam lasery/picam record
-```
-
-```
   -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
+  -v $(pwd)/run_me.sh:~/picam/run_me.sh `# custom script to run when picam started`\
 
 docker run -it --rm --name picam \
   --privileged \
