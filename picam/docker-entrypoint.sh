@@ -10,13 +10,6 @@ main() {
       run_custum_script
       tail -f /dev/null & wait
       ;;
-    record)
-      shift
-      trap 'term_handler' SIGTERM SIGINT
-      start_picam "$@"
-      touch ~/picam/hooks/start_record
-      tail -f /dev/null & wait
-      ;;
     help)
       cat /README.md
       ;;
@@ -31,9 +24,9 @@ main() {
 
 run_custum_script() {
   sleep 10 # wait for picam
-  if [ -f ~/picam/run_me.sh ]; then
+  if [ -f ~/hooks.sh ]; then
     echo "Run custom script."
-    bash ~/picam/run_me.sh
+    bash ~/hooks.sh
   fi
 }
 
@@ -54,7 +47,7 @@ term_handler() {
 }
 
 make_dirs() {
-  DEST_DIR=~/picam
+  DEST_DIR=~/
   SHM_DIR=/dev/shm
 
   mkdir -p $DEST_DIR

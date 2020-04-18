@@ -6,7 +6,11 @@ Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
 ```
 docker run --rm lasery/picam
 
-docker run --privileged -d --name picam lasery/picam record
+docker run --privileged -d --name picam lasery/picam \
+  start # Start without recording. Default parameter: "--noaudio". Can feed in parameters by append them to the end.
+
+  -v $(pwd)/hooks.sh:/home/picam/hooks.sh `# custom script to run when picam started`\
+  -v $(pwd)/:/home/picam/ `# save records in current directory`\
 ```
 
 # Development
@@ -33,7 +37,8 @@ build/build.sh deploy
 ```
   -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
-  -v $(pwd)/run_me.sh:~/picam/run_me.sh `# custom script to run when picam started`\
+  -v $(pwd)/hooks.sh:/home/picam/hooks.sh \
+  -v $(pwd)/:/home/picam/ \
 
 docker run -it --rm --name picam \
   --privileged \
@@ -41,7 +46,6 @@ docker run -it --rm --name picam \
   bash
 
   start # Start without recording. Default parameter: "--noaudio". Can feed in parameters by append them to the end.
-  record
 
   picam:build-armv6 `# For build image` \
 ```

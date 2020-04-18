@@ -1,5 +1,6 @@
 #!/bin/bash
 main() {
+  set -e
   local repo={{REPO}}
 
   case "$1" in
