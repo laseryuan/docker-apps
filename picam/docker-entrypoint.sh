@@ -7,7 +7,8 @@ main() {
       shift
       trap 'term_handler' SIGTERM SIGINT
       start_picam "$@"
-      run_custum_script
+      sleep 10 # wait for picam
+      bash ~/hooks.sh
       tail -f /dev/null & wait
       ;;
     help)
@@ -20,14 +21,6 @@ main() {
       exec "$@"
       ;;
   esac
-}
-
-run_custum_script() {
-  sleep 10 # wait for picam
-  if [ -f ~/hooks.sh ]; then
-    echo "Run custom script."
-    bash ~/hooks.sh
-  fi
 }
 
 start_picam() {

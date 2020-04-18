@@ -6,10 +6,9 @@ Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
 ```
 docker run --rm lasery/picam
 
-docker run --privileged -d --name picam lasery/picam \
-  start # Start without recording. Default parameter: "--noaudio". Can feed in parameters by append them to the end.
+docker run --privileged lasery/picam start # Start with default hooks to record 30 seconds video. Default picam parameter: "--noaudio". Can feed in parameters by append them to the end.
 
-  -v $(pwd)/hooks.sh:/home/picam/hooks.sh `# custom script to run when picam started`\
+  -v $(pwd)/hooks.sh:/home/picam/hooks.sh `# use custom hooks script`\
   -v $(pwd)/:/home/picam/ `# save records in current directory`\
 ```
 

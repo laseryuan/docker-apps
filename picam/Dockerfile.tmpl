@@ -52,6 +52,7 @@ VOLUME /home/picam
 WORKDIR /home/picam
 USER picam
 
+COPY --chown=picam hooks.sh /home/picam/
 COPY --chown=picam docker-entrypoint.sh /
 COPY --chown=picam README.md /
 
