@@ -1,0 +1,12 @@
+FROM lasery/ffmpeg:build as build
+
+FROM {{ARCH.images.base}}
+
+ENV LANG C.UTF-8
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
+COPY --from=build /usr/local/bin/ffmpeg /usr/local/bin/
+COPY --from=build /usr/local/lib/ffmpeg /usr/local/lib/
+
+# Sanity Test
+RUN ffmpeg -version

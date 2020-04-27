@@ -1,0 +1,65 @@
+FROM {{ARCH.images.base}}
+
+ENV LANG C.UTF-8
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
+# Install builder dependency
+RUN apt-get update -qy && apt-get install -qy \
+      build-essential curl
+
+# Install fdk-aac
+{{#ARCH.is_arm}}
+ENV FDK_AAC_PACKAGE="http://downloads.sourceforge.net/project/opencore-amr/fdk-aac/fdk-aac-0.1.6.tar.gz"
+RUN curl -L ${FDK_AAC_PACKAGE} -o /tmp/fdk-aac.tar.gz && \
+    tar xvf /tmp/fdk-aac.tar.gz -C /tmp/ && \
+    mv /tmp/fdk-aac-0.1.6 /tmp/fdk-aac
+
+WORKDIR /tmp/fdk-aac
+RUN ./configure && \
+    make -j4 && \
+    make install
+{{/ARCH.is_arm}}
+
+{{#ARCH.is_amd}}
+RUN echo "deb http://http.debian.net/debian/ stretch main contrib non-free" > /etc/apt/sources.list && \
+    echo "deb http://http.debian.net/debian/ stretch-updates main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
+    apt-get update && apt-get install -qy \
+      libfdk-aac-dev yasm
+{{/ARCH.is_amd}}
+
+# Build and install ffmpeg
+{{#ARCH.is_arm}}
+RUN apt-get update -qy && apt-get install -qy \
+      libraspberrypi-doc libraspberrypi-dev raspberrypi-kernel-headers \
+      libomxil-bellagio-dev
+{{/ARCH.is_arm}}
+
+ENV ffmpeg_version="4.2.2"
+RUN curl -L http://ffmpeg.org/releases/ffmpeg-${ffmpeg_version}.tar.gz -o /tmp/ffmpeg.tar.gz && \
+    tar xvf /tmp/ffmpeg.tar.gz -C /tmp/ && \
+    mv /tmp/ffmpeg-${ffmpeg_version} /tmp/ffmpeg
+
+WORKDIR /tmp/ffmpeg
+RUN ./configure \
+      --enable-libfdk-aac \
+      --disable-debug \
+      --disable-shared \
+      {{#ARCH.is_arm}}
+      --enable-mmal \
+      --enable-omx \
+      --enable-omx-rpi \
+      {{/ARCH.is_arm}}
+      --enable-gpl \
+      --enable-nonfree \
+      --disable-ffplay \
+      --enable-static && \
+    make -j4 && \
+    make install
+
+# Sanity Test
+RUN ffmpeg -version
+
+# Archive all shared libraries for ffmpeg
+RUN mkdir -p /usr/local/lib/ffmpeg
+RUN ldd `which ffmpeg` | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' /usr/local/lib/ffmpeg/
