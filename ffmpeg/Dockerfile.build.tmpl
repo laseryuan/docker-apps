@@ -34,32 +34,3 @@ RUN apt-get update -qy && apt-get install -qy \
       libraspberrypi-doc libraspberrypi-dev raspberrypi-kernel-headers \
       libomxil-bellagio-dev
 {{/ARCH.is_arm}}
-
-ENV ffmpeg_version="4.2.2"
-RUN curl -L http://ffmpeg.org/releases/ffmpeg-${ffmpeg_version}.tar.gz -o /tmp/ffmpeg.tar.gz && \
-    tar xvf /tmp/ffmpeg.tar.gz -C /tmp/ && \
-    mv /tmp/ffmpeg-${ffmpeg_version} /tmp/ffmpeg
-
-WORKDIR /tmp/ffmpeg
-RUN ./configure \
-      --enable-libfdk-aac \
-      --disable-debug \
-      --disable-shared \
-      {{#ARCH.is_arm}}
-      --enable-mmal \
-      --enable-omx \
-      --enable-omx-rpi \
-      {{/ARCH.is_arm}}
-      --enable-gpl \
-      --enable-nonfree \
-      --disable-ffplay \
-      --enable-static && \
-    make -j4 && \
-    make install
-
-# Sanity Test
-RUN ffmpeg -version
-
-# Archive all shared libraries for ffmpeg
-RUN mkdir -p /usr/local/lib/ffmpeg
-RUN ldd `which ffmpeg` | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' /usr/local/lib/ffmpeg/

@@ -1,6 +1,6 @@
 ---
 REPO: ffmpeg
-VERSION: 20.04
+VERSION: 4.2.2
 STAGE: false
 
 ARCH:
