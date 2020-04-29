@@ -1,0 +1,40 @@
+---
+REPO: nginx
+NGINX_VERSION: 1.14.0
+RTMP_VERSION: 1.2.1
+IMAGE_VERSION: rtmp-1.2.1
+# IMAGE_VERSION: 20.04
+STAGE: false
+
+ARCH:
+- name: armv6
+  images:
+    base: balenalib/raspberry-pi-debian:stretch-20200405
+    build_base: balenalib/raspberry-pi-debian:stretch-20200405
+  tag: armv6
+  arch: arm
+  variant: v6
+  platform: linux/arm/v6
+  is_arm: true
+  enable: true
+
+- name: armv7
+  images:
+    base: balenalib/raspberry-pi-debian:stretch-20200405
+    build_base: balenalib/raspberry-pi-debian:stretch-20200405
+  tag: armv7
+  arch: arm
+  variant: v7
+  platform: linux/arm/v7
+  is_arm: true
+  enable: true
+
+- name: amd64
+  images:
+    base: debian:stretch-20200327
+    build_base: debian:stretch-20200327
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  enable: true
