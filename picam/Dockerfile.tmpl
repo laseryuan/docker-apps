@@ -19,6 +19,10 @@ FROM {{IMAGES.BASE}}
 ENV LANG C.UTF-8
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
+# Install dependencies
+RUN apt-get update -qy && apt-get install -qy --no-install-recommends \
+      libharfbuzz0b libfontconfig1
+
 # Install picam
 COPY --from=build /usr/local/lib/picam /usr/local/lib/
 COPY --from=build /tmp/picam /usr/local/bin/

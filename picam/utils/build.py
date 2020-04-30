@@ -58,7 +58,7 @@ class Builder:
           "docker buildx bake -f build/docker-bake.hcl"
           )
 
-    def push_to_repo():
+    def push_to_repo(self):
         repo = self.data["REPO"]
         if_build = "build-" if self.data["STAGE"] else ""
         for arch in self.data['ARCH']:
