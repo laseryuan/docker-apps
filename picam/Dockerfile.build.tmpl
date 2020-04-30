@@ -3,18 +3,16 @@ FROM {{IMAGES.BUILD_BASE}}
 ENV LANG C.UTF-8
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
-# Install builder dependency
+# Install build dependency
 RUN apt-get update -qy && apt-get install -qy \
-      build-essential
+      build-essential pkg-config fontconfig \
+      libfreetype6-dev libfontconfig1-dev \
+      libraspberrypi-doc libraspberrypi-dev raspberrypi-kernel-headers \
+      libharfbuzz-dev libharfbuzz0b libfontconfig1 \
+      libraspberrypi0 `# Solve libbrcmGLESv2.so dependency issue` \
+      libomxil-bellagio-dev libasound2-dev libssl-dev `# Solve libasound dependency issue`
 
-# Build ilclient for raspberry pi
-RUN apt-get update -qy && apt-get install -qy \
-      libraspberrypi-doc libraspberrypi-dev raspberrypi-kernel-headers
-
-WORKDIR /opt/vc/src/hello_pi/libs/ilclient
-RUN make
-
-# Build and install fdk-aac
+# Install fdk-aac
 ENV FDK_AAC_PACKAGE="http://downloads.sourceforge.net/project/opencore-amr/fdk-aac/fdk-aac-0.1.6.tar.gz"
 RUN curl -L ${FDK_AAC_PACKAGE} -o /tmp/fdk-aac.tar.gz && \
     tar xvf /tmp/fdk-aac.tar.gz -C /tmp/ && \
@@ -24,6 +22,10 @@ WORKDIR /tmp/fdk-aac
 RUN ./configure && \
     make -j4 && \
     make install
+
+# Install libilclient
+WORKDIR /opt/vc/src/hello_pi/libs/ilclient
+RUN make
 
 # Build and install ffmpeg
 ENV ffmpeg_version="4.2.2"

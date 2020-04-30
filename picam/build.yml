@@ -1,7 +1,9 @@
 ---
 REPO: picam
-VERSION: 20.04
 STAGE: false
+IMAGE_VERSION: 20.04
+PICAM_VERSION: 1.4.8
+
 IMAGES:
   BASE: balenalib/raspberry-pi-debian:stretch-20200405
   BUILD_BASE: balenalib/raspberry-pi-debian:stretch-20200405
@@ -20,9 +22,3 @@ ARCH:
   variant: v7
   platform: linux/arm/v7
   enable: true
-
-- name: amd64
-  tag: amd64
-  arch: amd64
-  platform: linux/amd64
-  enable: false

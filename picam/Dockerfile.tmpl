@@ -1,50 +1,32 @@
-FROM lasery/picam:build AS build
-
-FROM {{IMAGES.BASE}} AS picam_build
-
-ENV LD_LIBRARY_PATH=/usr/local/lib
-
-# Build picam
-# Install build dependency
-RUN apt-get update -qy && apt-get install -qy \
-      build-essential pkg-config fontconfig \
-      libfreetype6-dev libfontconfig1-dev \
-      libraspberrypi-dev raspberrypi-kernel-headers \
-      libharfbuzz-dev libharfbuzz0b libfontconfig1 \
-      libraspberrypi0 `# Solve libbrcmGLESv2.so dependency issue` \
-      libasound2-dev libssl-dev `# Solve libasound dependency issue`
+FROM lasery/picam:build-20.04 AS build
 
 # Download source
-ENV picam_version="1.4.8"
-RUN curl -L https://github.com/iizukanao/picam/archive/v${picam_version}.tar.gz -o /tmp/picam.tar.gz && \
+RUN curl -L https://github.com/iizukanao/picam/archive/v{{PICAM_VERSION}}.tar.gz -o /tmp/picam.tar.gz && \
     tar xvf /tmp/picam.tar.gz -C /tmp/ && \
-    mv /tmp/picam-${picam_version} /tmp/picam
-
-# Install dependencies
-COPY --from=build /usr/local /usr/local/
-COPY --from=build /opt/vc/src/hello_pi/libs/ilclient /opt/vc/src/hello_pi/libs/ilclient/
+    mv /tmp/picam-{{PICAM_VERSION}} /tmp/picam
 
 WORKDIR /tmp/picam
 COPY patch/whichpi /tmp/picam/whichpi
 RUN make -j4
 
+# Archive all shared libraries for picam
+RUN mkdir -p /usr/local/lib/picam
+RUN ldd ./picam | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' /usr/local/lib/picam/
+
+# Final stage
 FROM {{IMAGES.BASE}}
 
+ENV LANG C.UTF-8
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
-RUN apt-get update -qy && apt-get install -qy \
-      --no-install-recommends \
-      libharfbuzz0b libfontconfig1 \
-      libraspberrypi0 `# Solve libbrcmGLESv2.so dependency issue` \
-      libasound2-dev libssl-dev `# Solve libasound dependency issue`
+# Install picam
+COPY --from=build /usr/local/lib/picam /usr/local/lib/
+COPY --from=build /tmp/picam /usr/local/bin/
 
-# Install dependencies
-COPY --from=build /usr/local/lib /usr/local/lib/
-COPY --from=build /usr/local/bin/ffmpeg /usr/local/bin/
-COPY --from=picam_build /tmp/picam /usr/local/bin/
+RUN ldconfig
 
 # Sanity Test
-RUN ffmpeg -version && picam --help
+RUN picam --help
 
 RUN useradd -ms /bin/bash picam
 RUN usermod -aG video,audio picam
