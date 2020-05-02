@@ -11,13 +11,6 @@ docker run --privileged lasery/picam start # Start with default hooks to record 
 ```
 
 # Development
-Fist time setup
-```
-gem install mustache
-utils/build.tmpl.sh config && chmod +x build/build.sh
-```
-
-## Set enviornment
 ```
 cd ~/projects/docker-apps/picam
 ```

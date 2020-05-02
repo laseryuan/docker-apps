@@ -1,7 +1,7 @@
 ---
 REPO: picam
 STAGE: false
-IMAGE_VERSION: 20.04
+IMAGE_VERSION: 1.4.8
 PICAM_VERSION: 1.4.8
 
 IMAGES:
@@ -12,7 +12,7 @@ ARCH:
 - name: armv6
   tag: armv6
   arch: arm
-  variant: v6
+  variant: v6l
   platform: linux/arm/v6
   enable: true
 
