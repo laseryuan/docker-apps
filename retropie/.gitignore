@@ -1,0 +1,3 @@
+build/**
+temp.sh
+__pycache__

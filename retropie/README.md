@@ -1,60 +1,43 @@
 # Usage
 ```
-docker pull lasery/retropie
-
-docker run --rm lasery/retropie help
+docker run --rm lasery/retropie
 ```
 
-# Development
-
-## Set variables
+### Raspberry pi
+Retropie default built doesn't use x server, it needs to run in non-desktop environment:
 ```
-REPO=retropie && VERSION=19.09 && cd ~/projects/docker-apps/${REPO}
-bash build.sh
-```
-
-## Build image
-```
-docker buildx bake
-```
-
-## Development
-```
-  emulationstation
-```
-
-### amd64
-```
-docker run -it --rm --name=${REPO} \
-  --privileged \
-  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
-  -v /dev/input:/dev/input \
-  lasery/${REPO}:${VERSION}-amd64 \
-  bash
-```
-
-### arm32
-Since retropie default built doesn't use x server, it needs to run in non-desktop environment:
-```
-docker run -it --rm --name=${REPO} \
+docker run -it --rm --name=retropie \
   --privileged \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
   --group-add video \
   -v /opt/vc:/opt/vc \
   -v /var/run/dbus/:/var/run/dbus/ \
-  -v /dev/shm:/dev/shm \
   -v /dev/snd:/dev/snd \
   -v /dev/input:/dev/input \
   -v /dev/vchiq:/dev/vchiq \
   -v /dev/vcio:/dev/vcio \
   -v /dev/fb0:/dev/fb0 \
   -v /dev/vcsm:/dev/vcsm \
-  lasery/${REPO}:${VERSION}-arm32 \
+  lasery/retropie \
+  run
+
   bash
 ```
 
-## Run
+### amd64
+```
+docker run -it --rm --name=retropie \
+  --privileged \
+  -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
+  -v /dev/input:/dev/input \
+  lasery/retropie \
+  run
+
+  bash
+```
+
+## Data storage
 ```
   -v retropie_roms:/home/pi/RetroPie/roms \
   -v ~/.config/retropie/emulationstation/:/home/pi/.emulationstation/ \
@@ -62,20 +45,13 @@ docker run -it --rm --name=${REPO} \
   -v ~/.config/retropie/retroarch.cfg:/opt/retropie/configs/all/retroarch.cfg \
 ```
 
-## Multiple Archi
+# Development
 ```
-docker push lasery/${REPO}:${VERSION}-amd64 lasery/${REPO}:${VERSION}-arm32
+cd ~/projects/docker-apps/retropie
 
-export DOCKER_CLI_EXPERIMENTAL=enabled
-docker manifest create lasery/${REPO} lasery/${REPO}:$VERSION-amd64 lasery/${REPO}:$VERSION-arm32
-
-docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-amd64 --arch amd64
-docker manifest annotate lasery/${REPO} lasery/${REPO}:$VERSION-arm32 --arch arm
-docker manifest push -p lasery/${REPO}
-docker manifest inspect lasery/${REPO}
+  emulationstation
 ```
 
-## Start the program
 RetroArch
 ```
 cd /opt/retropie/emulators/retroarch/bin/
@@ -86,6 +62,14 @@ Test joystick
 ```
 cat /dev/input/js0
 jstest /dev/input/js0
+```
+
+## Build image
+```
+append "skip" to skip compile bake and dockerfiles
+utils/build.py docker
+utils/build.py push
+utils/build.py deploy
 ```
 
 # Issues
