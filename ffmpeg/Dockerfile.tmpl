@@ -10,14 +10,15 @@ RUN curl -L http://ffmpeg.org/releases/ffmpeg-${ffmpeg_version}.tar.gz -o /tmp/f
 
 WORKDIR /tmp/ffmpeg
 RUN ./configure \
-      --enable-libfdk-aac \
-      --disable-debug \
-      --disable-shared \
       {{#ARCH.is_arm}}
+      --arch=armel --target-os=linux \
       --enable-mmal \
       --enable-omx \
       --enable-omx-rpi \
       {{/ARCH.is_arm}}
+      --enable-libfdk-aac \
+      --disable-debug \
+      --disable-shared \
       --enable-gpl \
       --enable-nonfree \
       --disable-ffplay \

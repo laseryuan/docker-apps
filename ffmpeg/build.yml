@@ -1,9 +1,22 @@
 ---
 REPO: ffmpeg
-VERSION: 4.2.2
+VERSION: 3.4.7
+IMAGE_VERSION: 3.4.7
 STAGE: false
+# STAGE: true
 
 ARCH:
+- name: armv6l
+  images:
+    base: balenalib/raspberry-pi-debian:stretch-20200405
+    build_base: balenalib/raspberry-pi-debian:stretch-20200405
+  tag: armv6l
+  arch: arm
+  variant: v6l
+  platform: linux/arm/v6
+  is_arm: true
+  enable: true
+
 - name: armv6
   images:
     base: balenalib/raspberry-pi-debian:stretch-20200405
@@ -13,7 +26,8 @@ ARCH:
   variant: v6
   platform: linux/arm/v6
   is_arm: true
-  enable: true
+  # enable: true
+  enable: false
 
 - name: armv7
   images:

@@ -13,6 +13,7 @@ class Builder:
         self.bake_path = "build/docker-bake.hcl"
         self.skip_config = False
         self.data=self.get_data()
+        self.create_dir_if_not_exist("build")
 
     def get_data(self):
         with io.open(self.data_path, 'r', encoding='utf-8') as f:
@@ -22,7 +23,7 @@ class Builder:
         with open(self.bake_tmpl_path, 'r') as f:
             bake = chevron.render(f, self.data)
 
-        with open(self.bake_path, 'w') as f:
+        with open(self.bake_path, 'w+') as f:
             f.write(str(bake))
 
     def build_dockerfile(self, arch_data):
@@ -34,14 +35,14 @@ class Builder:
         with open(dockerfile_path, 'w') as f:
             f.write(str(dockerfile))
 
-    def create_dir_if_not_exist(self, arch_name):
-        arch_path = 'build/' + arch_name
+    def create_dir_if_not_exist(self, arch_path):
         if not os.path.exists(arch_path):
             os.makedirs(arch_path)
 
     def build_dockerfiles(self):
         for arch in self.data['ARCH']:
-            self.create_dir_if_not_exist(arch['name'])
+            arch_path = 'build/' + arch['name']
+            self.create_dir_if_not_exist(arch_path)
             arch_data = self.data.copy()
             arch_data['ARCH'] = arch
             self.build_dockerfile(arch_data)
@@ -58,32 +59,41 @@ class Builder:
           "docker buildx bake -f build/docker-bake.hcl"
           )
 
-    def push(self):
-        self.docker()
-        repo = f'{self.data["REPO"]}'
+    def push_to_repo(self):
+        repo = self.data["REPO"]
+        if_build = "build-" if self.data["STAGE"] else ""
         for arch in self.data['ARCH']:
             if arch['enable']:
-                tag = f':{"build-" if self.data["STAGE"] else ""}{arch["tag"]}'
-                tag_new = f'{tag}-{self.data["VERSION"]}'
-                push_cmd = f'docker tag {repo}{tag} lasery/{repo}{tag_new}'
+                tag = f'{if_build}{arch["tag"]}'
+                tag_new = f'{if_build}{self.data["IMAGE_VERSION"]}-{arch["tag"]}'
+                push_cmd = f'docker tag {repo}:{tag} lasery/{repo}:{tag_new}'
                 os.system(push_cmd)
-                push_cmd = f'docker push lasery/{repo}{tag_new}'
+                push_cmd = f'docker push lasery/{repo}:{tag_new}'
                 os.system(push_cmd)
 
-    def deploy(self):
+    def tag_repo(self, version):
         repo = f'lasery/{self.data["REPO"]}'
-        tag = ":build" if self.data["STAGE"] else ""
+        if_build = "build-" if self.data["STAGE"] else ""
+        tag = f'{if_build}{version}'
         for arch in self.data['ARCH']:
             if arch['enable']:
-                tag_new = f':{ "build-" if self.data["STAGE"] else "" }{arch["tag"]}-{self.data["VERSION"]}'
-                push_cmd = f'docker manifest create -a {repo}{tag}  {repo}{tag_new}'
+                tag_new = f'{if_build}{self.data["IMAGE_VERSION"]}-{arch["tag"]}'
+                push_cmd = f'docker manifest create -a {repo}:{tag}  {repo}:{tag_new}'
                 os.system(push_cmd)
-                #  if arch["arch"] == "amd64":
-                    #  from IPython import embed; embed(colors="neutral")
-                push_cmd = f'docker manifest annotate {repo}{tag}  {repo}{tag_new} --arch {arch["arch"]}{" --variant " +  arch["variant"] if "variant" in arch else ""}'
+                push_cmd = f'docker manifest annotate {repo}:{tag}  {repo}:{tag_new} --arch {arch["arch"]}{" --variant " +  arch["variant"] if "variant" in arch else ""}'
                 os.system(push_cmd)
-        os.system(f'docker manifest push -p {repo}{tag}')
-        os.system(f'docker manifest inspect {repo}{tag}')
+        os.system(f'docker manifest push -p {repo}:{tag}')
+        os.system(f'docker manifest inspect {repo}:{tag}')
+
+    def push(self):
+        version = self.data["IMAGE_VERSION"]
+        self.docker()
+        self.push_to_repo()
+        self.tag_repo(version)
+
+    def deploy(self):
+        version = "latest"
+        self.tag_repo(version)
 
 if __name__ == '__main__':
     builder=Builder()
