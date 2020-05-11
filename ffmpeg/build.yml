@@ -1,7 +1,7 @@
 ---
 REPO: ffmpeg
-VERSION: 3.4.7
-IMAGE_VERSION: 3.4.7
+VERSION: 4.2.2
+IMAGE_VERSION: 4.2.2
 STAGE: false
 # STAGE: true
 
@@ -26,8 +26,7 @@ ARCH:
   variant: v6
   platform: linux/arm/v6
   is_arm: true
-  # enable: true
-  enable: false
+  enable: true
 
 - name: armv7
   images:
