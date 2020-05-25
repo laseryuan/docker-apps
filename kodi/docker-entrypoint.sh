@@ -4,7 +4,7 @@
 main() {
   case "$1" in
     run)
-      tail -f /dev/null
+      kodi
       ;;
     help)
 cat /README.md

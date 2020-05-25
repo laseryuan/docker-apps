@@ -1,0 +1,22 @@
+group "default" {
+    targets = [
+    {{#ARCH}}
+      {{#enable}}
+      "{{name}}", 
+      {{/enable}}
+    {{/ARCH}}
+    ]
+}
+
+{{#ARCH}}
+{{#enable}}
+target "{{name}}" {
+    dockerfile = "build/{{name}}/Dockerfile{{#STAGE}}.build{{/STAGE}}"
+    platforms = [
+        "{{platform}}"
+    ]
+    tags = ["{{REPO}}:{{#STAGE}}build-{{/STAGE}}{{IMAGE_VERSION}}-{{tag}}"]
+    output = ["type=docker"]
+}
+{{/enable}}
+{{/ARCH}}

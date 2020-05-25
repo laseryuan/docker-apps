@@ -4,7 +4,6 @@ Works for both amd64 (Ubuntu) and arm32v6 (Rapsberry Pi)
 
 # Usage
 ```
-docker pull lasery/kodi
 docker run --rm lasery/kodi
 ```
 
@@ -12,36 +11,42 @@ docker run --rm lasery/kodi
 
 ## Set enviornment
 ```
-export REPO=kodi && export VERSION=19.10 && cd ~/projects/docker-apps/${REPO}
+cd ~/projects/docker-apps/kodi
 ```
 
 ## Build image
 ```
-export DOCKER_CLI_EXPERIMENTAL=enabled
-./build.sh docker
-docker buildx bake \
-  amd64
-
-  --cache-from lasery/${REPO} \
+append "skip" to skip compile bake and dockerfiles
+utils/build.py docker
+utils/build.py push
+utils/build.py deploy
 ```
 
 ## Start the program
 ```
 docker volume create \
-  ${REPO}-config
+  --label keep \
+  kodi-config
 
-docker run -it --rm --name=${REPO}-dev \
+  -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
+
+  -v /home/laser/Videos/:/home/kodi/Videos/ \
+  -v kodi-config:/home/kodi/.kodi/userdata \
+```
+
+amd64
+```
+docker run -it --rm --name=kodi \
   --privileged \
-  --gpus all \
-  -v /dev:/dev \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
-  -v /dev/input:/dev/input \
-  ${REPO} \
+  -v /var/run/dbus/:/var/run/dbus/ \
+  kodi:17.6-amd64 \
   bash
+```
 
-  -v kodi-config:/home/kodi/.kodi/userdata \
-
+Raspberry pi
+```
 docker run -it --rm --name="$REPO"-dev \
   --privileged \
   --tmpfs /tmp/ \
