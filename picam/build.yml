@@ -29,3 +29,10 @@ ARCH:
   variant: v7
   platform: linux/arm/v7
   enable: true
+
+- name: armv7l
+  tag: armv7l
+  arch: arm
+  variant: v7l
+  platform: linux/arm/v7
+  enable: true

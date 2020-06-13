@@ -26,6 +26,7 @@ main() {
 start_picam() {
   make_dirs
   [ -z "$1" ] && param='--noaudio' || param="$@"
+  echo "$param" > ~/picam_param
   echo "Execute: \"picam $param\""
   picam $param &
 }

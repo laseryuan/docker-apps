@@ -8,6 +8,8 @@ docker run --privileged lasery/picam start # Start with default hooks to record 
 
   -v $(pwd)/hooks.sh:/home/picam/hooks.sh `# use custom hooks script`\
   -v $(pwd)/:/home/picam/ `# save records in current directory`\
+
+picam parameters are save in ~/picam_param
 ```
 
 # Development
