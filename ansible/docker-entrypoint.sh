@@ -14,6 +14,7 @@ main() {
 
 run-help() {
   echo 'docker run -it --rm \
+    --name ansible \
     -v $(pwd)/ansible:/home/ansible/app \
     -v $SSH_AUTH_SOCK:/ssh-agent \
     -e SSH_AUTH_SOCK=/ssh-agent \

@@ -24,6 +24,9 @@ RUN useradd -ms /bin/bash ansible
 USER ansible
 WORKDIR /home/ansible/app
 
+RUN ansible-galaxy install \
+      markosamuli.pyenv,v4.0.1
+
 COPY --chown=ansible ./docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
