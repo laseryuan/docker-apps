@@ -24,8 +24,9 @@ docker tag vnc-gpu lasery/vnc-gpu:ubuntu-18.04-19.10 && docker push lasery/vnc-g
 ```
 docker run --rm vnc-gpu
 
-docker run --gpus all  --name=vnc-gpu --rm -it -v /tmp/.X11-unix/X0:/tmp/.X11-unix/X0 -p 5901:5901 \
   -v /dev/shm:/dev/shm \
+
+docker run --gpus all  --name=vnc-gpu --rm -it -v /tmp/.X11-unix/X0:/tmp/.X11-unix/X0 -p 5901:5901 \
   lasery/vnc-gpu:ubuntu-18.04-19.10 \
   fps \
   ${Barrier_server_address}
@@ -53,6 +54,8 @@ docker exec -ti vnc-gpu vglrun glxspheres64
 NoVNC proxy
 ```
 /opt/websockify/run 5901 --cert=/self.pem --ssl-only --web=/opt/noVNC --wrap-mode=ignore -- \
+/opt/websockify/run 5901 --cert=/self.pem --ssl-only --web=/opt/noVNC --wrap-mode=ignore -- vncserver :1 -securitytypes otp -otp -noxstartup
+
 ```
 
 Turbovnc

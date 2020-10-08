@@ -32,6 +32,8 @@ docker volume create \
 
   -v /home/laser/Videos/:/home/kodi/Videos/ \
   -v kodi-config:/home/kodi/.kodi/userdata \
+
+cat /home/kodi/.kodi/temp/kodi.log
 ```
 
 amd64
