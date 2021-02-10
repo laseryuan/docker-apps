@@ -1,0 +1,12 @@
+image: lasery/gitpod-workspace-full
+
+github:
+  prebuilds:
+    branches: true
+
+tasks:
+  - command: |
+      ln -s /tmp/gitpod/.vim /home/gitpod/.vim
+      ln -s /tmp/gitpod/.vim/vimrc /home/gitpod/.vimrc
+      ln -s /tmp/gitpod/.tmux.conf /home/gitpod/.tmux.conf
+      alias tmux="tmux -2"
