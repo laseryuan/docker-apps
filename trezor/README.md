@@ -12,10 +12,11 @@ docker run -it --rm \
 
 ## Set variables
 ```
-REPO=trezor && VERSION=19.04
+REPO=trezor && VERSION=21.02
 echo $REPO && echo $VERSION
 
-cd ~/projects/docker-app/${REPO}
+cd ~/projects/docker-apps/
+cd ${REPO}
 bash build.sh
 ```
 
