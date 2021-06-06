@@ -2,9 +2,7 @@
 REPO: scrcpy
 STAGE: false
 # STAGE: true
-IMAGE_VERSION: 0.1.0
-# PKG_VERSION: 1.14.0
-# PKG1_VERSION: 1.2.1
+IMAGE_VERSION: 1.17
 
 ARCH:
 - name: armv7
