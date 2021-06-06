@@ -3,6 +3,35 @@ Works for arm32 (Rapsberry Pi)
 # Usage
 ```
 docker run --rm lasery/scrcpy
+docker volume create scrcpy_adb_keys
+
+export DISPLAY=:0.0
+echo $DISPLAY
+sudo xhost +
+
+docker run --rm -it --network host \
+  \
+  `# save adb config` \
+  -v scrcpy_adb_keys:/root/.android \
+  -e ADB_VENDOR_KEYS=/root/.android \
+  \
+  `# use host display` \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -e DISPLAY=$DISPLAY \
+  \
+  `# Raspberry pi 4 specific` \
+  -v /opt/vc:/opt/vc \
+  --device=/dev/dri \
+  --device /dev/bus/usb:/dev/bus/usb \
+  --device /dev/vchiq `# ` \
+  --device /dev/vcio `# GPU` \
+  --device /dev/vcsm-cma:/dev/vcsm-cma `# VideoCore Shared Memory` \
+  lasery/scrcpy \
+  bash
+
+adb devices
+adb tcpip 5555
+scrcpy
 ```
 
 # Development
