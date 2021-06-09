@@ -27,3 +27,10 @@ RUN pip3 install meson
 
 # Build scrcpy
 RUN ./install_release.sh
+
+# Create scrcpy user for X11
+RUN useradd -m -G video scrcpy
+
+WORKDIR /home/scrcpy
+
+USER scrcpy
