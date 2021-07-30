@@ -1,6 +1,6 @@
 # https://github.com/Yun-Mao/caddy_docker
 # Build Caddy
-FROM golang:1.13-alpine as caddy_builder
+FROM {{ARCH.images.base}}
 RUN apk add --no-cache git gcc musl-dev
 RUN mkdir /www /caddy
 COPY builder.sh /usr/bin/builder.sh

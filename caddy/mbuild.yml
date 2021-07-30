@@ -1,0 +1,54 @@
+---
+REPO: caddy
+STAGE: false
+IMAGE_VERSION: 1.0.5
+
+ARCH:
+- name: amd64
+  images:
+    base: golang:1.13-alpine
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  # enable: false
+
+- name: armv7
+  images:
+    base: golang:1.13-alpine
+  tag: armv7
+  arch: arm
+  variant: v7
+  platform: linux/arm/v7
+  is_arm: true
+  # enable: false
+
+- name: armv6l
+  images:
+    base: golang:1.13-alpine
+  tag: armv6l
+  arch: arm
+  variant: v6l
+  platform: linux/arm/v6
+  is_arm: true
+  # enable: false
+
+- name: armv6
+  images:
+    base: golang:1.13-alpine
+  tag: armv6
+  arch: arm
+  variant: v6
+  platform: linux/arm/v6
+  is_arm: true
+  # enable: false
+
+- name: armv7l
+  images:
+    base: golang:1.13-alpine
+  tag: armv7l
+  arch: arm
+  variant: v7l
+  platform: linux/arm/v7
+  is_arm: true
+  # enable: false

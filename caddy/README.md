@@ -12,12 +12,14 @@ docker run --rm lasery/caddy
 
 ## Set enviornment
 ```
-export REPO=caddy && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-apps/caddy
+cd caddy
 ```
 
 ## Build image
 ```
-./build.sh docker
+python3 ~/mbuild/utils/build.py docker
+python3 ~/mbuild/utils/build.py push --only
+python3 ~/mbuild/utils/build.py deploy only
 ```
 
 ## Start the program
