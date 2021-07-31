@@ -15,57 +15,71 @@ docker run -it --rm --name=caddy \
   bash
 ```
 
-
 # Development
 
-## Set enviornment
-```
-export REPO=v2ray && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-apps/v2ray
-```
-
-## Build image
-```
-./build.sh docker
-```
-
 ## Start the program
-Prepare environment
-Demand
+```
+docker run -it --rm --name=v2ray-dev \
+  v2ray:amd64 \
+  bash
+```
+
+### environment (Demand)
 ```
   -e DOMAIN=\
   -e V2RAY_ID=\
+```
 
-on server:
+for server:
+```
   -p 80:80 -p 443:443 -p 80:80/udp -p 443:443/udp \
+```
 
-on client:
+for client:
+```
   -p 1080:1080 -p 1080:1080/udp \
 ```
 
-Optional
+### environment (Optional)
 ```
-  -e DEBUG=true
-  -e WS_PATH="/two"
+  -e DEBUG=true \
+  -e WS_PATH="/two" \
 ```
 
-
-Development
+### Mount code
 ```
   -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
   -v $(pwd)/tmpl/:/etc/v2ray/tmpl/ \
+```
 
-on server:
+Provide web:
+```
   -v $(pwd)/web/:/tmp/web/ \
+```
+
+Provide caddy:
+```
   -v $(pwd)/web/ssl/:/root/.caddy/ \
 ```
 
+Run
 ```
-docker run -it --rm --name=v2ray-dev \
-  v2ray \
-  sh
+docker exec -it v2ray-dev bash
+/docker-entrypoint.sh server
+/docker-entrypoint.sh client
+```
 
-  /docker-entrypoint.sh server
-  /docker-entrypoint.sh client
+## Build image
+Set enviornment
+```
+cd v2ray
+```
+
+```
+python3 ~/mbuild/utils/build.py docker
+python3 ~/mbuild/utils/build.py docker --bake-arg "--progress plain --set *.cache-from=lasery/ride:latest"
+python3 ~/mbuild/utils/build.py push --only
+python3 ~/mbuild/utils/build.py deploy --only
 ```
 
 ## Deploy image

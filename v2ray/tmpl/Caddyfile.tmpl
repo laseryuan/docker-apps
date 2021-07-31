@@ -1,4 +1,5 @@
 ${domain}
+auto_https disable_redirects
 {
   log ./caddy.log
   proxy ${ws_path} :2333 {
