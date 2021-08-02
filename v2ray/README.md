@@ -8,13 +8,6 @@ docker pull lasery/v2ray
 docker run --rm lasery/v2ray
 ```
 
-caddy
-```
-docker run -it --rm --name=caddy \
-  webhippie/caddy:latest \
-  bash
-```
-
 # Development
 
 ## Start the program
@@ -22,6 +15,15 @@ docker run -it --rm --name=caddy \
 docker run -it --rm --name=v2ray-dev \
   v2ray:amd64 \
   bash
+  server
+  client
+```
+
+Run
+```
+docker exec -it v2ray-dev bash
+/docker-entrypoint.sh server
+/docker-entrypoint.sh client
 ```
 
 ### environment (Demand)
@@ -57,16 +59,9 @@ Provide web:
   -v $(pwd)/web/:/tmp/web/ \
 ```
 
-Provide caddy:
+Provide ssl certificate:
 ```
   -v $(pwd)/web/ssl/:/root/.caddy/ \
-```
-
-Run
-```
-docker exec -it v2ray-dev bash
-/docker-entrypoint.sh server
-/docker-entrypoint.sh client
 ```
 
 ## Build image
@@ -81,11 +76,3 @@ python3 ~/mbuild/utils/build.py docker --bake-arg "--progress plain --set *.cach
 python3 ~/mbuild/utils/build.py push --only
 python3 ~/mbuild/utils/build.py deploy --only
 ```
-
-## Deploy image
-```
-./build.sh push
-```
-
-# Issues
-

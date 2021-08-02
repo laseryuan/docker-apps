@@ -1,9 +1,21 @@
-${domain}
-auto_https disable_redirects
 {
-  log ./caddy.log
-  proxy ${ws_path} :2333 {
-    websocket
-    header_upstream -Origin
+  auto_https disable_redirects
+  log {
+    output stdout
+    output file ./caddy.log
+    level ${loglevel}
   }
+}
+
+http://${domain},
+https://${domain},
+http://localhost, 
+https://localhost {
+  file_server
+  @v2ray_websocket {
+      path ${ws_path}
+      header Connection *Upgrade*
+      header Upgrade websocket
+  }
+  reverse_proxy @v2ray_websocket localhost:2333
 }

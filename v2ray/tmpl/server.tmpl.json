@@ -1,4 +1,7 @@
 {
+  "log": {
+    "loglevel": "${loglevel}"
+  },
   "inbounds": [
     {
       "port": 2333,

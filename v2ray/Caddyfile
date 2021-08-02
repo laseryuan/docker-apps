@@ -1,9 +1,14 @@
-test
 {
-  log ./caddy.log
-  proxy /ray :6555 {
-    websocket
-    header_upstream -Origin
+  log {
+    output file ./caddy.log
+  }
+}
+
+localhost,
+test {
+  file_server
+  reverse_proxy /ray :6555 {
+    header_up -Origin
   }
 }
 
