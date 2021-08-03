@@ -50,18 +50,18 @@ for client:
 
 ### Mount code
 ```
-  -v $(pwd)/docker-entrypoint.sh:/docker-entrypoint.sh \
-  -v $(pwd)/tmpl/:/etc/v2ray/tmpl/ \
+  -v $PROJECT_pwd/docker-entrypoint.sh:/docker-entrypoint.sh \
+  -v $PROJECT_pwd/tmpl/:/etc/v2ray/tmpl/ \
 ```
 
 Provide web:
 ```
-  -v $(pwd)/web/:/tmp/web/ \
+  -v $PROJECT_pwd/web/:/tmp/web/ \
 ```
 
 Provide ssl certificate:
 ```
-  -v $(pwd)/web/ssl/:/root/.caddy/ \
+  -v $PROJECT_pwd/web/ssl/:/root/.caddy/ \
 ```
 
 ## Build image
