@@ -7,10 +7,8 @@
   }
 }
 
-http://${domain},
-https://${domain},
-http://localhost, 
-https://localhost {
+http://, 
+https:// {
   file_server
   @v2ray_websocket {
       path ${ws_path}
