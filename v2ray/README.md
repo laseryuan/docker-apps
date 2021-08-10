@@ -8,25 +8,7 @@ docker pull lasery/v2ray
 docker run --rm lasery/v2ray
 ```
 
-# Development
-
-## Start the program
-```
-docker run -it --rm --name=v2ray-dev \
-  v2ray:amd64 \
-  bash
-  server
-  client
-```
-
-Run
-```
-docker exec -it v2ray-dev bash
-/docker-entrypoint.sh server
-/docker-entrypoint.sh client
-```
-
-### environment (Demand)
+## environment (Demand)
 ```
   -e DOMAIN=\
   -e V2RAY_ID=\
@@ -46,6 +28,24 @@ for client:
 ```
   -e DEBUG=true \
   -e WS_PATH="/two" \
+```
+
+# Development
+
+## Start the program
+```
+docker run -it --rm --name=v2ray-dev \
+  v2ray:amd64 \
+  bash
+  server
+  client
+```
+
+Run
+```
+docker exec -it v2ray-dev bash
+/docker-entrypoint.sh server
+/docker-entrypoint.sh client
 ```
 
 ### Mount code
