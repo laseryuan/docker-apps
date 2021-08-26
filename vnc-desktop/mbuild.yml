@@ -1,0 +1,11 @@
+---
+REPO: vnc-desktop
+IMAGE_VERSION: 0.1.0
+
+ARCH:
+- name: amd64
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  # enable: false

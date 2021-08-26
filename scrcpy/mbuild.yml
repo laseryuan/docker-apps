@@ -1,7 +1,5 @@
 ---
 REPO: scrcpy
-STAGE: false
-# STAGE: true
 IMAGE_VERSION: v1.18
 
 ARCH:
