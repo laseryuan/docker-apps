@@ -43,7 +43,7 @@ docker run -it --rm --name=kodi \
   -e DISPLAY=unix:0 -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e PULSE_SERVER=unix:/run/user/1000/pulse/native -v /run/user/1000:/run/user/1000 \
   -v /var/run/dbus/:/var/run/dbus/ \
-  kodi:17.6-amd64 \
+  kodi:amd64 \
   bash
 ```
 
@@ -75,7 +75,10 @@ docker run -it --rm --name="$REPO"-dev \
 
 ## Deploy image
 ```
-./build.sh push
+python3 ~/mbuild/utils/build.py docker
+python3 ~/mbuild/utils/build.py docker --bake-arg "--progress plain --set *.cache-from=lasery/ride:latest"
+python3 ~/mbuild/utils/build.py push --only
+python3 ~/mbuild/utils/build.py deploy --only
 ```
 
 # Issues
