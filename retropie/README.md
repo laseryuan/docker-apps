@@ -1,6 +1,6 @@
 # Usage
 ```
-docker run --rm lasery/retropie
+docker run lasery/retropie
 ```
 
 ### Raspberry pi
@@ -46,7 +46,7 @@ docker run -it --rm --name=retropie \
 ```
 cd ~/projects/docker-apps/retropie
 
-  emulationstation
+emulationstation
 ```
 
 RetroArch
@@ -63,10 +63,10 @@ jstest /dev/input/js0
 
 ## Build image
 ```
-append "skip" to skip compile bake and dockerfiles
-utils/build.py docker
-utils/build.py push
-utils/build.py deploy
+python3 ~/mbuild/utils/build.py docker
+python3 ~/mbuild/utils/build.py docker --bake-arg "--progress plain --set *.cache-from=lasery/ride:latest"
+python3 ~/mbuild/utils/build.py push --only
+python3 ~/mbuild/utils/build.py deploy --only
 ```
 
 # Issues

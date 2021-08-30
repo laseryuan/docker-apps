@@ -17,9 +17,9 @@ RUN echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi
 
 
 USER pi
-RUN curl -L https://github.com/RetroPie/RetroPie-Setup/archive/{{RETROPIE_VERSION}}.tar.gz -o /tmp/retropie.tar.gz && \
+RUN curl -L https://github.com/RetroPie/RetroPie-Setup/archive/{{IMAGE_VERSION}}.tar.gz -o /tmp/retropie.tar.gz && \
     tar xvf /tmp/retropie.tar.gz -C /tmp/ && \
-    mv /tmp/RetroPie-Setup-{{RETROPIE_VERSION}} /home/pi/RetroPie-Setup
+    mv /tmp/RetroPie-Setup-{{IMAGE_VERSION}} /home/pi/RetroPie-Setup
 
 WORKDIR /home/pi/RetroPie-Setup
 RUN sudo chmod +x retropie_setup.sh

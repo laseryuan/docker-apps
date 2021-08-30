@@ -1,0 +1,63 @@
+---
+REPO: retropie
+IMAGE_VERSION: 4.7.1
+
+ARCH:
+- name: amd64
+  images:
+    # base: debian:stretch
+    build_base: debian:stretch
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  rpi_platform: x86
+  is_amd: true
+  # enable: false
+
+- name: armv7
+  images:
+    # base: balenalib/raspberry-pi-debian:buster
+    build_base: balenalib/raspberry-pi-debian:buster
+  tag: armv7
+  arch: arm
+  variant: v7
+  platform: linux/arm/v7
+  rpi_platform: rpi4
+  is_arm: true
+  # enable: false
+
+- name: armv6l
+  images:
+    # base: balenalib/raspberry-pi-debian:buster
+    build_base: balenalib/raspberry-pi-debian:buster
+  tag: armv6l
+  arch: arm
+  variant: v6l
+  platform: linux/arm/v6
+  rpi_platform: rpi1
+  is_arm: true
+  # enable: false
+
+- name: armv6
+  images:
+    # base: balenalib/raspberry-pi-debian:buster
+    build_base: balenalib/raspberry-pi-debian:buster
+  tag: armv6
+  arch: arm
+  variant: v6
+  platform: linux/arm/v6
+  rpi_platform: rpi1
+  is_arm: true
+  # enable: false
+
+- name: armv7l
+  images:
+    # base: balenalib/raspberry-pi-debian:buster
+    build_base: balenalib/raspberry-pi-debian:buster
+  tag: armv7l
+  arch: arm
+  variant: v7l
+  platform: linux/arm/v7
+  rpi_platform: rpi4
+  is_arm: true
+  # enable: false
