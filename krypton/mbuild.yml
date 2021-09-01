@@ -1,8 +1,6 @@
 ---
 REPO: krypton
-STAGE: false
-# STAGE: true
-IMAGE_VERSION: 21.04
+IMAGE_VERSION: 2.4.15
 
 ARCH:
 - name: armv7
@@ -13,7 +11,6 @@ ARCH:
   variant: v7
   platform: linux/arm/v7
   is_arm: true
-  enable: true
   # enable: false
 
 - name: armv6l
@@ -24,7 +21,6 @@ ARCH:
   variant: v6l
   platform: linux/arm/v6
   is_arm: true
-  enable: true
   # enable: false
 
 - name: armv7l
@@ -35,7 +31,6 @@ ARCH:
   variant: v7l
   platform: linux/arm/v7
   is_arm: true
-  enable: true
   # enable: false
 
 - name: armv6
@@ -46,5 +41,13 @@ ARCH:
   variant: v6
   platform: linux/arm/v6
   is_arm: true
-  enable: true
+  # enable: false
+
+- name: arm64
+  images:
+    base: debian:buster-slim
+  tag: arm64
+  arch: arm64
+  platform: linux/arm64
+  is_amd: true
   # enable: false

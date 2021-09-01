@@ -23,23 +23,10 @@ runtime
 ```
 
 ## Build image
-- Local
+1. Create builder image
 ```
-docker run --rm -it \
-  -v $(pwd)/:/home/mbuild/ \
-  -v ~/.docker/:/root/.docker/ \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  lasery/mbuild \
-bash
-
-cd mbuild
-
-# append "skip" to skip compile bake and dockerfiles
-# append "only" to perform current task only
-python3 /home/utils/build.py docker
-python3 /home/utils/build.py skip push only
-python3 /home/utils/build.py deploy only
+python3 ~/mbuild/utils/build.py docker
+python3 ~/mbuild/utils/build.py docker --bake-arg "--progress plain --set *.cache-from=lasery/ride:latest"
+python3 ~/mbuild/utils/build.py push --only
+python3 ~/mbuild/utils/build.py deploy --only
 ```
-
-# Issues
-
