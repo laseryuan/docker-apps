@@ -5,6 +5,17 @@ Works for arm32 (Rapsberry Pi)
 docker run --rm lasery/scrcpy
 ```
 
+```
+export \
+
+DISPLAY=\
+unix:1
+
+echo \
+
+$DISPLAY \
+```
+
 amd64
 ```
 docker run --rm -it \
@@ -15,7 +26,7 @@ docker run --rm -it \
   \
   `# use host display` \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e DISPLAY=$DISPLAY \
+  -e DISPLAY \
   \
   lasery/scrcpy \
   sh
@@ -46,6 +57,7 @@ docker run --rm -it \
 ```
 adb tcpip 5555
 adb connect tcpip.mydomain:5555
+adb kill-server
 adb devices
 scrcpy
 ```
