@@ -4,8 +4,19 @@ IMAGE_VERSION: 0.1.0
 
 ARCH:
 - name: amd64
+  images:
+    base: dorowu/ubuntu-desktop-lxde-vnc
   tag: amd64
   arch: amd64
   platform: linux/amd64
+  is_amd: true
+  # enable: false
+
+- name: arm64
+  images:
+    base: dorowu/ubuntu-desktop-lxde-vnc:focal-arm64
+  tag: arm64
+  arch: arm64
+  platform: linux/arm64
   is_amd: true
   # enable: false
