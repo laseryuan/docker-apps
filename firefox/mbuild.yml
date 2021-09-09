@@ -1,0 +1,22 @@
+---
+REPO: firefox
+IMAGE_VERSION: 90
+
+ARCH:
+- name: amd64
+  images:
+    base: jess/firefox
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  # enable: false
+
+- name: arm64
+  images:
+    base: debian:buster-slim
+  tag: arm64
+  arch: arm64
+  platform: linux/arm64
+  is_arm: true
+  # enable: false
