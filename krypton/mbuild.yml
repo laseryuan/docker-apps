@@ -3,6 +3,24 @@ REPO: krypton
 IMAGE_VERSION: 2.4.15
 
 ARCH:
+- name: amd64
+  images:
+    base: debian:buster-slim
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  enable: false
+
+- name: x386
+  images:
+    base: debian:buster-slim
+  tag: x386
+  arch: 386
+  platform: linux/386
+  is_amd: true
+  # enable: false
+
 - name: armv7
   images:
     base: balenalib/raspberry-pi-debian:buster

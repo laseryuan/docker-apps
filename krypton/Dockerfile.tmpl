@@ -3,6 +3,11 @@ FROM {{ARCH.images.base}}
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 
+{{#ARCH.is_amd}}
+RUN curl https://krypt.co/kr | sh
+{{/ARCH.is_amd}}
+
+{{#ARCH.is_arm}}
 RUN apt-get update -qy && apt-get install -qy \
       `# build support` \
       build-essential \
@@ -17,3 +22,4 @@ RUN git clone --depth=1 https://github.com/kryptco/kr.git
 RUN cd kr && \
       make install && \
       make start
+{{/ARCH.is_arm}}

@@ -9,7 +9,7 @@ docker run --rm lasery/krypton
 
 # Development
 ```
-cd ~/projects/docker-apps/krypton
+cd krypton
 
 docker run --name=krypton --rm \
   -it \
