@@ -9,7 +9,6 @@ ARCH:
   tag: amd64
   arch: amd64
   platform: linux/amd64
-  is_amd: true
   # enable: false
 
 - name: x386
@@ -18,7 +17,6 @@ ARCH:
   tag: x386
   arch: 386
   platform: linux/386
-  is_amd: true
   # enable: false
 
 - name: armv7
@@ -28,7 +26,6 @@ ARCH:
   arch: arm
   variant: v7
   platform: linux/arm/v7
-  is_arm: true
   # enable: false
 
 - name: armv6l
@@ -38,7 +35,6 @@ ARCH:
   arch: arm
   variant: v6l
   platform: linux/arm/v6
-  is_arm: true
   # enable: false
 
 - name: armv7l
@@ -48,7 +44,6 @@ ARCH:
   arch: arm
   variant: v7l
   platform: linux/arm/v7
-  is_arm: true
   # enable: false
 
 - name: armv6
@@ -58,7 +53,6 @@ ARCH:
   arch: arm
   variant: v6
   platform: linux/arm/v6
-  is_arm: true
   # enable: false
 
 - name: arm64
