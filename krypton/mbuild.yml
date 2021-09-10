@@ -10,7 +10,7 @@ ARCH:
   arch: amd64
   platform: linux/amd64
   is_amd: true
-  enable: false
+  # enable: false
 
 - name: x386
   images:
