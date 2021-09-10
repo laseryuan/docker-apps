@@ -49,5 +49,4 @@ ARCH:
   tag: arm64
   arch: arm64
   platform: linux/arm64
-  is_amd: true
   # enable: false

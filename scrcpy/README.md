@@ -14,6 +14,9 @@ unix:1
 echo \
 
 $DISPLAY \
+
+  `# for MIT-SHM` \
+  --ipc=container:desktop \
 ```
 
 amd64
@@ -25,8 +28,7 @@ docker run --rm -it \
   -v ${HOME}/.android:/root/.android \
   \
   `# use host display` \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e DISPLAY \
+  -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
   \
   lasery/scrcpy \
   sh
