@@ -38,7 +38,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build with mbuild
-        run: python3 /home/ride/mbuild/utils/build.py docker
+        run: python3 /home/ride/mbuild/utils/build.py docker || python3 /home/ride/mbuild/utils/build.py docker
       -
         name: Push with mbuild
         run: python3 /home/ride/mbuild/utils/build.py push --only
