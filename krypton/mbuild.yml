@@ -11,10 +11,10 @@ ARCH:
   platform: linux/amd64
   # enable: false
 
-- name: x386
+- name: x86
   images:
     base: debian:buster-slim
-  tag: x386
+  tag: x86
   arch: 386
   platform: linux/386
   # enable: false
