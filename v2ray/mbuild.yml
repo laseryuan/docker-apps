@@ -3,6 +3,16 @@ REPO: v2ray
 IMAGE_VERSION: v4.23.1
 
 ARCH:
+- name: arm64
+  images:
+    base: alpine:latest
+    build_base: caddy:alpine
+  tag: arm64
+  arch: arm64
+  platform: linux/arm64
+  is_arm: true
+  # enable: false
+
 - name: amd64
   images:
     base: alpine:latest
