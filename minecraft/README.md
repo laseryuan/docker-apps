@@ -12,8 +12,7 @@ docker run --rm lasery/minecraft
 
 ## Set enviornment
 ```
-export REPO=minecraft && export VERSION=$(date "+%y.%m") && cd ~/projects/docker-apps/minecraft
-./build.sh docker
+cd minecraft
 ```
 
 ## Start the program
@@ -47,12 +46,10 @@ docker run -it --rm --name=minecraft-dev \
 ## Build image
 - Local
 ```
-docker buildx bake
-```
-
-## Deploy image
-```
-./build.sh push
+python3 ~/mbuild/utils/build.py docker
+python3 ~/mbuild/utils/build.py deploy
+python3 ~/mbuild/utils/build.py push --only
+python3 ~/mbuild/utils/build.py deploy --only
 ```
 
 # Issues

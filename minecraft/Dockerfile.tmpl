@@ -1,0 +1,43 @@
+FROM {{ARCH.images.base}}
+
+ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
+
+# Install Minecraft
+# RUN apt-get update -qy && apt-get install -qy \
+RUN apt-get update && apt-get install -qy --no-install-recommends \
+      gdebi-core \
+      openjdk-8-jre \
+      flite \
+      mesa-utils `# OpenGL testing` \
+# Fix Gtk complain
+# https://askubuntu.com/questions/342202/failed-to-load-module-canberra-gtk-module-but-already-installed
+      libcanberra-gtk-module libcanberra-gtk3-module
+      # apt -y --purge autoremove && \
+      # rm -rf /var/lib/apt/lists/*
+
+# RUN curl -o /tmp/Minecraft.deb https://launcher.mojang.com/download/Minecraft.deb
+# RUN curl -o /tmp/Minecraft.deb https://launcher.mojang.com/download/Minecraft-beta.deb
+# ADD ./Minecraft.deb /tmp/
+# ADD ./Minecraft-beta.deb /tmp/Minecraft.deb
+ADD https://launcher.mojang.com/download/Minecraft.deb /tmp/Minecraft.deb
+RUN gdebi --n /tmp/Minecraft.deb
+# Finish install Minecraft
+
+# Fix dbind-WARNING
+# https://unix.stackexchange.com/questions/230238/x-applications-warn-couldnt-connect-to-accessibility-bus-on-stderr
+ENV NO_AT_BRIDGE=1
+
+RUN useradd -ms /bin/bash mc
+
+WORKDIR /home/mc
+
+USER mc
+
+RUN mkdir /home/mc/.minecraft
+
+COPY --chown=mc ./docker-entrypoint.sh /
+COPY --chown=mc ./README.md /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["help"]

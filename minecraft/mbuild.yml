@@ -1,0 +1,22 @@
+---
+REPO: minecraft
+IMAGE_VERSION: v2.1
+
+ARCH:
+- name: nvidia
+  images:
+    base: nvidia/opengl:1.0-glvnd-runtime-ubuntu18.04
+  tag: nvidia
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  # enable: false
+
+- name: amd64
+  images:
+    base: ubuntu:bionic
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  # enable: false
