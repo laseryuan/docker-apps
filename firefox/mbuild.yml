@@ -1,6 +1,6 @@
 ---
 REPO: firefox
-IMAGE_VERSION: 90
+IMAGE_VERSION: 103
 
 ARCH:
 - name: amd64
@@ -14,7 +14,7 @@ ARCH:
 
 - name: arm64
   images:
-    base: debian:buster-slim
+    base: debian:stable-slim
   tag: arm64
   arch: arm64
   platform: linux/arm64
