@@ -1,0 +1,20 @@
+---
+REPO: wine 
+IMAGE_VERSION: 7.11
+
+ARCH:
+- name: amd64
+  images:
+    base: ubuntu:20.04
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  # enable: false
+
+- name: arm64
+  images:
+    base: ubuntu:20.04
+  tag: arm64
+  arch: arm64
+  platform: linux/arm64
+  enable: false
