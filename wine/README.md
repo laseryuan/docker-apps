@@ -9,11 +9,15 @@ docker run
   -e LANG=zh_CN.UTF-8 \
   -e LANGUAGE=en_US.UTF-8 \
   -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --name wine \
   lasery/wine
 ```
 # Configure Wine
 ```
+docker exec -it wine
 WINEARCH=win64 WINEPREFIX=~/.wine64 winecfg
+export LC_ALL=zh_TW.BIG5
+export LANG=zh_TW.BIG5
 ```
 
 # run
