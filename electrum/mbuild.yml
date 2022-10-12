@@ -1,0 +1,38 @@
+---
+REPO: electrum
+STAGE: false
+IMAGE_VERSION: "4.3.2"
+GIT_NAME: "Laser Yuan"
+GIT_EMAIL: "laser.yuan@gmail.com"
+
+ARCH:
+- name: armv6l
+  images:
+    base: balenalib/raspberry-pi-debian
+  tag: armv6l
+  arch: arm
+  variant: v6l
+  platform: linux/arm/v6
+  is_arm: true
+  is_arm32: true
+  enable: false
+
+- name: armv7l
+  images:
+    base: balenalib/raspberry-pi-debian
+  tag: armv7l
+  arch: arm
+  variant: v7l
+  platform: linux/arm/v7
+  is_arm: true
+  is_arm32: true
+  enable: false
+
+- name: amd64
+  images:
+    base: debian:stable-slim
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  # enable: false
