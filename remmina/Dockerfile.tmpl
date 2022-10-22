@@ -1,0 +1,16 @@
+FROM {{ARCH.images.base}}
+
+{{#ARCH.is_amd}}
+RUN useradd -ms /bin/bash remmina
+USER remmina
+{{/ARCH.is_amd}}
+
+{{#ARCH.is_arm}}
+RUN \
+  apt-get update && \
+  apt-get install -y remmina \
+    remmina-plugin-rdp \
+    remmina-plugin-vnc \
+    && \
+    ``
+{{/ARCH.is_arm}}
