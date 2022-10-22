@@ -15,7 +15,7 @@ ARCH:
   platform: linux/arm/v6
   is_arm: true
   is_arm32: true
-  enable: false
+  # enable: false
 
 - name: armv7l
   images:
@@ -26,7 +26,7 @@ ARCH:
   platform: linux/arm/v7
   is_arm: true
   is_arm32: true
-  enable: false
+  # enable: false
 
 - name: amd64
   images:
