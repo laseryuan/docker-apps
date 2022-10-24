@@ -1,16 +1,13 @@
 FROM {{ARCH.images.base}}
 
-{{#ARCH.is_amd}}
-RUN useradd -ms /bin/bash remmina
-USER remmina
-{{/ARCH.is_amd}}
-
-{{#ARCH.is_arm}}
 RUN \
-  apt-get update && \
-  apt-get install -y remmina \
+  apt-get update && apt-get install -y \
+    software-properties-common \
+    --no-install-recommends && \
+    apt-get update && apt-get install -y \
+    hicolor-icon-theme \
+    remmina \
     remmina-plugin-rdp \
     remmina-plugin-vnc \
-    && \
-    ``
-{{/ARCH.is_arm}}
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*

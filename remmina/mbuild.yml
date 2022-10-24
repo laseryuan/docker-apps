@@ -30,7 +30,7 @@ ARCH:
 
 - name: amd64
   images:
-    base: jess/remmina
+    base: debian:stable-slim
   tag: amd64
   arch: amd64
   platform: linux/amd64
