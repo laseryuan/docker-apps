@@ -2,11 +2,8 @@ FROM {{ARCH.images.base}}
 
 RUN \
   apt-get update && apt-get install -y \
-    software-properties-common \
-    --no-install-recommends && \
-    apt-get update && apt-get install -y \
+    libcanberra-gtk-module libcanberra-gtk3-module `# panel icon dependency` \
     remmina \
     remmina-plugin-rdp \
     remmina-plugin-vnc \
-    --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*

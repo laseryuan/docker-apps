@@ -30,7 +30,7 @@ ARCH:
 
 - name: amd64
   images:
-    base: debian:stable-slim
+    base: ubuntu
   tag: amd64
   arch: amd64
   platform: linux/amd64
