@@ -1,6 +1,6 @@
 ---
 REPO: vnc-desktop
-IMAGE_VERSION: 0.1.0
+IMAGE_VERSION: 22.10
 
 ARCH:
 - name: amd64
