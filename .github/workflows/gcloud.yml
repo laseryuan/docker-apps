@@ -1,0 +1,26 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'gcloud/**'
+      - '.github/workflows/gcloud.yml'
+
+jobs:
+  deploy_gcloud:
+    defaults:
+      run:
+        working-directory: gcloud
+    runs-on: ubuntu-latest
+    container:
+      image: lasery/ride
+      options: >-
+        -v "/home/runner/work/templates/templates":"/home/ride/projects/templates"
+        -e HOST_USER_NAME=root
+        -e HOST_USER_ID=0
+        -e HOST_USER_GID=0
+        --privileged
+
+    steps:
+      -
+        name: Build and push docker image
+        uses: actions/docker-apps@v1
