@@ -1,0 +1,16 @@
+---
+REPO: gcloud
+STAGE: false
+IMAGE_VERSION: "22.11"
+GIT_NAME: "Laser Yuan"
+GIT_EMAIL: "laser.yuan@gmail.com"
+
+ARCH:
+- name: amd64
+  images:
+    base: google/cloud-sdk:alpine
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  is_amd: true
+  # enable: false

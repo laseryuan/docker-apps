@@ -1,0 +1,55 @@
+name: 'Build and Push Docker App'
+
+on:
+  workflow_call:
+    inputs:
+      project-folder:
+        description: The folder containing the project to build
+        type: string
+        default: .
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true 
+      DOCKERHUB_TOKEN:
+        required: true 
+
+jobs:
+  build-push:
+    defaults:
+      run:
+        working-directory: ${{ inputs.project-folder }}
+    runs-on: ubuntu-latest
+    container:
+      image: lasery/ride
+      options: >-
+        -v "/home/runner/work/templates/templates":"/home/ride/projects/templates"
+        -e HOST_USER_NAME=root
+        -e HOST_USER_ID=0
+        -e HOST_USER_GID=0
+        --privileged
+
+    steps:
+      -
+        name: Checkout repository and submodules
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build with mbuild
+        run: python3 /home/ride/mbuild/utils/build.py docker
+      -
+        name: Push with mbuild
+        run: python3 /home/ride/mbuild/utils/build.py push --only
+      -
+        name: Deply with mbuild
+        run: python3 /home/ride/mbuild/utils/build.py deploy --only
