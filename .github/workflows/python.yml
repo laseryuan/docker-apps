@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'python/**'
+      - '.github/workflows/python.yml'
+
+jobs:
+  build-push:
+    uses: ./.github/workflows/build-push.yml
+    secrets: inherit
+    with:
+      project-folder: python
