@@ -15,6 +15,11 @@ Use OS agnostic path in you bash script
 use debugger
 https://blog.jez.io/bash-debugger/
 
+add following command to break the script
+```
+  debugger "$@"
+```
+
 ##Method 2
 use return
 
