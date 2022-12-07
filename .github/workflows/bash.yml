@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'bash/**'
+      - '.github/workflows/bash.yml'
+
+jobs:
+  build-push:
+    uses: ./.github/workflows/build-push.yml
+    secrets: inherit
+    with:
+      project-folder: bash
