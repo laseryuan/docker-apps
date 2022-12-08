@@ -26,6 +26,29 @@ local debug_control=0
 [ $debug_control ] && debugger "$@"
 ```
 
+- add test cases to script
+- use mock method
+```
+test (){
+  function ssh {
+    echo "calling: ssh $@"
+  }
+  export -f ssh
+
+  if [[ $(main me@host ) != "calling: ssh me@host" ]]; then
+    echo "TEST FAILURE: ssh"
+    exit 1
+  fi
+  echo test succeed!
+}
+
+if [[ "$1" = "test" ]]; then
+  test "$@"
+else
+  main "$@"
+fi
+```
+
 ##Method 2
 use return
 
