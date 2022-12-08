@@ -49,13 +49,6 @@ else
 fi
 ```
 
-- Tips
-If debugger is inside a function which is called in the manner of $(function)
-the stdout is suppressed. To print variable, use
-```
-echo $var >&2
-```
-
 ##Method 2
 use return
 
