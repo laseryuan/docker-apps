@@ -20,40 +20,6 @@ https://blog.jez.io/bash-debugger/
 debugger "$@"
 ```
 
-- conditional break
-```
-local debug_control=0
-[ $debug_control ] && debugger "$@"
-```
-
-- add test cases to script
-- use mock method
-```
-test (){
-  # mocking function
-  function ssh {
-    echo "calling: ssh $@"
-  }
-
-  local res=$(main --mount me@host)
-  if ! [[ 
-    $res =~ "calling: mount"
-      &&
-    $res =~ "calling: ssh me@host"
-    ]]; then
-    echo "TEST FAILURE: --mount"
-    exit 1
-  fi
-
-  echo test succeed!
-}
-
-if [[ "$1" = "test" ]]; then
-  test "$@"
-else
-  main "$@"
-fi
-```
 
 ##Method 2
 use return

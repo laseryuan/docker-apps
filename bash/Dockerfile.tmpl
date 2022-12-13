@@ -1,6 +1,7 @@
 FROM {{ARCH.images.base}}
 
-COPY debugger.sh /etc/profile.d/
+COPY load.sh /etc/profile.d/
 COPY README.md /
+COPY sample.sh /
 
 CMD ["cat", "/README.md"]
