@@ -30,15 +30,21 @@ local debug_control=0
 - use mock method
 ```
 test (){
+  # mocking function
   function ssh {
     echo "calling: ssh $@"
   }
-  export -f ssh
 
-  if [[ $(main me@host ) != "calling: ssh me@host" ]]; then
-    echo "TEST FAILURE: ssh"
+  local res=$(main --mount me@host)
+  if ! [[ 
+    $res =~ "calling: mount"
+      &&
+    $res =~ "calling: ssh me@host"
+    ]]; then
+    echo "TEST FAILURE: --mount"
     exit 1
   fi
+
   echo test succeed!
 }
 
