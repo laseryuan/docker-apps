@@ -1,11 +1,11 @@
 ---
 REPO: scrcpy
-IMAGE_VERSION: v1.18
+IMAGE_VERSION: v1.25
 
 ARCH:
 - name: amd64
   images:
-    base: pierlo1/scrcpy:intel
+    base: ubuntu
   tag: amd64
   arch: amd64
   platform: linux/amd64

@@ -3,24 +3,23 @@
 
 FROM {{ARCH.images.base}}
 
-{{#ARCH.is_arm}}
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -qy
-RUN apt install -yq \
+
+RUN apt install -qy \
   ffmpeg libsdl2-2.0-0 adb wget \
-  gcc git pkg-config meson ninja-build \
-  libavcodec-dev libavformat-dev libavutil-dev libsdl2-dev \
-  libavdevice-dev \
-  ``
+  gcc git pkg-config meson ninja-build libsdl2-dev \
+  libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
+  libusb-1.0-0 libusb-1.0-0-dev
 
-RUN git clone --depth 1 --branch {{IMAGE_VERSION}} https://github.com/Genymobile/scrcpy
+# fix: sudo command not found
+RUN apt install -y sudo
+
+RUN git clone --depth 1 https://github.com/Genymobile/scrcpy
+#RUN git clone --depth 1 --branch {{IMAGE_VERSION}} https://github.com/Genymobile/scrcpy
 WORKDIR /scrcpy
-
-# install require version for meson
-RUN apt install python3-pip
-RUN pip3 install meson
 
 # Build scrcpy
 RUN ./install_release.sh
@@ -31,4 +30,3 @@ RUN useradd -m -G video scrcpy
 WORKDIR /home/scrcpy
 
 USER scrcpy
-{{/ARCH.is_arm}}
