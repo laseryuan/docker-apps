@@ -1,5 +1,6 @@
 ---
 REPO: scrcpy
+# Check version: https://github.com/Genymobile/scrcpy/blob/master/install_release.sh
 IMAGE_VERSION: v1.25
 
 ARCH:
