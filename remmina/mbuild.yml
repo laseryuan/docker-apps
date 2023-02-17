@@ -6,6 +6,17 @@ GIT_NAME: "Laser Yuan"
 GIT_EMAIL: "laser.yuan@gmail.com"
 
 ARCH:
+- name: armv7
+  images:
+    base: balenalib/raspberry-pi-debian
+  tag: armv7
+  arch: arm
+  variant: v7
+  platform: linux/arm/v7
+  is_arm: true
+  is_arm32: true
+  # enable: false
+
 - name: armv6l
   images:
     base: balenalib/raspberry-pi-debian
