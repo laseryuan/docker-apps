@@ -1,3 +1,6 @@
 FROM {{ARCH.images.base}}
 
 VOLUME /tmp/.X11-unix
+
+RUN \
+  mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix
