@@ -1,50 +1,16 @@
 FROM {{ARCH.images.base}}
+
 VOLUME /tmp/.X11-unix
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 
 RUN \
   mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix
 
-# RUN apt update \
-RUN \
-  apt-get update && apt-get -y upgrade && apt-get install -y \
-    language-pack-zh-hans-base \
-    language-pack-zh-hans \
-    language-pack-zh-hant-base \
-    language-pack-zh-hant \
-    locales tzdata xfonts-wqy ttf-wqy-zenhei && \
-  locale-gen zh_CN && \
-  locale-gen zh_CN.UTF-8 && \
-  locale-gen zh_TW && \
-  locale-gen zh_TW.UTF-8 && \
-  locale-gen zh_HK && \
-  locale-gen zh_HK.UTF-8 && \
-  locale-gen zh_SG && \
-  locale-gen zh_SG.UTF-8 && \
-  apt autoclean -y && \
-  apt autoremove -y && \
-  rm -rf /var/lib/apt/lists/*
-
-# Set Timezone to CST
-ENV DEBIAN_FRONTEND=noninteractive
-RUN \
-  set -eux && \
-  update-locale LANG=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 && \
-  ln -fs /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime && \
-  dpkg-reconfigure --frontend noninteractive tzdata && \
-  find /var/lib/apt/lists -type f -delete && \
-  find /var/cache -type f -delete
-
-RUN \
-  apt-get update && apt-get install -y \
-    ibus ibus-libpinyin ibus-table-wubi \
-    fcitx-table-wbpy fcitx-config-gtk \
-  && apt-get install -f \
-  && ibus-daemon -drx \
-  && apt autoclean -y \
-  && apt autoremove -y \
-  && rm -rf /var/lib/apt/lists/*
+COPY ./locale /tmp/locale
+RUN cd /tmp/locale/ && ./install.sh
 
 # fix: passwd/group file permission were reverted by ibus installation
 RUN \

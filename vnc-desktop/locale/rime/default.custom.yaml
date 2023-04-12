@@ -1,0 +1,4 @@
+patch:
+  schema_list:
+    - schema: jyutping
+    - schema: luna_pinyin
