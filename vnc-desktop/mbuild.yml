@@ -5,7 +5,7 @@ IMAGE_VERSION: 22.10
 ARCH:
 - name: amd64
   images:
-    base: accetto/ubuntu-vnc-xfce-g3
+    base: lasery/vnc-desktop:build
   tag: amd64
   arch: amd64
   platform: linux/amd64
