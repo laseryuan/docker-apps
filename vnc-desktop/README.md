@@ -1,4 +1,14 @@
-https://github.com/fcwu/docker-ubuntu-vnc-desktop
+Build lasery/vnc-desktop:build
+```
+git clone https://github.com/accetto/ubuntu-vnc-xfce-g3.git
+cd ubuntu-vnc-xfce-g3
+find . -type f -name "*.sh" -exec chmod +x '{}' \;
+chmod +x docker/hooks/*
+
+export REPO_OWNER_NAME="lasery"
+export BUILDER_REPO="vnc-desktop:build"
+```
+
 ```
 export \
 

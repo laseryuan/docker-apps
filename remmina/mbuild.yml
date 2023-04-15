@@ -1,7 +1,7 @@
 ---
 REPO: remmina
 STAGE: false
-IMAGE_VERSION: "22.10"
+IMAGE_VERSION: "23.04"
 GIT_NAME: "Laser Yuan"
 GIT_EMAIL: "laser.yuan@gmail.com"
 
