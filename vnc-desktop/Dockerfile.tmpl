@@ -7,6 +7,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 USER root
 
 RUN \
+  apt-get update && apt-get -y install \
+      xfce4-screensaver && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN \
   mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix
 
 COPY ./locale /tmp/locale

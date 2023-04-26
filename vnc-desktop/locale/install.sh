@@ -1,6 +1,6 @@
 set -eux
 
-apt-get update && apt-get -y upgrade
+apt-get update
 
 apt-get install -y \
   locales tzdata

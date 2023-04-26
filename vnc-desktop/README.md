@@ -5,8 +5,15 @@ cd ubuntu-vnc-xfce-g3
 find . -type f -name "*.sh" -exec chmod +x '{}' \;
 chmod +x docker/hooks/*
 
-export REPO_OWNER_NAME="lasery"
-export BUILDER_REPO="vnc-desktop:build"
+export REPO_OWNER_NAME="my"
+export BUILDER_REPO="desktop"
+# export FEATURES_NOVNC=0
+./builder.sh latest all
+
+
+docker tag my/desktop:latest lasery/vnc-desktop:build
+# docker tag lasery/vnc-desktop:latest-vnc lasery/vnc-desktop:build
+docker push lasery/vnc-desktop:build
 ```
 
 ```
