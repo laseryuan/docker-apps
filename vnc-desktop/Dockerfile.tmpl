@@ -6,9 +6,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 
+# Can lock screen
 RUN \
   apt-get update && apt-get -y install \
       xfce4-screensaver && \
+  echo idletimeout=600 >> /etc/tigervnc/vncserver-config-defaults && \
   rm -rf /var/lib/apt/lists/*
 
 RUN \
