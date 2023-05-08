@@ -8,7 +8,7 @@ docker run \
   -it --rm \
   -v $PWD:/home/app/app \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e DISPLAY=unix:2 \
+  -e DISPLAY \
   lasery/lyx
 
 docker exec -it lyx bash
