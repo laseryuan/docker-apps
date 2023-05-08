@@ -1,5 +1,6 @@
 FROM {{ARCH.images.base}}
 
+{{#ARCH.is_amd}}
 VOLUME /tmp/.X11-unix
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,3 +25,4 @@ RUN \
   chmod 666 /etc/passwd /etc/group
 
 USER "${HEADLESS_USER_ID}"
+{{/ARCH.is_amd}}
