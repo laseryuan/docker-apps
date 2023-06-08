@@ -2,12 +2,12 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'python/**'
-      - '.github/workflows/python.yml'
+      - 'devpy/**'
+      - '.github/workflows/devpy.yml'
 
 jobs:
   build-push:
     uses: ./.github/workflows/build-push.yml
     secrets: inherit
     with:
-      project-folder: python
+      project-folder: devpy
