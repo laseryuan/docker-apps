@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 init() {
-  cp -r /templates/* ./
+  cp -r /templates/. ./
 }
