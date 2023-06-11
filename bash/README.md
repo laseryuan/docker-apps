@@ -2,6 +2,7 @@
 
 ```
 docker run -it lasery/bash bash -l
+bash /sample.sh test
 ```
 
 Use OS agnostic path in you bash script

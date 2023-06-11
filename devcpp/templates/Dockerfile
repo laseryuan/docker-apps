@@ -1,4 +1,4 @@
-FROM lasery/cling
+FROM lasery/devcpp
 
 # ADD gsl
 RUN apt-get update && apt-get install -y libgsl-dev

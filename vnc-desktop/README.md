@@ -1,3 +1,10 @@
+Change resolution without restart desktop:
+https://stackoverflow.com/questions/15816/changing-the-resolution-of-a-vnc-session-in-linux
+```
+xrandr # list availabe resoltuions
+xrandr -s 5 # select preferred one
+```
+
 Build lasery/vnc-desktop:build
 ```
 git clone https://github.com/accetto/ubuntu-vnc-xfce-g3.git

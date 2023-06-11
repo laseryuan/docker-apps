@@ -40,8 +40,11 @@ RUN \
 ENV PYTHONPATH=/tmp/clang/bindings/python:/tmp/inspector/build/python/build/lib
 ENV LD_LIBRARY_PATH=/opt/cling/lib
 
-# test
-RUN cling --version && inspector -h
+# Install reple
+RUN pip install reple
+
+# Test
+RUN cling --version && inspector -h && reple -h
 
 COPY templates /templates
 
