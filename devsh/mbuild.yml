@@ -1,5 +1,5 @@
 ---
-REPO: bash
+REPO: devsh
 STAGE: false
 IMAGE_VERSION: "22.12"
 GIT_NAME: "Laser Yuan"

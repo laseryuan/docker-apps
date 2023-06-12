@@ -2,12 +2,12 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'bash/**'
-      - '.github/workflows/bash.yml'
+      - 'devsh/**'
+      - '.github/workflows/devsh.yml'
 
 jobs:
   build-push:
     uses: ./.github/workflows/build-push.yml
     secrets: inherit
     with:
-      project-folder: bash
+      project-folder: devsh

@@ -1,7 +1,7 @@
 "debugger" command avaible for bash script debugging
 
 ```
-docker run -it lasery/bash bash -l
+docker run -it lasery/devsh bash -l
 bash /sample.sh test
 ```
 
@@ -34,3 +34,6 @@ return
 echo $MY_VAR
 ```
 source target.sh
+
+# Issue
+The breaking line ">" can't handle searching history with arrow keys
