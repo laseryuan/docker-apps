@@ -1,8 +1,21 @@
 Change resolution without restart desktop:
-https://stackoverflow.com/questions/15816/changing-the-resolution-of-a-vnc-session-in-linux
+- quick and dirty
 ```
-xrandr # list availabe resoltuions
+xrandr --fb 1280x720
+```
+
+- 
+```
+xrandr # list availabe resoltuions. Get the OUTPUT device: VNC-0
 xrandr -s 5 # select preferred one
+
+cvt 600 1165 # (optional) get modeline parameters
+
+xrandr --newmode "600x1165"   58.50  600 648 704 808  1165 1168 1178 1208 -hsync +vsync
+xrandr --addmode VNC-0 "600x1165"
+
+xrandr -s 600x1165
+
 ```
 
 Build lasery/vnc-desktop:build
