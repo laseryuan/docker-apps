@@ -3,8 +3,6 @@
 ## Initialize project
 ```
 init
-vi Dockerfile
-docker build -t myapp .
 ```
 
 ## Usage

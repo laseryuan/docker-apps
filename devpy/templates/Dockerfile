@@ -6,6 +6,7 @@ RUN \
 
 USER 1000
 ENV HOME=/tmp
+ARG REPO=app
 
 # install poetry nox
 RUN \
