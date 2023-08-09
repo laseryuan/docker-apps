@@ -1,6 +1,7 @@
 ---
 REPO: krypton
-IMAGE_VERSION: 2.4.15
+IMAGE_VERSION: 23.08
+PKG_VERSION: 2.4.15
 
 ARCH:
 - name: amd64
