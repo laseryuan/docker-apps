@@ -22,7 +22,7 @@ apt-get install -y \
   librime-data-luna-pinyin
 
 # confile locale
-ln -sf /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
+ln -sf /usr/share/zoneinfo/America/Vancouver /etc/localtime
 locale-gen en_US.UTF-8 zh_CN zh_CN.UTF-8 zh_TW zh_TW.UTF-8 zh_HK zh_HK.UTF-8 zh_SG zh_SG.UTF-8
 
 # config ibus-rime
