@@ -35,5 +35,9 @@ npm install locus crconsole live-server pryjs binding-pry-js better-node-inspect
 
 ENV PATH=/home/node/node_app/node_modules/.bin:$PATH
 
+COPY app/templates /templates
+COPY app/load.sh /etc/profile.d/
+COPY README.md /
+
 
 CMD ["cat", "/README.md"]
