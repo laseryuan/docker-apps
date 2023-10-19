@@ -8,8 +8,12 @@ docker run \
     bash
 }
 
-dev_root() {
-docker exec -it -u root jest-puppeteer bash
+exec() {
+docker exec -it devjs bash
+}
+
+exec_root() {
+docker exec -it -u root devjs bash
 }
 
 build() {

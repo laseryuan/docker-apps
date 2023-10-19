@@ -15,7 +15,7 @@ RUN apt-get update \
 
 # install chrome version that work with crconsole
 ENV \
-CHROME_VERSION="114.0.5735.198-1"
+CHROME_VERSION="104.0.5112.79-1"
 
 RUN \
 wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb \

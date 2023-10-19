@@ -1,7 +1,5 @@
 // https://medium.com/@trivedidarshan30/remote-debugging-in-puppeteer-to-debug-browser-automation-709b6a578d
 const puppeteer = require('puppeteer');
-// const puppeteer = await import('puppeteer')
-// const locus = await import('locus')
 
 async function start() {
  // headless: true,
@@ -18,7 +16,7 @@ const page = await browser.newPage();
 
 await page.goto('https://youtube.com/', {waitUntil: 'networkidle0'});
 
-const filePath = 'file://'+'/apptmp/chrome/tmp/breakpoint.html';
+const filePath = 'file://'+'/home/node/node_app/app/breakpoint.html';
 eval(require('locus'));
 
 // start crconsole
