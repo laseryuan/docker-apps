@@ -19,3 +19,8 @@ docker exec -it -u root devjs bash
 build() {
 python3 ~/mbuild/utils/build.py docker
 }
+
+deploy() {
+build
+python3 ~/mbuild/utils/build.py deploy
+}
