@@ -1,21 +1,5 @@
 FROM {{ARCH.images.base}}
 
-ARG USER=node
-
-# node image default node user id is 1000
-ARG UID=1000
-ARG GID=1000
-# default password for user
-ARG PW=docker
-# create user
-RUN echo "$UID"
-RUN if ! [ "$UID" -eq 1000 ]; then \
-        useradd -m ${USER} --uid=${UID}; \
-    fi
-
-# Using unencrypted password/ specifying password
-RUN "$(getent passwd ${UID} | cut -d: -f1):${PW}" | chpasswd
-
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chrome that Puppeteer
 # installs, work.
@@ -38,18 +22,18 @@ wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool
   && apt install -y --allow-downgrades /tmp/chrome.deb \
   && rm /tmp/chrome.deb
 
-ENV HOME=/home/$USER
+ENV HOME=/home/node
 
-USER ${UID}:${GID}
+USER node
 
 # Install node modules in parent directory
-WORKDIR /home/$USER/node_app
+WORKDIR /home/node/node_app
 
 # Install the application's dependencies inside the container
 RUN \
 npm install locus crconsole live-server pryjs binding-pry-js better-node-inspect
 
-ENV PATH=/home/$USER/node_app/node_modules/.bin:$PATH
+ENV PATH=/home/node/node_app/node_modules/.bin:$PATH
 
 
 CMD ["cat", "/README.md"]
