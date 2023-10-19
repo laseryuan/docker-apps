@@ -2,6 +2,11 @@ FROM lasery/devpy
 
 ARG REPO=app
 
+# creat virtual environment
+ENV VIRTUAL_ENV=/opt/venv
+RUN python -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 RUN \
     pip install \
         ipdb pytest behave pipenv `# if base image is not lasery/devpy` \

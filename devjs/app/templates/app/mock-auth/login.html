@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sample Login Page</title>
+	<meta charset="utf-8">
+	<meta name="description" content="A simple portfolio page for Ai saturdays abeokuta chapter">
+	<meta name="author" content="Bello Gbadebo" />
+	<meta name="viewport" content="width=device-width,  initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" media="all" href="./css/style.css">
+	<link rel="stylesheet" media="all" href="./css/Lato/latofonts.css">
+	<link rel="stylesheet" media="all" href="./css/font-awesome.min.css">
+	<link rel="stylesheet" media="all" href="./css/materialize.min.css">
+
+    <script type="text/javascript" src="./js/login.js"></script>
+</head>
+<body>
+	<div class="body displayFlex">
+		<div class="z-depth-2" id="loginBody">
+			<div id="loginHeader">
+				<h4>Login</h4>
+			</div>
+			<div class="row inputField">
+			    <div class="input-field">
+				    <input type="text" id="username" placeholder="Type in your username...">
+				    <label class="active" for="first_name2">Username</label>
+			    </div>
+			</div>
+			<div class="row inputField">
+			    <div class="input-field">
+				    <input type="text" id="password" placeholder="Type in your password...">
+				    <label class="active" for="first_name2">Password</label>
+			    </div>
+			</div>
+			<div class="row inputField">
+				<div class="btn-large blue waves-effect waves-light right" id="loginBtn">Login</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="loader displayFlex" id="loader">
+		<div class="preloader-wrapper active">
+		    <div class="spinner-layer spinner-blue-only"> 	
+			    <div class="circle-clipper left">
+			        <div class="circle"></div>
+			    </div><div class="gap-patch">
+			        <div class="circle"></div>
+			    </div><div class="circle-clipper right">
+			        <div class="circle"></div>
+			    </div>
+		    </div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', () => {
+		const loginBtn = document.querySelector('#loginBtn');
+
+		loginBtn.addEventListener("click", () => {
+			const username = document.querySelector("#username").value;
+			const password = document.querySelector("#password").value;
+			// Fetch user details
+			let user = localStorage.getItem("user");
+			user = JSON.parse(user);
+
+			if(user){
+				console.log("Username => ", username)
+				console.log("Password => ", password)
+
+				console.log("user Username => ", user.username)
+				console.log("user Password => ", user.password)
+
+				// Load the page
+				const loader = document.querySelector('#loader');
+
+				loader.style.display = "flex";
+
+				const randomTime = Math.random() * 5 * 1000; // Random number between 1 and 5
+		        setTimeout(() => {
+		            loader.style.display = "none";
+		            // Confirm the login details
+		            if(username == user.username && password == user.password){
+		            	window.location.assign('./home.html');
+		            } else {
+		            	alert("Invalid username or password inputted");
+		            }
+		        }, randomTime);
+			} else {
+            	alert("Invalid username or password inputted");
+			}
+
+		});
+
+	})
+	</script>
+</body>
+</html>

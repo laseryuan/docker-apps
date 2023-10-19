@@ -1,0 +1,21 @@
+tmp/
+
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# OS meta files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+/.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
