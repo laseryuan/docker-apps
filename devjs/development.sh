@@ -1,5 +1,8 @@
 dev() {
 docker run \
+    --privileged \
+    -e DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
     -it \
     --rm \
     --name devjs \
