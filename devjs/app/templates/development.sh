@@ -13,6 +13,11 @@ docker run \
     devjs-app bash
 }
 
+server() {
+cd src
+live-server
+}
+
 chrome() {
 google-chrome --headless --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --no-sandbox
 }
