@@ -1,32 +1,34 @@
 https://www.digitalocean.com/community/tutorials/how-to-write-end-to-end-tests-in-node-js-using-puppeteer-and-jest#step-3-running-the-sample-web-interface
 
-## Initiating your Testing Program
+## Load scripts
 ```
-mkdir end-to-end-test-tutorial
-dev
-npm -y init
-npm install --save-dev jest-puppeteer puppeteer jest locus
+. development.sh
 ```
 
-## Configuring your Testing Program
+## Static site
+ * Start static server
 ```
-mkdir actions # hold the Puppeteer scripts that will crawl your local web page
-mkdir logs # hold the results of your tests
-mkdir specs # the tests
-mkdir utils # helper files like mock credential generation
-
-npm run e2e
+server
 ```
 
-## Running the Sample Web Interface
+ * Open webpage in browser
 ```
-git clone https://github.com/do-community/mock-auth.git
-npm install -g live-server
-cd mock-auth
-live-server
+headless
 ```
 
-## Testing Account Creation
+Or with UI:
 ```
-node inspect `which jest` --runInBand
+browser
 ```
+
+ * Open repl
+```
+repl
+```
+
+ * Go to breaking point
+type "exit" in browser to continue to breaking point
+
+ * Coding in repl
+
+## Jest

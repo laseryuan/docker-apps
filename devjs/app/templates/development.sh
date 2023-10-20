@@ -21,12 +21,6 @@ docker exec -id \
     live-server --no-browser
 }
 
-# open ui browser
-browser() {
-docker exec -id devjs-app \
-google-chrome --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --no-sandbox $@
-}
-
 # open headless browser
 headless() {
 docker exec -it \
@@ -35,6 +29,16 @@ docker exec -it \
     node remote.js
 
 clean
+}
+
+repl() {
+exec crconsole --host 127.0.0.1
+}
+
+# open ui browser
+browser() {
+docker exec -id devjs-app \
+google-chrome --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --no-sandbox $@
 }
 
 # locus work arround
