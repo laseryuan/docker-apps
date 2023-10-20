@@ -1,3 +1,6 @@
+let createAccount = require( '../actions/global-setup' );
+let createAccount = require( '../actions/global-teardown' );
+
 let credentials = require( '../utils/credentials' );
 let createAccount = require( '../actions/createAccount' );
 
@@ -10,12 +13,21 @@ jest.setTimeout(60000);
 describe('Basic authentication e2e tests', () => {
   let credential;
   beforeAll( async () => {
-  // Set a definite size for the page viewport so view is consistent across browsers
+    globalSetup();
+
+    // Set a definite size for the page viewport so view is consistent across browsers
     await page.setViewport( {
       width: 1366,
       height: 768,
       deviceScaleFactor: 1
     } );
+
+    credential = credentials( 'User' );
+    createAccount = await createAccount( page );
+  } );
+
+  afterAll( async () => {
+    globalTeardown();
 
     credential = credentials( 'User' );
     createAccount = await createAccount( page );

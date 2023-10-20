@@ -13,15 +13,10 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.7.0",
+    "jest-dev-server": "^9.0.1",
     "jest-puppeteer": "^9.0.1",
     "puppeteer": "^21.3.8"
   },
   "dependencies": {
-    "better-node-inspect": "^0.3.3",
-    "binding-pry-js": "^0.2.0",
-    "crconsole": "^1.4.0",
-    "live-server": "^1.2.2",
-    "locus": "^2.0.4",
-    "pryjs": "^1.0.3"
   }
 }
