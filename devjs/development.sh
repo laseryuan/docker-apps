@@ -11,6 +11,11 @@ docker run \
     bash
 }
 
+npm_install() {
+cd ~/node_app/
+npm install --save-dev $@
+}
+
 exec() {
 docker exec -it devjs bash
 }

@@ -13,21 +13,43 @@ docker run \
     devjs-app bash
 }
 
+# start web server for static site
 server() {
-cd src
-live-server
+docker exec -id \
+    -w /home/node/node_app/app/src \
+    devjs-app \
+    live-server --no-browser
 }
 
-chrome() {
-google-chrome --headless --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --no-sandbox
+# open ui browser
+browser() {
+docker exec -id devjs-app \
+google-chrome --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --no-sandbox $@
+}
+
+# open headless browser
+headless() {
+docker exec -it \
+    -w /home/node/node_app/app/ \
+    devjs-app \
+    node remote.js
+
+clean
+}
+
+# locus work arround
+clean() {
+docker exec -it \
+    devjs-app \
+    bash -c "rm /home/node/node_modules/locus/histories/*"
 }
 
 exec() {
-docker exec -it devjs-app bash
+docker exec -it devjs-app $@
 }
 
 exec_root() {
-docker exec -it -u root devjs-app bash
+docker exec -it -u root devjs-app $@
 }
 
 build() {
