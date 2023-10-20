@@ -42,13 +42,13 @@ ENV HOME=/home/node
 USER node
 
 # Install node modules in parent directory
-WORKDIR /home/node/node_app
+WORKDIR /home/node
 
-# Install the application's dependencies inside the container
+# Install global package
 RUN \
 npm install locus crconsole live-server pryjs binding-pry-js better-node-inspect
 
-ENV PATH=/home/node/node_app/node_modules/.bin:$PATH
+ENV PATH=/home/node/node_modules/.bin:$PATH
 
 COPY app/templates /templates
 COPY app/load.sh /etc/profile.d/

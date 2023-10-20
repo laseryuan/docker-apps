@@ -1,5 +1,5 @@
 # Use the official Node.js base image
-FROM devjs:amd64
+FROM lasery/devjs
 
 ARG USER=node
 
@@ -25,8 +25,6 @@ COPY --chown=${UID}:${GID} app/package*.json ./
 # Install the application's dependencies inside the container
 RUN \
 npm install --no-optional && npm cache clean --force
-# RUN \
-# npm install ${dev-packages}
 
 ENV PATH=/home/$USER/node_app/node_modules/.bin:$PATH
 
