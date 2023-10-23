@@ -1,23 +1,33 @@
+Config() {
+. tmp/env.sh
+# . tmp/dev.env.sh
+
+echo "Using config: $GCLOUD_CONFIG"
+}
+Config
+
 dev() {
+# export DISPLAY=:1
 docker run \
     --privileged `#make it work first, then security` \
+    -v /dev/shm:/dev/shm \
     -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -it --rm \
-    --name=devjs-app \
+    --name=$APP_NAME \
     -v $(get_host_pwd)/app:/home/node/node_app/app \
     -v $(get_host_pwd)/app/package.json:/home/node/node_app/package.json \
     -v $(get_host_pwd)/app/package-lock.json:/home/node/node_app/package-lock.json \
     -v $(get_host_pwd)/tmp/:/apptmp/ \
     --network=ride_network \
-    devjs-app bash
+    $APP_NAME bash
 }
 
 # start web server for static site
 server() {
 docker exec -id \
     -w /home/node/node_app/app/src \
-    devjs-app \
+    $APP_NAME \
     live-server --no-browser
 }
 
@@ -25,7 +35,7 @@ docker exec -id \
 headless() {
 docker exec -it \
     -w /home/node/node_app/app/ \
-    devjs-app \
+    $APP_NAME \
     node remote.js
 
 clean
@@ -37,28 +47,28 @@ exec crconsole --host 127.0.0.1
 
 # open ui browser
 browser() {
-docker exec -id devjs-app \
+docker exec -d $APP_NAME \
 google-chrome --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --no-sandbox $@
 }
 
 # locus work arround
 clean() {
 docker exec -it \
-    devjs-app \
+    $APP_NAME \
     bash -c "rm /home/node/node_modules/locus/histories/*"
 }
 
 exec() {
-docker exec -it devjs-app $@
+docker exec -it $APP_NAME $@
 }
 
 exec_root() {
-docker exec -it -u root devjs-app $@
+docker exec -it -u root $APP_NAME $@
 }
 
 build() {
 docker build \
     --build-arg UID=$(id -u) \
     --build-arg GID=$(id -u) \
-    -t devjs-app .
+    -t $APP_NAME .
 }

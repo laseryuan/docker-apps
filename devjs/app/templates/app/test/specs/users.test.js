@@ -4,16 +4,12 @@ let createAccount = require( '../actions/global-teardown' );
 let credentials = require( '../utils/credentials' );
 let createAccount = require( '../actions/createAccount' );
 
-// let locus = require('locus');
-// let pry = require('pryjs')
-// import "better-node-inspect"
-
 jest.setTimeout(60000);
 
 describe('Basic authentication e2e tests', () => {
   let credential;
   beforeAll( async () => {
-    globalSetup();
+    // globalSetup(); //start web server
 
     // Set a definite size for the page viewport so view is consistent across browsers
     await page.setViewport( {
@@ -27,10 +23,7 @@ describe('Basic authentication e2e tests', () => {
   } );
 
   afterAll( async () => {
-    globalTeardown();
-
-    credential = credentials( 'User' );
-    createAccount = await createAccount( page );
+    // globalTeardown();
   } );
 
   it( 'Should be able to create an account', async () => {

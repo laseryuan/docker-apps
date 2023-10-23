@@ -3,6 +3,7 @@ https://www.digitalocean.com/community/tutorials/how-to-write-end-to-end-tests-i
 ## Load scripts
 ```
 . development.sh
+dev
 ```
 
 ## Static site
