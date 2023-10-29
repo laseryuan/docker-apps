@@ -2,7 +2,7 @@ Config() {
 . tmp/env.sh
 # . tmp/dev.env.sh
 
-echo "Using config: $GCLOUD_CONFIG"
+echo "APP: $APP_NAME"
 }
 Config
 
@@ -21,6 +21,10 @@ docker run \
     -v $(get_host_pwd)/tmp/:/apptmp/ \
     --network=ride_network \
     $APP_NAME bash
+}
+
+copy_package_lock_to_host() {
+docker cp $APP_NAME:/home/node/node_app/package-lock.json app/
 }
 
 # start web server for static site

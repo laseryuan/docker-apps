@@ -48,6 +48,9 @@ WORKDIR /home/node
 RUN \
 npm install locus crconsole live-server pryjs binding-pry-js better-node-inspect
 
+RUN \
+npm install puppeteer jest-puppeteer jest jest-dev-server
+
 ENV PATH=/home/node/node_modules/.bin:$PATH
 
 COPY app/templates /templates
