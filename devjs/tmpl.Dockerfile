@@ -55,7 +55,11 @@ ENV PATH=/home/node/node_modules/.bin:$PATH
 
 COPY app/templates /templates
 COPY app/load.sh /etc/profile.d/
+COPY test /home/node/test
 COPY README.md /
 
+# testing
+RUN \
+    cd /home/node/test && bash test.sh
 
 CMD ["cat", "/README.md"]

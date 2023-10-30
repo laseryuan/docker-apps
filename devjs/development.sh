@@ -3,10 +3,10 @@ docker run \
     --privileged \
     -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -it \
-    --rm \
+    -it --rm \
     --name devjs \
     --network ride_network \
+    -v $(get_host_pwd)/test:/home/node/test \
     devjs:amd64 \
     bash
 }
