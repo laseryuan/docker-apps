@@ -46,7 +46,7 @@ WORKDIR /home/node
 
 # Install global package
 RUN \
-npm install locus crconsole live-server pryjs binding-pry-js better-node-inspect
+npm install laseryuan/locus laseryuan/crconsole live-server pryjs binding-pry-js better-node-inspect
 
 RUN \
 npm install puppeteer jest-puppeteer jest jest-dev-server

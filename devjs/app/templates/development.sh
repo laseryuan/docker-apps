@@ -16,6 +16,7 @@ docker run \
     -it --rm \
     --name=$APP_NAME \
     -v $(get_host_pwd)/app:/home/node/node_app/app \
+    -v $(get_host_pwd)/utils:/home/node/node_app/utils \
     -v $(get_host_pwd)/app/package.json:/home/node/node_app/package.json \
     -v $(get_host_pwd)/app/package-lock.json:/home/node/node_app/package-lock.json \
     -v $(get_host_pwd)/tmp/:/apptmp/ \
@@ -38,7 +39,7 @@ docker exec -id \
 # open headless browser
 headless() {
 docker exec -it \
-    -w /home/node/node_app/app/ \
+    -w /home/node/node_app/utils/ \
     $APP_NAME \
     node remote.js
 
