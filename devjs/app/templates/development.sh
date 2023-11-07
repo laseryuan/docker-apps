@@ -42,8 +42,6 @@ docker exec -it \
     -w /home/node/node_app/utils/ \
     $APP_NAME \
     node remote.js
-
-clean
 }
 
 repl() {
@@ -54,13 +52,6 @@ exec crconsole --host 127.0.0.1
 browser() {
 docker exec -d $APP_NAME \
 google-chrome --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --no-sandbox $@
-}
-
-# locus work arround
-clean() {
-docker exec -it \
-    $APP_NAME \
-    bash -c "rm /home/node/node_modules/locus/histories/*"
 }
 
 exec() {
@@ -77,3 +68,9 @@ docker build \
     --build-arg GID=$(id -u) \
     -t $APP_NAME .
 }
+
+copy_package__to_project() {
+mkdir -p app/node_modules/
+docker cp $APP_NAME:/home/node/node_app/node_modules/$1 app/node_modules/$1
+}
+
