@@ -11,6 +11,14 @@ docker run \
     bash
 }
 
+dev_image() {
+docker run \
+    -it \
+    --platform linux/amd64 \
+    devjs:amd64 \
+    bash
+}
+
 npm_install() {
 cd ~/node_app/
 npm install --save-dev $@

@@ -14,7 +14,11 @@ RUN apt-get update && apt-get install -y \
     libv4l-0 \
     fonts-symbola \
     --no-install-recommends \
-    && curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    ``
+
+{{#ARCH.is_amd}}
+RUN \
+    curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list \
     && apt-get update && apt-get install -y \
     google-chrome-stable \
@@ -33,9 +37,10 @@ ENV \
 CHROME_VERSION="104.0.5112.79-1"
 
 RUN \
-wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb \
+  wget --no-verbose -O /tmp/chrome.deb https://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb \
   && apt install -y --allow-downgrades /tmp/chrome.deb \
   && rm /tmp/chrome.deb
+{{/ARCH.is_amd}}
 
 ENV HOME=/home/node
 
