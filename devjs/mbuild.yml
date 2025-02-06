@@ -9,7 +9,7 @@ ARCH:
 -
   name: amd64
   images:
-    base: node:18
+    base: node:20
   tag: amd64
   arch: amd64
   platform: linux/amd64
