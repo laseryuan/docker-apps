@@ -13,7 +13,7 @@ USER root
 
 RUN \
     apt-get update && \
-    apt-get install -y vim
+    apt-get install -y curl
 
 # create user
 RUN if ! [ "$UID" -eq 1000 ]; then \
@@ -21,11 +21,12 @@ RUN if ! [ "$UID" -eq 1000 ]; then \
         usermod --uid=${UID} --gid=${GID} ${USER}; \
     fi
 
-WORKDIR /home/$USER/node_app
-RUN chown -R node:node /home/$USER/node_app
-
 # Using unencrypted password/ specifying password
 RUN "$(getent passwd ${UID} | cut -d: -f1):${PW}" | chpasswd
+
+# Make sure the node app directory writable
+WORKDIR /home/$USER/node_app
+RUN chown -R node:node /home/$USER/node_app
 
 USER node
 
