@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'rclone/**'
+      - '.github/workflows/rclone.yml'
+
+jobs:
+  build-push:
+    uses: ./.github/workflows/build-push.yml
+    secrets: inherit
+    with:
+      project-folder: rclone

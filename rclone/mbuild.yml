@@ -1,0 +1,21 @@
+---
+REPO: rclone
+IMAGE_VERSION: 1.69.0
+PKG_VERSION: 1.69.0
+
+ARCH:
+- name: amd64
+  images:
+    base: ubuntu
+  tag: amd64
+  arch: amd64
+  platform: linux/amd64
+  # enable: false
+
+- name: arm64
+  images:
+    base: ubuntu
+  tag: arm64
+  arch: arm64
+  platform: linux/arm64
+  # enable: false
