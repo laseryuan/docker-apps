@@ -9,6 +9,7 @@ ARCH:
     base: ubuntu
   tag: amd64
   arch: amd64
+  is_amd: true
   platform: linux/amd64
   # enable: false
 
@@ -17,5 +18,6 @@ ARCH:
     base: ubuntu
   tag: arm64
   arch: arm64
+  is_arm: true
   platform: linux/arm64
   # enable: false
