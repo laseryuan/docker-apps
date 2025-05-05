@@ -19,3 +19,7 @@ RUN \
     cp rclone /usr/bin/ && \
     chown root:root /usr/bin/rclone && \
     chmod 755 /usr/bin/rclone
+
+RUN \
+    curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/bin/yt-dlp && \
+    chmod a+rx /usr/bin/yt-dlp  # Make executable
