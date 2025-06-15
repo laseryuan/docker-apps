@@ -1,0 +1,35 @@
+---
+REPO: openstego
+IMAGE_VERSION: 0.8.6
+PKG_VERSION: 0.8.6
+
+ARCH:
+- name: amd64
+  images:
+    base: eclipse-temurin
+  tag: amd64
+  arch: amd64
+  is_amd: true
+  platform: linux/amd64
+  # enable: false
+
+- name: arm64
+  images:
+    base: eclipse-temurin
+  tag: arm64
+  arch: arm64
+  is_arm: true
+  platform: linux/arm64
+  # enable: false
+
+- name: armv6l
+  images:
+    base: balenalib/raspberry-pi-debian-openjdk
+  tag: armv6l
+  arch: arm
+  variant: v6l
+  platform: linux/arm/v6
+  is_arm: true
+  is_arm32: true
+  is_armv6: true
+  # enable: false
