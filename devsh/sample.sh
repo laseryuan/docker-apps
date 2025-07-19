@@ -72,6 +72,7 @@ test() {
 }
 
 if [[ "$1" = "test" ]]; then
+  shift
   test "$@"
 else
   main "$@"
