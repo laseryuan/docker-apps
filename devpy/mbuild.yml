@@ -14,3 +14,13 @@ ARCH:
   platform: linux/amd64
   is_amd: true
   # enable: false
+
+
+- name: arm64
+  images:
+    base: python
+  tag: arm64
+  arch: arm64
+  is_arm: true
+  platform: linux/arm64
+  # enable: false
