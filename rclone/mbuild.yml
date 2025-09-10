@@ -1,12 +1,11 @@
 ---
 REPO: rclone
-IMAGE_VERSION: 1.69.0
-PKG_VERSION: 1.69.0
+IMAGE_VERSION: 1.70.3
+RCLONE_VERSION: 1.70.3
+FFMPEG_VERSION: 8.0
 
 ARCH:
 - name: amd64
-  images:
-    base: ubuntu
   tag: amd64
   arch: amd64
   is_amd: true
@@ -14,8 +13,6 @@ ARCH:
   # enable: false
 
 - name: arm64
-  images:
-    base: ubuntu
   tag: arm64
   arch: arm64
   is_arm: true
