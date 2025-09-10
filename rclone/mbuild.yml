@@ -1,7 +1,7 @@
 ---
 REPO: rclone
-IMAGE_VERSION: 1.69.0
-PKG_VERSION: 1.69.0
+IMAGE_VERSION: 1.71.0
+PKG_VERSION: 1.71.0
 
 ARCH:
 - name: amd64
@@ -20,4 +20,4 @@ ARCH:
   arch: arm64
   is_arm: true
   platform: linux/arm64
-  # enable: false
+  enable: false
