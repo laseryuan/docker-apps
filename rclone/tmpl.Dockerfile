@@ -8,7 +8,10 @@ ARG OS_VERSION
 
 RUN \
     apt-get update && \
-    apt-get install -y curl unzip fuse3 ffmpeg
+    apt-get install -y curl unzip fuse3 ffmpeg python3-pip
+
+# For rclone
+RUN pip install --no-cache-dir --break-system-packages curl_cffi
 
 RUN \
     curl -L https://downloads.rclone.org/rclone-current-linux-${PACKAGE_ARCH}.zip -o /tmp/rclone.zip && \
